@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RageMine — Анархия / PvP сервер</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WILDS玩法 |  анархический PVP сервер</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,55 +13,74 @@
         }
 
         :root {
-            --accent: #ff3b3b;
-            --accent-glow: rgba(255, 59, 59, 0.4);
-            --bg-main: #050505;
-            --bg-card: #0f0f12;
-            --bg-elevated: #1a1a1f;
-            --text: #f0f0f0;
-            --text-muted: #9ca3af;
-            --border: rgba(255, 255, 255, 0.08);
-            --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.6);
+            --bg-dark: #03060c;
+            --bg-card-dark: #0b111a;
+            --border-dark: #1e2a3a;
+            --text-dark: #eef2ff;
+            --text-muted-dark: #8b9bb0;
+            --accent-dark: #c2410c;
+            --accent-glow: rgba(194, 65, 12, 0.3);
         }
 
+        :root {
+            --bg-light: #f4f6fa;
+            --bg-card-light: #ffffff;
+            --border-light: #dce3ec;
+            --text-light: #0a0e1a;
+            --text-muted-light: #475569;
+            --accent-light: #b91c1c;
+        }
+
+        body.dark {
+            --bg: var(--bg-dark);
+            --bg-card: var(--bg-card-dark);
+            --border: var(--border-dark);
+            --text: var(--text-dark);
+            --text-muted: var(--text-muted-dark);
+            --accent: var(--accent-dark);
+        }
         body.light {
-            --accent: #dc2626;
-            --accent-glow: rgba(220, 38, 38, 0.3);
-            --bg-main: #f8fafc;
-            --bg-card: #ffffff;
-            --bg-elevated: #f1f5f9;
-            --text: #0f172a;
-            --text-muted: #334155;
-            --border: rgba(0, 0, 0, 0.1);
+            --bg: var(--bg-light);
+            --bg-card: var(--bg-card-light);
+            --border: var(--border-light);
+            --text: var(--text-light);
+            --text-muted: var(--text-muted-light);
+            --accent: var(--accent-light);
         }
 
         body {
-            background: var(--bg-main);
+            background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             transition: background 0.2s, color 0.2s;
+            line-height: 1.5;
         }
 
+        a, button {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        /* layout */
         .container {
-            max-width: 1300px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 28px;
         }
 
-        /* Navbar */
+        /* header / navbar */
         .navbar {
             position: sticky;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(16px);
-            background: rgba(5, 5, 5, 0.8);
+            z-index: 90;
+            background: rgba(var(--bg-rgb, 3, 6, 12), 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            padding: 16px 0;
+            padding: 14px 0;
         }
-        body.light .navbar {
-            background: rgba(248, 250, 252, 0.8);
-        }
-        .nav-inner {
+        body.dark .navbar { background: rgba(3, 6, 12, 0.85); }
+        body.light .navbar { background: rgba(244, 246, 250, 0.9); }
+        .nav-flex {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -69,9 +88,11 @@
             gap: 20px;
         }
         .logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ff3b3b, #ff8c3b);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 26px;
+            letter-spacing: -1px;
+            background: linear-gradient(125deg, var(--accent), #f97316);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -79,380 +100,389 @@
         .nav-links {
             display: flex;
             gap: 28px;
-            align-items: center;
             flex-wrap: wrap;
+            align-items: center;
         }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
-            transition: 0.2s;
+            font-size: 15px;
         }
         .nav-links a:hover {
             color: var(--accent);
         }
-        .theme-toggle {
-            background: var(--bg-elevated);
+        .theme-switch {
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 8px 18px;
-            cursor: pointer;
+            border-radius: 32px;
+            padding: 6px 18px;
+            font-size: 14px;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
             color: var(--text);
+            cursor: pointer;
         }
-        .theme-toggle:hover {
+        .theme-switch:hover {
             background: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
 
-        /* Hero */
-        .hero {
-            padding: 80px 0 60px;
+        /* hero */
+        .hero-section {
+            padding: 80px 0 50px;
         }
-        .hero-grid {
+        .hero-wrapper {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 40px;
+            gap: 48px;
         }
-        .hero-content {
-            flex: 1;
+        .hero-left {
+            flex: 1.2;
         }
-        .hero-badge {
-            background: rgba(220, 38, 38, 0.15);
+        .hero-tag {
+            background: rgba(194, 65, 12, 0.12);
+            border-left: 3px solid var(--accent);
+            padding: 6px 18px;
+            font-size: 14px;
+            font-weight: 500;
             color: var(--accent);
-            border-radius: 40px;
-            padding: 5px 16px;
+            margin-bottom: 24px;
             display: inline-block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-family: monospace;
         }
         .hero-title {
-            font-size: clamp(42px, 8vw, 78px);
+            font-size: clamp(42px, 7vw, 74px);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 20px;
         }
-        .hero-title span {
+        .hero-title mark {
+            background: none;
             color: var(--accent);
         }
         .hero-desc {
             color: var(--text-muted);
-            font-size: 18px;
-            max-width: 550px;
+            font-size: 17px;
+            max-width: 540px;
             margin-bottom: 32px;
         }
-        .ip-group {
+        .ip-block {
             display: flex;
-            gap: 15px;
+            gap: 16px;
             flex-wrap: wrap;
         }
-        .ip-btn {
+        .btn-copy {
             background: var(--accent);
             border: none;
             padding: 12px 28px;
-            border-radius: 50px;
             font-weight: 700;
             font-size: 18px;
+            border-radius: 36px;
             color: white;
-            cursor: pointer;
-            transition: 0.2s;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            font-family: monospace;
         }
-        .ip-btn:hover {
-            transform: scale(1.03);
-            filter: brightness(1.1);
+        .btn-copy:hover {
+            transform: scale(1.02);
+            filter: brightness(1.07);
         }
-        .version-badge {
-            background: var(--bg-elevated);
+        .version-chip {
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 50px;
+            padding: 12px 26px;
+            border-radius: 36px;
             font-weight: 500;
             color: var(--text-muted);
         }
-        .hero-image {
-            flex: 1;
+        .hero-right {
+            flex: 0.9;
             text-align: center;
         }
-        .hero-image img {
+        .hero-right svg {
             max-width: 100%;
-            border-radius: 24px;
+            border-radius: 28px;
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.3));
         }
 
-        /* Stats */
-        .stats-row {
+        /* metrics row */
+        .metrics {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 30px;
-            margin: 60px 0;
+            gap: 36px;
+            margin: 30px 0 60px;
         }
-        .stat-card {
+        .metric {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 24px 32px;
+            border-radius: 48px;
+            padding: 20px 36px;
             text-align: center;
-            min-width: 180px;
-            transition: 0.2s;
+            min-width: 170px;
         }
-        .stat-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-6px);
-        }
-        .stat-number {
-            font-size: 42px;
+        .metric-value {
+            font-size: 38px;
             font-weight: 800;
             color: var(--accent);
+            font-family: monospace;
         }
-        .stat-label {
+        .metric-label {
             color: var(--text-muted);
             font-weight: 500;
+            font-size: 14px;
         }
 
-        /* Sections */
+        /* section generic */
         .section {
             padding: 70px 0;
         }
-        .section-title {
+        .section-header {
+            text-align: center;
             font-size: 32px;
             font-weight: 700;
-            text-align: center;
             margin-bottom: 48px;
         }
-        .section-title span {
-            color: var(--accent);
+        .section-header span {
             border-bottom: 3px solid var(--accent);
-            padding-bottom: 6px;
+            padding-bottom: 5px;
         }
-        .grid-3 {
+        .grid-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 28px;
+            gap: 30px;
         }
-        .card {
+        .card-item {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 28px;
-            padding: 28px 24px;
-            transition: 0.25s;
+            padding: 32px 26px;
+            transition: 0.2s;
         }
-        .card:hover {
+        .card-item:hover {
             border-color: var(--accent);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
         .card-icon {
-            font-size: 44px;
-            margin-bottom: 20px;
+            font-size: 38px;
+            margin-bottom: 18px;
         }
-        .card h3 {
+        .card-item h3 {
             font-size: 22px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
-        .card p {
+        .card-item p {
             color: var(--text-muted);
             font-size: 15px;
         }
 
-        /* Top players */
-        .top-players-list {
+        /* рейтинг (топ игроков) */
+        .leaderboard {
             background: var(--bg-card);
-            border-radius: 36px;
+            border-radius: 32px;
             border: 1px solid var(--border);
             overflow: hidden;
         }
-        .player-row {
+        .rank-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 18px 28px;
             border-bottom: 1px solid var(--border);
         }
-        .player-rank {
+        .rank-pos {
             font-weight: 800;
-            font-size: 22px;
-            width: 60px;
+            font-size: 20px;
+            width: 65px;
             color: var(--accent);
         }
-        .player-name {
+        .rank-name {
             flex: 2;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 17px;
         }
-        .player-kills {
+        .rank-stats {
             color: var(--text-muted);
         }
-        .player-value {
+        .rank-number {
             font-weight: 700;
             color: var(--accent);
         }
-
-        /* Rules banner */
-        .rules-banner {
-            background: var(--bg-elevated);
-            border-radius: 36px;
-            padding: 40px 32px;
+        .update-note {
             text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* правила блок */
+        .rule-block {
+            background: var(--bg-card);
+            border-radius: 36px;
+            padding: 38px 36px;
             border: 1px solid var(--border);
+            text-align: center;
             margin-top: 20px;
         }
-        .rules-banner h3 {
-            font-size: 28px;
-            margin-bottom: 20px;
+        .rule-block h3 {
+            font-size: 26px;
+            margin-bottom: 24px;
         }
-        .rules-banner ul {
-            list-style: none;
+        .rule-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 24px;
-            margin-bottom: 30px;
+            gap: 28px;
+            margin-bottom: 32px;
+            list-style: none;
         }
-        .rules-banner li {
+        .rule-list li {
             color: var(--text-muted);
+            font-weight: 500;
         }
-        .btn-rules {
+        .btn-full-rules {
             background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            padding: 12px 28px;
+            border: 1.5px solid var(--accent);
+            padding: 12px 32px;
             border-radius: 60px;
-            font-weight: 700;
+            font-weight: 600;
+            color: var(--accent);
             cursor: pointer;
+            transition: 0.2s;
         }
-        .btn-rules:hover {
+        .btn-full-rules:hover {
             background: var(--accent);
             color: white;
         }
 
-        /* Footer */
+        /* footer */
         .footer {
             border-top: 1px solid var(--border);
-            padding: 40px 0 30px;
-            margin-top: 40px;
+            padding: 44px 0 32px;
             background: var(--bg-card);
+            margin-top: 50px;
         }
-        .footer-inner {
+        .footer-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 30px;
+            gap: 40px;
         }
         .footer-col p {
             color: var(--text-muted);
             font-size: 14px;
             margin-top: 10px;
         }
-        .social-links a {
+        .footer-links a {
             color: var(--text-muted);
             text-decoration: none;
-            margin-right: 20px;
-            font-size: 20px;
-            display: inline-block;
+            margin-right: 28px;
+            font-size: 15px;
         }
-        .social-links a:hover {
+        .footer-links a:hover {
             color: var(--accent);
         }
 
-        /* Modal */
-        .modal {
+        /* модальное окно */
+        .modal-rules {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.96);
+            z-index: 1100;
             align-items: center;
             justify-content: center;
         }
-        .modal.active {
+        .modal-rules.open {
             display: flex;
         }
-        .modal-content {
+        .modal-container {
             background: var(--bg-card);
-            max-width: 800px;
+            max-width: 760px;
             width: 90%;
             max-height: 80vh;
             border-radius: 32px;
+            border: 1px solid var(--border);
             padding: 32px;
             overflow-y: auto;
             position: relative;
         }
-        .close-modal {
+        .modal-close {
             position: absolute;
             top: 20px;
-            right: 25px;
-            font-size: 28px;
+            right: 24px;
+            font-size: 30px;
             cursor: pointer;
             color: var(--text-muted);
         }
-        .close-modal:hover {
+        .modal-close:hover {
             color: var(--accent);
         }
-        .modal h2 {
+        .modal-container h2 {
             margin-bottom: 20px;
             color: var(--accent);
         }
-        .rule-list p {
-            margin-bottom: 8px;
+        .rules-text p {
+            margin-bottom: 10px;
             padding-bottom: 6px;
             border-bottom: 1px solid var(--border);
+            font-size: 14px;
         }
 
-        /* Toast */
-        .toast {
+        .toast-notify {
             position: fixed;
-            bottom: 30px;
+            bottom: 32px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent);
             color: white;
-            padding: 10px 28px;
-            border-radius: 60px;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 48px;
+            font-size: 14px;
+            font-weight: 500;
             opacity: 0;
             transition: opacity 0.2s;
-            z-index: 1100;
+            z-index: 1200;
             pointer-events: none;
         }
 
-        .update-date {
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 768px) {
-            .nav-inner {
-                flex-direction: column;
+        @media (max-width: 780px) {
+            .container {
+                padding: 0 20px;
             }
-            .hero-content {
+            .hero-wrapper {
+                flex-direction: column;
                 text-align: center;
             }
             .hero-desc {
-                margin: 0 auto 32px;
+                margin-left: auto;
+                margin-right: auto;
             }
-            .ip-group {
+            .ip-block {
                 justify-content: center;
             }
-            .player-row {
-                flex-wrap: wrap;
-                gap: 10px;
+            .rule-list {
+                gap: 16px;
+                flex-direction: column;
+                align-items: center;
             }
         }
 
-        .reveal {
+        .fade-up {
             opacity: 0;
             transform: translateY(20px);
-            transition: 0.5s ease;
+            transition: all 0.55s ease;
         }
-        .reveal.active {
+        .fade-up.active {
             opacity: 1;
             transform: translateY(0);
         }
@@ -461,164 +491,173 @@
 <body class="dark">
 
 <div class="navbar">
-    <div class="container nav-inner">
-        <div class="logo">⚡ RAGEMINE</div>
+    <div class="container nav-flex">
+        <div class="logo">WILDS METHOD</div>
         <div class="nav-links">
-            <a href="#home">Главная</a>
-            <a href="#features">Особенности</a>
-            <a href="#top">Топ PvP</a>
-            <a href="#rules">Правила</a>
-            <a href="#" onclick="return false;">Discord</a>
-            <div class="theme-toggle" id="themeToggle">
-                <span id="themeIcon">🌙</span> <span id="themeText">Тёмная</span>
+            <a href="#home">база</a>
+            <a href="#rules-block">уклад</a>
+            <a href="#pvp-rank">рейтинг</a>
+            <a href="#" id="fakeDiscord">сообщество</a>
+            <div class="theme-switch" id="themeSwitchBtn">
+                <span id="themeIconSym">🌙</span>
+                <span id="themeLabel">ночь</span>
             </div>
         </div>
     </div>
 </div>
 
 <main>
-    <section class="hero container" id="home">
-        <div class="hero-grid">
-            <div class="hero-content reveal">
-                <div class="hero-badge">🔪 Анархия / Полный PvP / Рейды</div>
-                <h1 class="hero-title">Выживай, <span>уничтожай</span>, строй</h1>
-                <p class="hero-desc">RageMine — жёсткий ванильный опыт с налётами, грабежами и абсолютной свободой. Только PvP, только хардкор.</p>
-                <div class="ip-group">
-                    <button class="ip-btn" id="copyIpBtn">⚔️ ragemine.anarchy.fun</button>
-                    <span class="version-badge">1.21.4 / 1.21.8</span>
+    <section class="hero-section container" id="home">
+        <div class="hero-wrapper">
+            <div class="hero-left fade-up">
+                <div class="hero-tag">// ANARCHY / NO CLAIMS / FULL PVP</div>
+                <h1 class="hero-title">рейд, <mark>разрушай</mark>, побеждай</h1>
+                <p class="hero-desc">Абсолютная свобода на ванильном ядре. Никаких приватов, только хардкор и pvp на выживание. Сервер с минимальными правилами.</p>
+                <div class="ip-block">
+                    <button class="btn-copy" id="copyServerIp">play.wildsmethod.net</button>
+                    <span class="version-chip">minecraft 1.21.4+</span>
                 </div>
             </div>
-            <div class="hero-image reveal">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 400'%3E%3Crect width='500' height='400' fill='%23111111'/%3E%3Ctext x='250' y='180' font-family='monospace' font-size='32' fill='%23ff3b3b' text-anchor='middle' font-weight='bold'%3ERAGEMINE%3C/text%3E%3Ctext x='250' y='240' fill='%23aaa' text-anchor='middle'%3EAnarchy PvP Server%3C/text%3E%3C/svg%3E" alt="RageMine">
+            <div class="hero-right fade-up">
+                <svg width="380" height="280" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="300" rx="28" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1.5"/>
+                    <path d="M80 150 L130 110 L180 150 L230 110 L280 150 L330 110" stroke="var(--accent)" stroke-width="3" fill="none"/>
+                    <circle cx="130" cy="110" r="12" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)" stroke-width="2"/>
+                    <circle cx="230" cy="110" r="12" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)" stroke-width="2"/>
+                    <rect x="150" y="190" width="100" height="60" stroke="var(--text-muted)" fill="var(--bg-card)" stroke-width="1.5"/>
+                    <line x1="100" y1="230" x2="300" y2="230" stroke="var(--border)" stroke-dasharray="6 6"/>
+                    <text x="200" y="228" text-anchor="middle" fill="var(--accent)" font-size="12" font-family="monospace">RAID ZONE</text>
+                </svg>
             </div>
         </div>
     </section>
 
-    <div class="container stats-row reveal">
-        <div class="stat-card"><div class="stat-number">∞</div><div class="stat-label">Грифинг разрешён</div></div>
-        <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Приватов</div></div>
-        <div class="stat-card"><div class="stat-number">⚡</div><div class="stat-label">Full PvP 24/7</div></div>
-        <div class="stat-card"><div class="stat-number">🔪</div><div class="stat-label">Рейды</div></div>
+    <div class="container metrics fade-up">
+        <div class="metric"><div class="metric-value">24/7</div><div class="metric-label">uptime сервера</div></div>
+        <div class="metric"><div class="metric-value">0%</div><div class="metric-label">донат привилегий</div></div>
+        <div class="metric"><div class="metric-value">1.21+</div><div class="metric-label">актуальный билд</div></div>
+        <div class="metric"><div class="metric-value">full pvp</div><div class="metric-label">везде / всегда</div></div>
     </div>
 
-    <section class="section container" id="features">
-        <h2 class="section-title reveal"><span>Анархия без границ</span></h2>
-        <div class="grid-3 reveal">
-            <div class="card"><div class="card-icon">🔨</div><h3>Грифинг и разрушение</h3><p>Ломай чужие постройки, воруй ресурсы — здесь нет приватов.</p></div>
-            <div class="card"><div class="card-icon">⚔️</div><h3>Жёсткий PvP</h3><p>Полное PvP без ограничений. Убивай где хочешь, когда хочешь.</p></div>
-            <div class="card"><div class="card-icon">👑</div><h3>Клановая война</h3><p>Объединяйся в кланы, устраивай рейды на базы.</p></div>
-            <div class="card"><div class="card-icon">📦</div><h3>Лут с игроков</h3><p>После убийства выпадает весь инвентарь.</p></div>
-            <div class="card"><div class="card-icon">🌍</div><h3>Ванильный геймплей</h3><p>Никаких донат-преимуществ. Только скилл.</p></div>
-            <div class="card"><div class="card-icon">🏴‍☠️</div><h3>Регулярные вайпы</h3><p>Каждые 3-4 месяца новый мир.</p></div>
+    <section class="section container" id="features-raw">
+        <div class="section-header fade-up"><span>правила игры</span></div>
+        <div class="grid-cards fade-up">
+            <div class="card-item"><div class="card-icon"></div><h3>абсолютный грифинг</h3><p>Разрушайте чужие базы, воруйте сундуки, создавайте ловушки — ограничений нет.</p></div>
+            <div class="card-item"><div class="card-icon"></div><h3>жестокий pvp</h3><p>Убийство в любом месте, выпадение полного инвентаря. Каждая схватка — за风险.</p></div>
+            <div class="card-item"><div class="card-icon"></div><h3>клановые войны</h3><p>Объединяйтесь в отряды, устраивайте осады и защищайте ресурсы.</p></div>
+            <div class="card-item"><div class="card-icon"></div><h3>никаких читов</h3><p>Killaura, xray, flight — бан без права восстановления. Честная анархия.</p></div>
+            <div class="card-item"><div class="card-icon"></div><h3>ванильное ядро</h3><p>Никаких /tpa /home или магазинов. Только pure minecraft опыт.</p></div>
+            <div class="card-item"><div class="card-icon"></div><h3>регулярные вайпы</h3><p>Карта обновляется раз в 90 дней, чтобы мир не застаивался.</p></div>
         </div>
     </section>
 
-    <section class="section container" id="top">
-        <h2 class="section-title reveal"><span>Топ убийц</span></h2>
-        <div class="top-players-list reveal">
-            <div class="player-row"><div class="player-rank">🥇</div><div class="player-name">Rage_Killer</div><div class="player-kills">убийств: <span class="player-value">347</span></div></div>
-            <div class="player-row"><div class="player-rank">🥈</div><div class="player-name">Mad_Wolf</div><div class="player-kills">убийств: <span class="player-value">289</span></div></div>
-            <div class="player-row"><div class="player-rank">🥉</div><div class="player-name">X_Raider_X</div><div class="player-kills">убийств: <span class="player-value">276</span></div></div>
-            <div class="player-row"><div class="player-rank">4</div><div class="player-name">GriefLord</div><div class="player-kills">убийств: <span class="player-value">198</span></div></div>
-            <div class="player-row"><div class="player-rank">5</div><div class="player-name">CreeperSlayer</div><div class="player-kills">убийств: <span class="player-value">142</span></div></div>
+    <section class="section container" id="pvp-rank">
+        <div class="section-header fade-up"><span>топ агрессоров</span></div>
+        <div class="leaderboard fade-up">
+            <div class="rank-row"><div class="rank-pos">#1</div><div class="rank-name">BanditRex</div><div class="rank-stats">уничтожений: <span class="rank-number">412</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#2</div><div class="rank-name">Warden_6</div><div class="rank-stats">уничтожений: <span class="rank-number">387</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#3</div><div class="rank-name">GriefBishop</div><div class="rank-stats">уничтожений: <span class="rank-number">299</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#4</div><div class="rank-name">RipperLive</div><div class="rank-stats">уничтожений: <span class="rank-number">245</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#5</div><div class="rank-name">ToxicKnight</div><div class="rank-stats">уничтожений: <span class="rank-number">201</span></div></div>
         </div>
-        <p class="update-date">Рейтинг обновляется автоматически</p>
+        <div class="update-note fade-up">→ статистика убийств обновляется раз в 6 часов</div>
     </section>
 
-    <div class="container" id="rules">
-        <div class="rules-banner reveal">
-            <h3>☠️ Законы анархии</h3>
-            <ul>
-                <li>✔️ Грифинг и PvP — везде</li>
-                <li>❌ Читы / X-ray — бан IP</li>
-                <li>✔️ Крафт ловушек разрешён</li>
-                <li>❌ Оскорбления в чате (мут)</li>
-                <li>✔️ Рейды на базы приветствуются</li>
+    <div class="container" id="rules-block">
+        <div class="rule-block fade-up">
+            <h3>хардкорный устав</h3>
+            <ul class="rule-list">
+                <li>✓ разрешён грифинг и рейды</li>
+                <li>✓ полное pvp без ограничений</li>
+                <li>✗ читы, xray, автокликеры</li>
+                <li>✗ дюпы и эксплойты</li>
+                <li>✗ оскорбления на расовой почве</li>
             </ul>
-            <button class="btn-rules" id="openRulesBtn">📜 Полный устав анархии</button>
+            <button class="btn-full-rules" id="showRulesModal">прочитать детальный кодекс</button>
         </div>
     </div>
 
     <section class="section container">
-        <h2 class="section-title reveal"><span>Как выжить</span></h2>
-        <div class="grid-3 reveal">
-            <div class="card"><div class="card-icon">🗡️</div><h3>Шаг 1: Заходи</h3><p>IP: ragemine.anarchy.fun, версия 1.21+</p></div>
-            <div class="card"><div class="card-icon">🛡️</div><h3>Шаг 2: Спрячь базу</h3><p>Не строй на поверхности — копай глубоко.</p></div>
-            <div class="card"><div class="card-icon">🤝</div><h3>Шаг 3: Найди команду</h3><p>В одиночку выжить сложно, объединяйся.</p></div>
+        <div class="section-header fade-up"><span>как начать выживать</span></div>
+        <div class="grid-cards fade-up">
+            <div class="card-item"><h3>1. Подключение</h3><p>Версия 1.21.4 — 1.21.8. Добавьте сервер play.wildsmethod.net, порт стандартный.</p></div>
+            <div class="card-item"><h3>2. Скрытая база</h3><p>Не стройте на поверхности — ищите пещеры или копайте глубоко. Маскировка важна.</p></div>
+            <div class="card-item"><h3>3. Вооружение</h3><p>Сразу крафтите алмазную броню и оружие. Первый день — самый опасный.</p></div>
+            <div class="card-item"><h3>4. Альянсы</h3><p>Объединяйтесь в группы через дискорд, чтобы выживать и рейдить других.</p></div>
         </div>
     </section>
 </main>
 
 <footer class="footer">
-    <div class="container footer-inner">
+    <div class="container footer-grid">
         <div class="footer-col">
-            <div class="logo" style="font-size: 22px;">RAGEMINE</div>
-            <p>Анархия, PvP, полная свобода действий.</p>
+            <div class="logo" style="font-size: 20px;">WILDS METHOD</div>
+            <p>анархический сервер с фокусом на pvp и разрушения. 2026</p>
         </div>
         <div class="footer-col">
-            <h4 style="margin-bottom: 12px;">Сообщества</h4>
-            <div class="social-links">
-                <a href="#" onclick="return false;">🎮 Discord</a>
-                <a href="#" onclick="return false;">📱 Telegram</a>
-                <a href="#" onclick="return false;">▶️ YouTube</a>
+            <div class="footer-links">
+                <a href="#">дискорд</a>
+                <a href="#">telegram</a>
+                <a href="#">youtube</a>
             </div>
+            <p style="margin-top: 18px;">ip: play.wildsmethod.net</p>
         </div>
         <div class="footer-col">
-            <p>© 2026 RageMine — сервер лайт-анархии</p>
-            <p style="font-size: 12px; margin-top: 8px;">IP: ragemine.anarchy.fun | Версия: 1.21+</p>
+            <p>данные игроков защищены, администрация не вмешивается в ход игры.</p>
+            <p style="font-size: 12px;">вайпы: каждые 3 месяца</p>
         </div>
     </div>
 </footer>
 
-<div class="toast" id="toastMsg">IP скопирован</div>
+<div class="toast-notify" id="toastMsg">скопировано</div>
 
-<div id="rulesModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" id="closeModalBtn">&times;</span>
-        <h2>📜 Полный свод правил RAGEMINE</h2>
-        <div class="rule-list" id="rulesList"></div>
+<div id="rulesModalGlobal" class="modal-rules">
+    <div class="modal-container">
+        <div class="modal-close" id="closeRulesModalBtn">&times;</div>
+        <h2>свод правил (анархия)</h2>
+        <div class="rules-text" id="dynamicRulesList"></div>
     </div>
 </div>
 
 <script>
-    (function() {
-        // Тема
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-        let currentTheme = localStorage.getItem('ragemine-theme') || 'dark';
+    (function(){
+        // тема (только светлая/тёмная)
+        const storedTheme = localStorage.getItem('wilds_theme') || 'dark';
+        const body = document.body;
+        const themeBtn = document.getElementById('themeSwitchBtn');
+        const themeIconSpan = document.getElementById('themeIconSym');
+        const themeTextSpan = document.getElementById('themeLabel');
         
         function setTheme(theme) {
-            document.body.classList.remove('dark', 'light');
-            document.body.classList.add(theme);
-            if (theme === 'dark') {
-                themeIcon.innerText = '🌙';
-                themeText.innerText = 'Тёмная';
+            body.classList.remove('dark', 'light');
+            body.classList.add(theme);
+            if(theme === 'dark') {
+                themeIconSpan.innerText = '🌙';
+                themeTextSpan.innerText = 'ночь';
             } else {
-                themeIcon.innerText = '☀️';
-                themeText.innerText = 'Светлая';
+                themeIconSpan.innerText = '☀️';
+                themeTextSpan.innerText = 'день';
             }
-            localStorage.setItem('ragemine-theme', theme);
+            localStorage.setItem('wilds_theme', theme);
         }
-        setTheme(currentTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+        setTheme(storedTheme);
+        themeBtn.addEventListener('click', () => {
+            const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
             setTheme(newTheme);
         });
-
-        // Копирование IP
-        function showToast(msg) {
-            const toast = document.getElementById('toastMsg');
-            toast.innerText = msg;
-            toast.style.opacity = '1';
-            setTimeout(() => toast.style.opacity = '0', 2000);
-        }
         
-        document.getElementById('copyIpBtn').addEventListener('click', () => {
-            const ip = 'ragemine.anarchy.fun';
+        // копирование ip + тост
+        const ipButton = document.getElementById('copyServerIp');
+        const toastEl = document.getElementById('toastMsg');
+        function showMessage(msg) {
+            toastEl.innerText = msg;
+            toastEl.style.opacity = '1';
+            setTimeout(() => toastEl.style.opacity = '0', 1800);
+        }
+        ipButton.addEventListener('click', () => {
+            const ip = 'play.wildsmethod.net';
             navigator.clipboard.writeText(ip).then(() => {
-                showToast('IP скопирован: ' + ip);
+                showMessage('ip скопирован: ' + ip);
             }).catch(() => {
                 const textarea = document.createElement('textarea');
                 textarea.value = ip;
@@ -626,63 +665,75 @@
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                showToast('IP скопирован');
+                showMessage('ip скопирован');
             });
         });
-
-        // Правила
-        const rules = [
-            "1. Разрешены убийства, грифинг, воровство — полная анархия.",
-            "2. Запрещены читы, X-ray, автокликеры, killaura — бан IP.",
-            "3. Дюпы (дублирование предметов) запрещены — перманентный бан.",
-            "4. Оскорбления на почве расы, религии — бан без предупреждения.",
-            "5. Спам и реклама сторонних серверов — мут/бан.",
-            "6. Использование багов для преимущества — бан на месяц.",
-            "7. Администрация не возвращает вещи после смерти или грифа.",
-            "8. Запрещены постройки, вызывающие лаги сервера.",
-            "9. Играя, вы соглашаетесь со всеми рисками.",
-            "10. Администратор имеет право выдать бан за нарушение духа честной игры."
+        
+        // модальные правила (детальные)
+        const rulesDetailed = [
+            "1. Полный грифинг разрешён: кража, разрушение, залив лавой, ловушки.",
+            "2. Убийства без причины не наказываются — это анархия.",
+            "3. Читы любого рода (аура, рейкаст, xray, freecam, автоматизация) -> бан по IP навсегда.",
+            "4. Использование багов и дюпов для получения ресурсов -> бан на 30 дней и откат.",
+            "5. Оскорбления по национальному/религиозному признаку -> мут или бан от 7 дней.",
+            "6. Строительство лаг-машин (миллионы сущностей) -> снос постройки и предупреждение.",
+            "7. Администрация не возвращает вещи и не восстанавливает постройки.",
+            "8. Запрещено выдавать себя за админов или модераторов.",
+            "9. Игнорирование требований администрации при проверках -> бан 3 дня.",
+            "10. Регистрация нескольких аккаунтов для обхода бана -> IP блокировка."
         ];
+        const modalOverlay = document.getElementById('rulesModalGlobal');
+        const openModalBtn = document.getElementById('showRulesModal');
+        const closeModalBtn = document.getElementById('closeRulesModalBtn');
+        const rulesContainer = document.getElementById('dynamicRulesList');
         
-        const modal = document.getElementById('rulesModal');
-        const openBtn = document.getElementById('openRulesBtn');
-        const closeBtn = document.getElementById('closeModalBtn');
-        
-        function renderRules() {
-            const container = document.getElementById('rulesList');
-            if (container) {
-                container.innerHTML = rules.map(r => `<p>${r}</p>`).join('');
+        function fillRulesModal() {
+            if(rulesContainer) {
+                rulesContainer.innerHTML = rulesDetailed.map(r => `<p>${r}</p>`).join('');
             }
         }
-        
-        openBtn.addEventListener('click', () => {
-            renderRules();
-            modal.classList.add('active');
+        openModalBtn.addEventListener('click', () => {
+            fillRulesModal();
+            modalOverlay.classList.add('open');
             document.body.style.overflow = 'hidden';
         });
-        
-        function closeModal() {
-            modal.classList.remove('active');
+        function closeModalGlobal() {
+            modalOverlay.classList.remove('open');
             document.body.style.overflow = '';
         }
-        
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+        closeModalBtn.addEventListener('click', closeModalGlobal);
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) closeModalGlobal();
         });
-
-        // Reveal анимация
-        const reveals = document.querySelectorAll('.reveal');
-        function checkReveal() {
-            reveals.forEach(el => {
+        
+        // псевдо-ссылки
+        const fakeDisc = document.getElementById('fakeDiscord');
+        if(fakeDisc) {
+            fakeDisc.addEventListener('click', (e) => {
+                e.preventDefault();
+                showMessage('дискорд: discord.gg/wildsmethod');
+            });
+        }
+        
+        // анимация появления при скролле
+        const animatedElements = document.querySelectorAll('.fade-up');
+        function checkFade() {
+            animatedElements.forEach(el => {
                 const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight - 100) {
+                if(rect.top < window.innerHeight - 70) {
                     el.classList.add('active');
                 }
             });
         }
-        window.addEventListener('scroll', checkReveal);
-        window.addEventListener('load', checkReveal);
+        window.addEventListener('scroll', checkFade);
+        window.addEventListener('load', checkFade);
+        
+        // защита от выделения контекстного меню
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if(e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'u' || e.key === 'a')) e.preventDefault();
+            if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
+        });
     })();
 </script>
 </body>
