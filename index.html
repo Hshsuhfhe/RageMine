@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>WILDS玩法 |  анархический PVP сервер</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>RageMine | Анархия · PvP · Привилегии</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,73 +13,63 @@
         }
 
         :root {
-            --bg-dark: #03060c;
-            --bg-card-dark: #0b111a;
-            --border-dark: #1e2a3a;
-            --text-dark: #eef2ff;
-            --text-muted-dark: #8b9bb0;
-            --accent-dark: #c2410c;
-            --accent-glow: rgba(194, 65, 12, 0.3);
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #0f0f14;
+            --bg-card: #13131a;
+            --bg-elevated: #1c1c24;
+            --accent: #f97316;
+            --accent-dark: #ea580c;
+            --accent-glow: rgba(249, 115, 22, 0.35);
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.6);
+            --gradient: linear-gradient(135deg, #f97316, #dc2626);
         }
 
-        :root {
-            --bg-light: #f4f6fa;
-            --bg-card-light: #ffffff;
-            --border-light: #dce3ec;
-            --text-light: #0a0e1a;
-            --text-muted-light: #475569;
-            --accent-light: #b91c1c;
-        }
-
-        body.dark {
-            --bg: var(--bg-dark);
-            --bg-card: var(--bg-card-dark);
-            --border: var(--border-dark);
-            --text: var(--text-dark);
-            --text-muted: var(--text-muted-dark);
-            --accent: var(--accent-dark);
-        }
         body.light {
-            --bg: var(--bg-light);
-            --bg-card: var(--bg-card-light);
-            --border: var(--border-light);
-            --text: var(--text-light);
-            --text-muted: var(--text-muted-light);
-            --accent: var(--accent-light);
+            --bg-primary: #f4f4f9;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-elevated: #f0f0f5;
+            --text: #18181b;
+            --text-muted: #52525b;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            background: var(--bg);
+            background: var(--bg-primary);
             color: var(--text);
             font-family: 'Inter', sans-serif;
-            transition: background 0.2s, color 0.2s;
             line-height: 1.5;
+            transition: background 0.2s, color 0.2s;
         }
 
-        a, button {
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        /* красивые скроллбары */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        /* layout */
         .container {
-            max-width: 1280px;
+            max-width: 1300px;
             margin: 0 auto;
             padding: 0 28px;
         }
 
-        /* header / navbar */
+        /* ===== HEADER ===== */
         .navbar {
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 90;
-            background: rgba(var(--bg-rgb, 3, 6, 12), 0.85);
-            backdrop-filter: blur(12px);
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(16px);
+            background: rgba(var(--bg-primary-rgb, 10, 10, 12), 0.75);
             border-bottom: 1px solid var(--border);
-            padding: 14px 0;
+            padding: 16px 0;
+            transition: 0.3s;
         }
-        body.dark .navbar { background: rgba(3, 6, 12, 0.85); }
-        body.light .navbar { background: rgba(244, 246, 250, 0.9); }
         .nav-flex {
             display: flex;
             align-items: center;
@@ -88,204 +78,266 @@
             gap: 20px;
         }
         .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 26px;
-            letter-spacing: -1px;
-            background: linear-gradient(125deg, var(--accent), #f97316);
+            font-family: 'Orbitron', monospace;
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+            background: var(--gradient);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
         .nav-links {
             display: flex;
-            gap: 28px;
-            flex-wrap: wrap;
+            gap: 36px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
             font-size: 15px;
+            transition: 0.2s;
         }
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-        .theme-switch {
-            background: var(--bg-card);
+        .nav-links a:hover { color: var(--accent); }
+        .theme-btn {
+            background: var(--bg-elevated);
             border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 6px 18px;
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 40px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--text);
             cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
         }
-        .theme-switch:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
+        .theme-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* hero */
-        .hero-section {
-            padding: 80px 0 50px;
+        /* ===== HERO ===== */
+        .hero {
+            padding: 140px 0 80px;
+            position: relative;
         }
-        .hero-wrapper {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(249,115,22,0.08), transparent 70%);
+            pointer-events: none;
+        }
+        .hero-grid {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 48px;
+            gap: 50px;
         }
-        .hero-left {
-            flex: 1.2;
-        }
+        .hero-left { flex: 1.2; }
         .hero-tag {
-            background: rgba(194, 65, 12, 0.12);
+            background: rgba(249,115,22,0.12);
             border-left: 3px solid var(--accent);
             padding: 6px 18px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--accent);
             margin-bottom: 24px;
             display: inline-block;
-            font-family: monospace;
+            letter-spacing: 1px;
         }
         .hero-title {
-            font-size: clamp(42px, 7vw, 74px);
+            font-size: clamp(46px, 8vw, 82px);
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 20px;
+            line-height: 1.08;
+            margin-bottom: 24px;
         }
         .hero-title mark {
-            background: none;
-            color: var(--accent);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .hero-desc {
             color: var(--text-muted);
-            font-size: 17px;
-            max-width: 540px;
-            margin-bottom: 32px;
+            font-size: 18px;
+            max-width: 560px;
+            margin-bottom: 36px;
         }
-        .ip-block {
+        .ip-area {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
         }
         .btn-copy {
-            background: var(--accent);
+            background: var(--gradient);
             border: none;
-            padding: 12px 28px;
+            padding: 14px 32px;
             font-weight: 700;
             font-size: 18px;
-            border-radius: 36px;
+            border-radius: 48px;
             color: white;
-            box-shadow: 0 4px 12px var(--accent-glow);
             font-family: monospace;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 6px 20px var(--accent-glow);
         }
-        .btn-copy:hover {
-            transform: scale(1.02);
-            filter: brightness(1.07);
-        }
-        .version-chip {
+        .btn-copy:hover { transform: scale(1.02); filter: brightness(1.08); }
+        .version-badge {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 12px 26px;
-            border-radius: 36px;
+            padding: 14px 28px;
+            border-radius: 48px;
             font-weight: 500;
             color: var(--text-muted);
         }
-        .hero-right {
-            flex: 0.9;
-            text-align: center;
-        }
-        .hero-right svg {
+        .hero-right { flex: 0.9; text-align: center; }
+        .hero-svg svg {
             max-width: 100%;
-            border-radius: 28px;
-            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
         }
 
-        /* metrics row */
-        .metrics {
+        /* ===== СТАТЫ ===== */
+        .stats-row {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 36px;
-            margin: 30px 0 60px;
+            gap: 28px;
+            margin: 30px 0 70px;
         }
-        .metric {
+        .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 48px;
-            padding: 20px 36px;
+            border-radius: 56px;
+            padding: 22px 40px;
             text-align: center;
-            min-width: 170px;
+            min-width: 180px;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
         }
-        .metric-value {
-            font-size: 38px;
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .stat-value {
+            font-size: 42px;
             font-weight: 800;
             color: var(--accent);
             font-family: monospace;
         }
-        .metric-label {
+        .stat-label {
             color: var(--text-muted);
             font-weight: 500;
             font-size: 14px;
         }
 
-        /* section generic */
+        /* ===== СЕКЦИИ ===== */
         .section {
-            padding: 70px 0;
+            padding: 80px 0;
         }
         .section-header {
             text-align: center;
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 700;
-            margin-bottom: 48px;
+            margin-bottom: 56px;
         }
         .section-header span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             border-bottom: 3px solid var(--accent);
-            padding-bottom: 5px;
+            padding-bottom: 8px;
         }
+
         .grid-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
         }
-        .card-item {
+        .feature-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 32px 26px;
-            transition: 0.2s;
+            border-radius: 32px;
+            padding: 34px 28px;
+            transition: 0.25s;
         }
-        .card-item:hover {
+        .feature-card:hover {
             border-color: var(--accent);
-            transform: translateY(-4px);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
         }
-        .card-icon {
-            font-size: 38px;
-            margin-bottom: 18px;
+        .feature-icon {
+            font-size: 44px;
+            margin-bottom: 20px;
         }
-        .card-item h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
             font-weight: 700;
         }
-        .card-item p {
+        .feature-card p {
             color: var(--text-muted);
             font-size: 15px;
         }
 
-        /* рейтинг (топ игроков) */
+        /* донат таблица */
+        .donate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            margin-top: 20px;
+        }
+        .donate-card {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+            border: 1px solid var(--border);
+            border-radius: 36px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .donate-card.featured {
+            border: 1.5px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .donate-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .donate-price {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        .donate-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .donate-features li {
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .donate-btn {
+            background: var(--gradient);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .donate-btn:hover { filter: brightness(1.05); transform: scale(0.98); }
+
+        /* топ pvp */
         .leaderboard {
             background: var(--bg-card);
-            border-radius: 32px;
+            border-radius: 36px;
             border: 1px solid var(--border);
             overflow: hidden;
         }
@@ -293,194 +345,76 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 28px;
+            padding: 20px 32px;
             border-bottom: 1px solid var(--border);
         }
         .rank-pos {
             font-weight: 800;
-            font-size: 20px;
-            width: 65px;
+            font-size: 22px;
+            width: 70px;
             color: var(--accent);
         }
         .rank-name {
             flex: 2;
             font-weight: 600;
-            font-size: 17px;
+            font-size: 18px;
         }
         .rank-stats {
             color: var(--text-muted);
-        }
-        .rank-number {
-            font-weight: 700;
-            color: var(--accent);
-        }
-        .update-note {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* правила блок */
-        .rule-block {
-            background: var(--bg-card);
-            border-radius: 36px;
-            padding: 38px 36px;
-            border: 1px solid var(--border);
-            text-align: center;
-            margin-top: 20px;
-        }
-        .rule-block h3 {
-            font-size: 26px;
-            margin-bottom: 24px;
-        }
-        .rule-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 28px;
-            margin-bottom: 32px;
-            list-style: none;
-        }
-        .rule-list li {
-            color: var(--text-muted);
             font-weight: 500;
         }
-        .btn-full-rules {
-            background: transparent;
-            border: 1.5px solid var(--accent);
-            padding: 12px 32px;
-            border-radius: 60px;
-            font-weight: 600;
+        .rank-number {
+            font-weight: 800;
             color: var(--accent);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-full-rules:hover {
-            background: var(--accent);
-            color: white;
         }
 
-        /* footer */
+        /* футер */
         .footer {
             border-top: 1px solid var(--border);
-            padding: 44px 0 32px;
-            background: var(--bg-card);
-            margin-top: 50px;
+            padding: 48px 0 36px;
+            background: var(--bg-secondary);
+            margin-top: 40px;
+            text-align: center;
         }
-        .footer-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-        }
-        .footer-col p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-right: 28px;
-            font-size: 15px;
-        }
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        /* модальное окно */
-        .modal-rules {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.96);
-            z-index: 1100;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-rules.open {
-            display: flex;
-        }
-        .modal-container {
-            background: var(--bg-card);
-            max-width: 760px;
-            width: 90%;
-            max-height: 80vh;
-            border-radius: 32px;
-            border: 1px solid var(--border);
-            padding: 32px;
-            overflow-y: auto;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            font-size: 30px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-        .modal-close:hover {
-            color: var(--accent);
-        }
-        .modal-container h2 {
+        .footer .logo {
+            display: inline-block;
             margin-bottom: 20px;
-            color: var(--accent);
         }
-        .rules-text p {
-            margin-bottom: 10px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid var(--border);
+        .footer-copyright {
+            color: var(--text-muted);
             font-size: 14px;
+            letter-spacing: 1px;
         }
 
-        .toast-notify {
+        /* тост */
+        .toast {
             position: fixed;
-            bottom: 32px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent);
             color: white;
-            padding: 10px 24px;
-            border-radius: 48px;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
             opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 1200;
+            transition: 0.2s;
+            z-index: 1100;
             pointer-events: none;
+            font-size: 14px;
         }
 
-        @media (max-width: 780px) {
-            .container {
-                padding: 0 20px;
-            }
-            .hero-wrapper {
-                flex-direction: column;
-                text-align: center;
-            }
-            .hero-desc {
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .ip-block {
-                justify-content: center;
-            }
-            .rule-list {
-                gap: 16px;
-                flex-direction: column;
-                align-items: center;
-            }
+        @media (max-width: 840px) {
+            .container { padding: 0 20px; }
+            .hero-grid { flex-direction: column; text-align: center; }
+            .hero-desc { margin-left: auto; margin-right: auto; }
+            .ip-area { justify-content: center; }
         }
 
         .fade-up {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.55s ease;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         .fade-up.active {
             opacity: 1;
@@ -492,235 +426,196 @@
 
 <div class="navbar">
     <div class="container nav-flex">
-        <div class="logo">WILDS METHOD</div>
+        <div class="logo">RAGEMINE</div>
         <div class="nav-links">
-            <a href="#home">база</a>
-            <a href="#rules-block">уклад</a>
-            <a href="#pvp-rank">рейтинг</a>
-            <a href="#" id="fakeDiscord">сообщество</a>
-            <div class="theme-switch" id="themeSwitchBtn">
-                <span id="themeIconSym">🌙</span>
-                <span id="themeLabel">ночь</span>
+            <a href="#home">главная</a>
+            <a href="#features">механики</a>
+            <a href="#donate">привилегии</a>
+            <a href="#top">рейтинг</a>
+            <div class="theme-btn" id="themeToggle">
+                <span id="themeIcon">🌙</span>
+                <span id="themeLabel">темная</span>
             </div>
         </div>
     </div>
 </div>
 
 <main>
-    <section class="hero-section container" id="home">
-        <div class="hero-wrapper">
+    <!-- Hero -->
+    <section class="hero container" id="home">
+        <div class="hero-grid">
             <div class="hero-left fade-up">
-                <div class="hero-tag">// ANARCHY / NO CLAIMS / FULL PVP</div>
-                <h1 class="hero-title">рейд, <mark>разрушай</mark>, побеждай</h1>
-                <p class="hero-desc">Абсолютная свобода на ванильном ядре. Никаких приватов, только хардкор и pvp на выживание. Сервер с минимальными правилами.</p>
-                <div class="ip-block">
-                    <button class="btn-copy" id="copyServerIp">play.wildsmethod.net</button>
-                    <span class="version-chip">minecraft 1.21.4+</span>
+                <div class="hero-tag">⚡ ABSOLUTE ANARCHY · NO RULES · PVP EVERYWHERE</div>
+                <h1 class="hero-title">рейды, <mark>грабёж</mark>, тотальная свобода</h1>
+                <p class="hero-desc">Привилегии, донат-киты, полный PvP. Грифинг разрешён — выживает сильнейший. Сервер без ограничений.</p>
+                <div class="ip-area">
+                    <button class="btn-copy" id="copyIpBtn">rage.anarchy.fun</button>
+                    <span class="version-badge">1.21.4 — 1.21.8</span>
                 </div>
             </div>
-            <div class="hero-right fade-up">
-                <svg width="380" height="280" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="400" height="300" rx="28" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1.5"/>
-                    <path d="M80 150 L130 110 L180 150 L230 110 L280 150 L330 110" stroke="var(--accent)" stroke-width="3" fill="none"/>
-                    <circle cx="130" cy="110" r="12" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)" stroke-width="2"/>
-                    <circle cx="230" cy="110" r="12" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)" stroke-width="2"/>
-                    <rect x="150" y="190" width="100" height="60" stroke="var(--text-muted)" fill="var(--bg-card)" stroke-width="1.5"/>
-                    <line x1="100" y1="230" x2="300" y2="230" stroke="var(--border)" stroke-dasharray="6 6"/>
-                    <text x="200" y="228" text-anchor="middle" fill="var(--accent)" font-size="12" font-family="monospace">RAID ZONE</text>
+            <div class="hero-right fade-up hero-svg">
+                <svg width="380" height="300" viewBox="0 0 420 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="420" height="320" rx="32" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1.5"/>
+                    <path d="M80 170 L140 120 L200 170 L260 120 L320 170 L380 120" stroke="var(--accent)" stroke-width="3" fill="none"/>
+                    <circle cx="140" cy="120" r="14" fill="var(--accent)" fill-opacity="0.2" stroke="var(--accent)" stroke-width="2"/>
+                    <circle cx="260" cy="120" r="14" fill="var(--accent)" fill-opacity="0.2" stroke="var(--accent)" stroke-width="2"/>
+                    <rect x="150" y="210" width="120" height="55" stroke="var(--text-muted)" fill="var(--bg-primary)" stroke-width="1.5" rx="8"/>
+                    <text x="210" y="245" text-anchor="middle" fill="var(--accent)" font-size="16" font-family="monospace" font-weight="bold">RAID ZONE</text>
+                    <line x1="80" y1="280" x2="340" y2="280" stroke="var(--border)" stroke-dasharray="8 6"/>
                 </svg>
             </div>
         </div>
     </section>
 
-    <div class="container metrics fade-up">
-        <div class="metric"><div class="metric-value">24/7</div><div class="metric-label">uptime сервера</div></div>
-        <div class="metric"><div class="metric-value">0%</div><div class="metric-label">донат привилегий</div></div>
-        <div class="metric"><div class="metric-value">1.21+</div><div class="metric-label">актуальный билд</div></div>
-        <div class="metric"><div class="metric-value">full pvp</div><div class="metric-label">везде / всегда</div></div>
+    <!-- статистика -->
+    <div class="container stats-row fade-up">
+        <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">uptime</div></div>
+        <div class="stat-card"><div class="stat-value">⚔️</div><div class="stat-label">full pvp</div></div>
+        <div class="stat-card"><div class="stat-value">💰</div><div class="stat-label">донат / привилегии</div></div>
+        <div class="stat-card"><div class="stat-value">∞</div><div class="stat-label">грифинг</div></div>
     </div>
 
-    <section class="section container" id="features-raw">
-        <div class="section-header fade-up"><span>правила игры</span></div>
+    <!-- механики (анархия) -->
+    <section class="section container" id="features">
+        <div class="section-header fade-up"><span>анархия без фальши</span></div>
         <div class="grid-cards fade-up">
-            <div class="card-item"><div class="card-icon"></div><h3>абсолютный грифинг</h3><p>Разрушайте чужие базы, воруйте сундуки, создавайте ловушки — ограничений нет.</p></div>
-            <div class="card-item"><div class="card-icon"></div><h3>жестокий pvp</h3><p>Убийство в любом месте, выпадение полного инвентаря. Каждая схватка — за风险.</p></div>
-            <div class="card-item"><div class="card-icon"></div><h3>клановые войны</h3><p>Объединяйтесь в отряды, устраивайте осады и защищайте ресурсы.</p></div>
-            <div class="card-item"><div class="card-icon"></div><h3>никаких читов</h3><p>Killaura, xray, flight — бан без права восстановления. Честная анархия.</p></div>
-            <div class="card-item"><div class="card-icon"></div><h3>ванильное ядро</h3><p>Никаких /tpa /home или магазинов. Только pure minecraft опыт.</p></div>
-            <div class="card-item"><div class="card-icon"></div><h3>регулярные вайпы</h3><p>Карта обновляется раз в 90 дней, чтобы мир не застаивался.</p></div>
+            <div class="feature-card"><div class="feature-icon">🔪</div><h3>абсолютный pvp</h3><p>Убивай где угодно — в спавне, в пустошах, у базы. Никаких "мирных зон".</p></div>
+            <div class="feature-card"><div class="feature-icon">🏴‍☠️</div><h3>рейды и грифинг</h3><p>Ломай чужие постройки, воруй сундуки, ставь ловушки — здесь нет ограничений.</p></div>
+            <div class="feature-card"><div class="feature-icon">👑</div><h3>привилегии доната</h3><p>/kit, /fly, эффекты, уникальные кирки и броня. Покупай мощь.</p></div>
+            <div class="feature-card"><div class="feature-icon">💥</div><h3>клановые войны</h3><p>Объединяйся, захватывай территории, уничтожай вражеские фракции.</p></div>
+            <div class="feature-card"><div class="feature-icon">⚡</div><h3>2b2t стиль</h3><p>Хаос, дюпы (разрешены), кристаллы, автокликеры — выживает опытный.</p></div>
+            <div class="feature-card"><div class="feature-icon">📦</div><h3>донат-киты</h3><p>Алмазная броня с зачарами, оружие, ресурсы — ускорь свой путь к вершине.</p></div>
         </div>
     </section>
 
-    <section class="section container" id="pvp-rank">
-        <div class="section-header fade-up"><span>топ агрессоров</span></div>
+    <!-- донат/привилегии -->
+    <section class="section container" id="donate">
+        <div class="section-header fade-up"><span>привилегии & донат</span></div>
+        <div class="donate-grid fade-up">
+            <div class="donate-card">
+                <div class="donate-title">RAID</div>
+                <div class="donate-price">590 ₽</div>
+                <ul class="donate-features">
+                    <li>/fly в креативе</li>
+                    <li>/kit raid (алмаз+)</li>
+                    <li>эффект силы I</li>
+                    <li>цветной ник</li>
+                </ul>
+                <button class="donate-btn" onclick="showDonateToast('RAID')">купить</button>
+            </div>
+            <div class="donate-card featured">
+                <div class="donate-title">WARLORD</div>
+                <div class="donate-price">1290 ₽</div>
+                <ul class="donate-features">
+                    <li>всё из RAID</li>
+                    <li>/kit warlord (незерит)</li>
+                    <li>эффект силы II + реген</li>
+                    <li>ан lim /home и /back</li>
+                    <li>эксклюзивный префикс</li>
+                </ul>
+                <button class="donate-btn" onclick="showDonateToast('WARLORD')">купить</button>
+            </div>
+            <div class="donate-card">
+                <div class="donate-title">DESTROYER</div>
+                <div class="donate-price">2490 ₽</div>
+                <ul class="donate-features">
+                    <li>всё из WARLORD</li>
+                    <li>/kit destroyer (незерит V)</li>
+                    <li>эф. силы III+скорость II</li>
+                    <li>доступ к /vanish</li>
+                    <li>приватный канал в дс</li>
+                </ul>
+                <button class="donate-btn" onclick="showDonateToast('DESTROYER')">купить</button>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 32px; color: var(--text-muted); font-size: 14px;">* донат не возвращает вещи после смерти, улучшения только для pvp преимуществ</p>
+    </section>
+
+    <!-- топ рейтинг pvp -->
+    <section class="section container" id="top">
+        <div class="section-header fade-up"><span>топ убийц анархии</span></div>
         <div class="leaderboard fade-up">
-            <div class="rank-row"><div class="rank-pos">#1</div><div class="rank-name">BanditRex</div><div class="rank-stats">уничтожений: <span class="rank-number">412</span></div></div>
-            <div class="rank-row"><div class="rank-pos">#2</div><div class="rank-name">Warden_6</div><div class="rank-stats">уничтожений: <span class="rank-number">387</span></div></div>
-            <div class="rank-row"><div class="rank-pos">#3</div><div class="rank-name">GriefBishop</div><div class="rank-stats">уничтожений: <span class="rank-number">299</span></div></div>
-            <div class="rank-row"><div class="rank-pos">#4</div><div class="rank-name">RipperLive</div><div class="rank-stats">уничтожений: <span class="rank-number">245</span></div></div>
-            <div class="rank-row"><div class="rank-pos">#5</div><div class="rank-name">ToxicKnight</div><div class="rank-stats">уничтожений: <span class="rank-number">201</span></div></div>
-        </div>
-        <div class="update-note fade-up">→ статистика убийств обновляется раз в 6 часов</div>
-    </section>
-
-    <div class="container" id="rules-block">
-        <div class="rule-block fade-up">
-            <h3>хардкорный устав</h3>
-            <ul class="rule-list">
-                <li>✓ разрешён грифинг и рейды</li>
-                <li>✓ полное pvp без ограничений</li>
-                <li>✗ читы, xray, автокликеры</li>
-                <li>✗ дюпы и эксплойты</li>
-                <li>✗ оскорбления на расовой почве</li>
-            </ul>
-            <button class="btn-full-rules" id="showRulesModal">прочитать детальный кодекс</button>
-        </div>
-    </div>
-
-    <section class="section container">
-        <div class="section-header fade-up"><span>как начать выживать</span></div>
-        <div class="grid-cards fade-up">
-            <div class="card-item"><h3>1. Подключение</h3><p>Версия 1.21.4 — 1.21.8. Добавьте сервер play.wildsmethod.net, порт стандартный.</p></div>
-            <div class="card-item"><h3>2. Скрытая база</h3><p>Не стройте на поверхности — ищите пещеры или копайте глубоко. Маскировка важна.</p></div>
-            <div class="card-item"><h3>3. Вооружение</h3><p>Сразу крафтите алмазную броню и оружие. Первый день — самый опасный.</p></div>
-            <div class="card-item"><h3>4. Альянсы</h3><p>Объединяйтесь в группы через дискорд, чтобы выживать и рейдить других.</p></div>
+            <div class="rank-row"><div class="rank-pos">#1</div><div class="rank-name">RageViking</div><div class="rank-stats">уничтожений: <span class="rank-number">534</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#2</div><div class="rank-name">KillStealer</div><div class="rank-stats">уничтожений: <span class="rank-number">478</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#3</div><div class="rank-name">GriefLord</div><div class="rank-stats">уничтожений: <span class="rank-number">402</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#4</div><div class="rank-name">WardenSix</div><div class="rank-stats">уничтожений: <span class="rank-number">356</span></div></div>
+            <div class="rank-row"><div class="rank-pos">#5</div><div class="rank-name">ToxicRex</div><div class="rank-stats">уничтожений: <span class="rank-number">301</span></div></div>
         </div>
     </section>
 </main>
 
 <footer class="footer">
-    <div class="container footer-grid">
-        <div class="footer-col">
-            <div class="logo" style="font-size: 20px;">WILDS METHOD</div>
-            <p>анархический сервер с фокусом на pvp и разрушения. 2026</p>
-        </div>
-        <div class="footer-col">
-            <div class="footer-links">
-                <a href="#">дискорд</a>
-                <a href="#">telegram</a>
-                <a href="#">youtube</a>
-            </div>
-            <p style="margin-top: 18px;">ip: play.wildsmethod.net</p>
-        </div>
-        <div class="footer-col">
-            <p>данные игроков защищены, администрация не вмешивается в ход игры.</p>
-            <p style="font-size: 12px;">вайпы: каждые 3 месяца</p>
-        </div>
+    <div class="container">
+        <div class="logo" style="font-size: 26px;">RAGEMINE</div>
+        <div class="footer-copyright">© RageMine 2026</div>
     </div>
 </footer>
 
-<div class="toast-notify" id="toastMsg">скопировано</div>
-
-<div id="rulesModalGlobal" class="modal-rules">
-    <div class="modal-container">
-        <div class="modal-close" id="closeRulesModalBtn">&times;</div>
-        <h2>свод правил (анархия)</h2>
-        <div class="rules-text" id="dynamicRulesList"></div>
-    </div>
-</div>
+<div class="toast" id="toastMsg">IP скопирован</div>
 
 <script>
-    (function(){
-        // тема (только светлая/тёмная)
-        const storedTheme = localStorage.getItem('wilds_theme') || 'dark';
+    (function() {
+        // тема
         const body = document.body;
-        const themeBtn = document.getElementById('themeSwitchBtn');
-        const themeIconSpan = document.getElementById('themeIconSym');
-        const themeTextSpan = document.getElementById('themeLabel');
+        const themeBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        let savedTheme = localStorage.getItem('ragemine_theme') || 'dark';
         
         function setTheme(theme) {
             body.classList.remove('dark', 'light');
             body.classList.add(theme);
-            if(theme === 'dark') {
-                themeIconSpan.innerText = '🌙';
-                themeTextSpan.innerText = 'ночь';
+            if (theme === 'dark') {
+                themeIcon.innerText = '🌙';
+                themeLabel.innerText = 'темная';
             } else {
-                themeIconSpan.innerText = '☀️';
-                themeTextSpan.innerText = 'день';
+                themeIcon.innerText = '☀️';
+                themeLabel.innerText = 'светлая';
             }
-            localStorage.setItem('wilds_theme', theme);
+            localStorage.setItem('ragemine_theme', theme);
         }
-        setTheme(storedTheme);
+        setTheme(savedTheme);
         themeBtn.addEventListener('click', () => {
             const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
             setTheme(newTheme);
         });
-        
-        // копирование ip + тост
-        const ipButton = document.getElementById('copyServerIp');
-        const toastEl = document.getElementById('toastMsg');
-        function showMessage(msg) {
-            toastEl.innerText = msg;
-            toastEl.style.opacity = '1';
-            setTimeout(() => toastEl.style.opacity = '0', 1800);
+
+        // тост уведомление
+        function showToast(msg) {
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 2000);
         }
-        ipButton.addEventListener('click', () => {
-            const ip = 'play.wildsmethod.net';
-            navigator.clipboard.writeText(ip).then(() => {
-                showMessage('ip скопирован: ' + ip);
+
+        // копирование ip
+        const copyBtn = document.getElementById('copyIpBtn');
+        const serverIp = 'rage.anarchy.fun';
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(serverIp).then(() => {
+                showToast('IP скопирован: ' + serverIp);
             }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = ip;
-                document.body.appendChild(textarea);
-                textarea.select();
+                const ta = document.createElement('textarea');
+                ta.value = serverIp;
+                document.body.appendChild(ta);
+                ta.select();
                 document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showMessage('ip скопирован');
+                document.body.removeChild(ta);
+                showToast('IP скопирован');
             });
         });
-        
-        // модальные правила (детальные)
-        const rulesDetailed = [
-            "1. Полный грифинг разрешён: кража, разрушение, залив лавой, ловушки.",
-            "2. Убийства без причины не наказываются — это анархия.",
-            "3. Читы любого рода (аура, рейкаст, xray, freecam, автоматизация) -> бан по IP навсегда.",
-            "4. Использование багов и дюпов для получения ресурсов -> бан на 30 дней и откат.",
-            "5. Оскорбления по национальному/религиозному признаку -> мут или бан от 7 дней.",
-            "6. Строительство лаг-машин (миллионы сущностей) -> снос постройки и предупреждение.",
-            "7. Администрация не возвращает вещи и не восстанавливает постройки.",
-            "8. Запрещено выдавать себя за админов или модераторов.",
-            "9. Игнорирование требований администрации при проверках -> бан 3 дня.",
-            "10. Регистрация нескольких аккаунтов для обхода бана -> IP блокировка."
-        ];
-        const modalOverlay = document.getElementById('rulesModalGlobal');
-        const openModalBtn = document.getElementById('showRulesModal');
-        const closeModalBtn = document.getElementById('closeRulesModalBtn');
-        const rulesContainer = document.getElementById('dynamicRulesList');
-        
-        function fillRulesModal() {
-            if(rulesContainer) {
-                rulesContainer.innerHTML = rulesDetailed.map(r => `<p>${r}</p>`).join('');
-            }
-        }
-        openModalBtn.addEventListener('click', () => {
-            fillRulesModal();
-            modalOverlay.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        });
-        function closeModalGlobal() {
-            modalOverlay.classList.remove('open');
-            document.body.style.overflow = '';
-        }
-        closeModalBtn.addEventListener('click', closeModalGlobal);
-        modalOverlay.addEventListener('click', (e) => {
-            if(e.target === modalOverlay) closeModalGlobal();
-        });
-        
-        // псевдо-ссылки
-        const fakeDisc = document.getElementById('fakeDiscord');
-        if(fakeDisc) {
-            fakeDisc.addEventListener('click', (e) => {
-                e.preventDefault();
-                showMessage('дискорд: discord.gg/wildsmethod');
-            });
-        }
-        
-        // анимация появления при скролле
-        const animatedElements = document.querySelectorAll('.fade-up');
+
+        // донат уведомление
+        window.showDonateToast = function(rank) {
+            showToast(`Привилегия ${rank} — перейдите в Discord для оплаты`);
+        };
+
+        // анимация появления
+        const animated = document.querySelectorAll('.fade-up');
         function checkFade() {
-            animatedElements.forEach(el => {
+            animated.forEach(el => {
                 const rect = el.getBoundingClientRect();
-                if(rect.top < window.innerHeight - 70) {
+                if (rect.top < window.innerHeight - 80) {
                     el.classList.add('active');
                 }
             });
@@ -728,11 +623,11 @@
         window.addEventListener('scroll', checkFade);
         window.addEventListener('load', checkFade);
         
-        // защита от выделения контекстного меню
+        // контекстное меню заблокировано
         document.addEventListener('contextmenu', (e) => e.preventDefault());
         document.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'u' || e.key === 'a')) e.preventDefault();
-            if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'u')) e.preventDefault();
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
         });
     })();
 </script>
