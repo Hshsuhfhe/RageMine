@@ -4,41 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DEV RANK • Global Leaderboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
 
     body {
-      background: #0d0d12;
+      background: #08080f;
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       color: #e4e4e7;
-      padding: 1.5rem;
+      padding: 2rem;
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(139,92,246,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 50%, rgba(236,72,153,0.03) 0%, transparent 70%);
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
-      background: #13131a;
+      background: #0f0f18;
       border-radius: 0.75rem;
       overflow: hidden;
-      border: 1px solid #252530;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.6);
+      border: 1px solid #1f1f2e;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 25px 70px rgba(0,0,0,0.7), 0 0 60px rgba(99,102,241,0.08);
     }
 
     .header {
-      padding: 1.25rem 1.75rem;
+      padding: 1.4rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 1rem;
-      background: #16161f;
-      border-bottom: 1px solid #252530;
+      gap: 1.2rem;
+      background: #12121d;
+      border-bottom: 1px solid #1f1f2e;
     }
 
     .logo-area {
@@ -48,48 +56,63 @@
     }
 
     .logo-icon {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       background: linear-gradient(135deg, #8b5cf6, #6366f1);
       border-radius: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       color: #fff;
-      box-shadow: 0 0 20px rgba(139,92,246,0.3);
+      box-shadow: 0 0 24px rgba(139,92,246,0.35);
+      position: relative;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 0.6rem;
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      z-index: -1;
+      opacity: 0.5;
+      filter: blur(8px);
     }
 
     .logo-text h2 {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 800;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.4px;
       color: #f4f4f5;
+      line-height: 1.1;
     }
 
     .logo-text span {
-      font-size: 0.7rem;
-      color: #a1a1aa;
-      letter-spacing: 0.5px;
+      font-size: 0.68rem;
+      color: #8b8b9a;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
-    .tabs {
+    .nav-tabs {
       display: flex;
-      gap: 0.25rem;
-      background: #1e1e28;
-      border-radius: 0.5rem;
-      padding: 0.25rem;
+      gap: 0.3rem;
+      background: #181825;
+      border-radius: 0.55rem;
+      padding: 0.3rem;
+      border: 1px solid #222230;
     }
 
-    .tab-btn {
-      padding: 0.55rem 1.1rem;
+    .nav-tab {
+      padding: 0.55rem 1.2rem;
       border: none;
       background: transparent;
-      color: #a1a1aa;
+      color: #8b8b9a;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       border-radius: 0.4rem;
       cursor: pointer;
       transition: all 0.2s;
@@ -97,150 +120,173 @@
       letter-spacing: -0.2px;
     }
 
-    .tab-btn.active {
-      background: #2a2a38;
-      color: #f4f4f5;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+    .nav-tab.active {
+      background: #6366f1;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(99,102,241,0.5);
     }
 
-    .tab-btn:hover {
+    .nav-tab:hover:not(.active) {
       color: #d4d4d8;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.04);
     }
 
-    .filter-bar {
-      padding: 0.75rem 1.75rem;
+    .filter-section {
+      padding: 0.9rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 0.75rem;
-      background: #16161f;
-      border-bottom: 1px solid #22222e;
-      font-size: 0.8rem;
-      color: #a1a1aa;
+      gap: 0.9rem;
+      background: #12121d;
+      border-bottom: 1px solid #1c1c2a;
     }
 
-    .country-pills {
+    .country-group {
       display: flex;
-      gap: 0.35rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
     }
 
-    .country-pill {
-      padding: 0.35rem 0.85rem;
-      border-radius: 0.35rem;
-      font-size: 0.72rem;
+    .country-chip {
+      padding: 0.4rem 1rem;
+      border-radius: 0.4rem;
+      font-size: 0.73rem;
       font-weight: 600;
-      background: #1e1e28;
-      color: #a1a1aa;
-      border: none;
+      background: #1a1a28;
+      color: #9d9dab;
+      border: 1px solid transparent;
       cursor: pointer;
       transition: all 0.2s;
       font-family: 'Inter', sans-serif;
       letter-spacing: -0.1px;
     }
 
-    .country-pill.active {
-      background: #6366f1;
-      color: #fff;
-      box-shadow: 0 0 12px rgba(99,102,241,0.4);
+    .country-chip.active {
+      background: rgba(99,102,241,0.15);
+      border-color: #6366f1;
+      color: #c7d2fe;
+      box-shadow: 0 0 12px rgba(99,102,241,0.2);
     }
 
-    .country-pill:hover {
-      background: #2a2a38;
+    .country-chip:hover {
+      background: #232332;
       color: #e4e4e7;
     }
-    .country-pill.active:hover {
-      background: #6366f1;
+    .country-chip.active:hover {
+      background: rgba(99,102,241,0.2);
     }
 
-    .sort-indicator {
+    .legend {
+      display: flex;
+      gap: 1.2rem;
+      font-size: 0.68rem;
+      color: #6b6b7a;
+      letter-spacing: 0.3px;
+      font-weight: 500;
+    }
+
+    .legend span {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      color: #71717a;
+      gap: 0.3rem;
     }
+
+    .legend .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot.dhr { background: #818cf8; box-shadow: 0 0 6px #6366f1; }
+    .dot.dlr { background: #f472b6; box-shadow: 0 0 6px #ec4899; }
+    .dot.bdev { background: #fbbf24; box-shadow: 0 0 6px #f59e0b; }
 
     .table-wrapper {
       overflow-x: auto;
+      position: relative;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 700px;
+      min-width: 750px;
     }
 
     thead th {
-      padding: 0.9rem 1.5rem;
+      padding: 0.9rem 1.8rem;
       text-align: left;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #71717a;
-      background: #111118;
-      border-bottom: 1px solid #22222e;
+      letter-spacing: 1px;
+      color: #6b6b7a;
+      background: #0d0d16;
+      border-bottom: 1px solid #1c1c2a;
       white-space: nowrap;
     }
 
     tbody td {
-      padding: 0.8rem 1.5rem;
-      border-bottom: 1px solid #1e1e28;
-      font-size: 0.88rem;
+      padding: 0.75rem 1.8rem;
+      border-bottom: 1px solid #181825;
+      font-size: 0.85rem;
       font-weight: 500;
       white-space: nowrap;
       transition: background 0.15s;
     }
 
     tbody tr {
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     tbody tr:hover {
-      background: rgba(99, 102, 241, 0.06);
+      background: rgba(99, 102, 241, 0.05);
     }
 
-    .rank-num {
+    .rank-cell {
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #a1a1aa;
-      width: 32px;
-      height: 32px;
-      display: flex;
+    }
+
+    .rank-badge-num {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: #1e1e28;
-      border-radius: 0.35rem;
+      background: #1a1a28;
+      border-radius: 0.3rem;
+      font-weight: 800;
+      font-size: 0.85rem;
     }
 
-    .rank-1 .rank-num {
+    tr.rank-1 .rank-badge-num {
       background: #fbbf24;
       color: #0d0d12;
-      box-shadow: 0 0 14px rgba(251,191,36,0.5);
+      box-shadow: 0 0 16px rgba(251,191,36,0.55);
     }
-    .rank-2 .rank-num {
+    tr.rank-2 .rank-badge-num {
       background: #a1a1aa;
       color: #0d0d12;
-      box-shadow: 0 0 10px rgba(161,161,170,0.4);
+      box-shadow: 0 0 12px rgba(161,161,170,0.45);
     }
-    .rank-3 .rank-num {
+    tr.rank-3 .rank-badge-num {
       background: #cd7f32;
       color: #0d0d12;
-      box-shadow: 0 0 10px rgba(205,127,50,0.4);
+      box-shadow: 0 0 12px rgba(205,127,50,0.5);
     }
 
     .player-cell {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.7rem;
     }
 
     .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 0.35rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 0.4rem;
       background: linear-gradient(135deg, #4c1d95, #5b21b6);
       display: flex;
       align-items: center;
@@ -249,6 +295,7 @@
       font-size: 0.85rem;
       color: #ddd6fe;
       flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .player-name {
@@ -257,67 +304,71 @@
       letter-spacing: -0.2px;
     }
 
-    .bdev-tag {
-      background: #fbbf24;
+    .bdev-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
       color: #0d0d12;
       font-size: 0.6rem;
       font-weight: 800;
-      padding: 0.2rem 0.55rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 0.25rem;
-      letter-spacing: 0.3px;
-      margin-left: 0.35rem;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
-      box-shadow: 0 0 8px rgba(251,191,36,0.4);
+      box-shadow: 0 0 10px rgba(251,191,36,0.4);
     }
 
-    .rank-badge {
+    .stat-pill {
       display: inline-block;
-      padding: 0.25rem 0.7rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 0.3rem;
       font-weight: 700;
-      font-size: 0.78rem;
-      background: #1e1e28;
-      color: #c4b5fd;
-      letter-spacing: 0.3px;
+      font-size: 0.8rem;
+      letter-spacing: 0.2px;
     }
 
-    .rank-badge.dhr {
-      background: rgba(99,102,241,0.15);
+    .stat-pill.dhr {
+      background: rgba(99,102,241,0.12);
       color: #a5b4fc;
     }
 
-    .rank-badge.dlr {
-      background: rgba(236,72,153,0.12);
+    .stat-pill.dlr {
+      background: rgba(236,72,153,0.1);
       color: #f9a8d4;
     }
 
-    .empty-state {
-      color: #52525b;
+    .empty-text {
+      color: #3f3f4a;
       font-style: italic;
-      font-size: 0.8rem;
-      padding: 0.5rem 0;
+      font-size: 0.78rem;
     }
 
-    .footer-stats {
-      padding: 0.9rem 1.75rem;
-      background: #111118;
-      border-top: 1px solid #22222e;
-      font-size: 0.7rem;
+    .footer {
+      padding: 1rem 2rem;
+      background: #0d0d16;
+      border-top: 1px solid #1c1c2a;
+      font-size: 0.68rem;
       color: #52525b;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       letter-spacing: 0.3px;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
-    @media (max-width: 600px) {
-      body { padding: 0.5rem; }
-      .header { padding: 1rem; }
-      .filter-bar { padding: 0.75rem 1rem; }
-      thead th, tbody td { padding: 0.7rem 0.8rem; }
+    .footer .count {
+      color: #8b8b9a;
+      font-weight: 600;
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 0.8rem; }
+      .header, .filter-section, .footer { padding: 0.9rem 1rem; }
+      thead th, tbody td { padding: 0.6rem 0.7rem; }
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 <div class="container">
   <div class="header">
     <div class="logo-area">
@@ -327,24 +378,26 @@
         <span>Global Leaderboard</span>
       </div>
     </div>
-    <div class="tabs" id="categoryTabs">
-      <button class="tab-btn active" data-cat="overall">Overall</button>
-      <button class="tab-btn" data-cat="dhr">DHR</button>
-      <button class="tab-btn" data-cat="dlr">DLR</button>
-      <button class="tab-btn" data-cat="bdev">B DEV</button>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-tab="overall">🏆 Overall</button>
+      <button class="nav-tab" data-tab="dhr">⚡ DHR</button>
+      <button class="nav-tab" data-tab="dlr">💎 DLR</button>
+      <button class="nav-tab" data-tab="bdev">👑 B DEV</button>
     </div>
   </div>
 
-  <div class="filter-bar">
-    <div class="country-pills" id="countryPills">
-      <button class="country-pill active" data-country="all">🌍 Все</button>
-      <button class="country-pill" data-country="russia">🇷🇺 Россия</button>
-      <button class="country-pill" data-country="ukraine">🇺🇦 Украина</button>
-      <button class="country-pill" data-country="usa">🇺🇸 Америка</button>
-      <button class="country-pill" data-country="germany">🇩🇪 Германия</button>
+  <div class="filter-section">
+    <div class="country-group" id="countryGroup">
+      <button class="country-chip active" data-country="all">🌍 Все страны</button>
+      <button class="country-chip" data-country="russia">🇷🇺 Россия</button>
+      <button class="country-chip" data-country="ukraine">🇺🇦 Украина</button>
+      <button class="country-chip" data-country="usa">🇺🇸 Америка</button>
+      <button class="country-chip" data-country="germany">🇩🇪 Германия</button>
     </div>
-    <div class="sort-indicator">
-      <span>🔽 DHR ↓</span>
+    <div class="legend">
+      <span><span class="dot dhr"></span> DHR 1-5</span>
+      <span><span class="dot dlr"></span> DLR 1-5</span>
+      <span><span class="dot bdev"></span> B DEV</span>
     </div>
   </div>
 
@@ -363,9 +416,9 @@
       <tbody id="tableBody"></tbody>
     </table>
   </div>
-  <div class="footer-stats">
-    <span>DHR 1-5 (High Rank) · DLR 1-5 (Low Rank, 5=лучший)</span>
-    <span id="playerCount">0 разработчиков</span>
+  <div class="footer">
+    <span>⚡ DHR 1-5 (High Rank) · 💎 DLR 1-5 (Low Rank, 5 = лучший) · 👑 B DEV (только 1 на страну)</span>
+    <span class="count" id="playerCount">0 разработчиков</span>
   </div>
 </div>
 
@@ -387,33 +440,28 @@
       { name: "NullRaum", country: "germany", dhr: 5, dlr: 3, bdev: false },
       { name: "SchattenDev", country: "germany", dhr: 3, dlr: 4, bdev: false },
       { name: "CyberFox", country: "russia", dhr: 2, dlr: 5, bdev: false },
-      { name: "GlitchMaster", country: "usa", dhr: 5, dlr: 2, bdev: true },
+      { name: "GlitchMaster", country: "usa", dhr: 5, dlr: 2, bdev: false },
     ];
 
     const countryNames = {
-      russia: "Россия",
-      ukraine: "Украина",
-      usa: "Америка",
-      germany: "Германия"
+      russia: "Россия", ukraine: "Украина", usa: "Америка", germany: "Германия"
     };
-
     const countryFlags = {
-      russia: "🇷🇺",
-      ukraine: "🇺🇦",
-      usa: "🇺🇸",
-      germany: "🇩🇪"
+      russia: "🇷🇺", ukraine: "🇺🇦", usa: "🇺🇸", germany: "🇩🇪"
     };
 
     let activeCountry = 'all';
-    let activeCategory = 'overall';
+    let activeTab = 'overall';
 
     const tableBody = document.getElementById('tableBody');
     const playerCountSpan = document.getElementById('playerCount');
-    const countryPills = document.querySelectorAll('.country-pill');
-    const categoryTabs = document.querySelectorAll('.tab-btn');
+    const countryChips = document.querySelectorAll('.country-chip');
+    const navTabs = document.querySelectorAll('.nav-tab');
 
     function getInitials(name) {
-      return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || name[0].toUpperCase();
+      const parts = name.trim().split(/\s+/);
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return name.slice(0, 2).toUpperCase();
     }
 
     function renderTable() {
@@ -423,18 +471,14 @@
         filtered = filtered.filter(d => d.country === activeCountry);
       }
 
-      filtered.sort((a, b) => {
-        if (b.dhr !== a.dhr) return b.dhr - a.dhr;
-        if (b.dlr !== a.dlr) return b.dlr - a.dlr;
-        return a.name.localeCompare(b.name);
-      });
-
-      if (activeCategory === 'bdev') {
+      if (activeTab === 'bdev') {
         filtered.sort((a, b) => (b.bdev ? 1 : 0) - (a.bdev ? 1 : 0) || b.dhr - a.dhr || b.dlr - a.dlr);
-      } else if (activeCategory === 'dhr') {
+      } else if (activeTab === 'dhr') {
         filtered.sort((a, b) => b.dhr - a.dhr || b.dlr - a.dlr);
-      } else if (activeCategory === 'dlr') {
+      } else if (activeTab === 'dlr') {
         filtered.sort((a, b) => b.dlr - a.dlr || b.dhr - a.dhr);
+      } else {
+        filtered.sort((a, b) => (b.bdev ? 1 : 0) - (a.bdev ? 1 : 0) || b.dhr - a.dhr || b.dlr - a.dlr);
       }
 
       const top10 = filtered.slice(0, 10);
@@ -451,29 +495,28 @@
         if (!dev) {
           rows += `
             <tr>
-              <td><div class="rank-num">${rank}</div></td>
-              <td><div class="empty-state">— нет участника —</div></td>
-              <td><span class="empty-state">—</span></td>
-              <td><span class="empty-state">—</span></td>
-              <td><span class="empty-state">—</span></td>
-              <td><span class="empty-state">—</span></td>
+              <td><span class="rank-badge-num">${rank}</span></td>
+              <td><span class="empty-text">— нет участника —</span></td>
+              <td><span class="empty-text">—</span></td>
+              <td><span class="empty-text">—</span></td>
+              <td><span class="empty-text">—</span></td>
+              <td><span class="empty-text">—</span></td>
             </tr>`;
           continue;
         }
 
         rows += `
           <tr class="${rankClass}">
-            <td><div class="rank-num">${rank}</div></td>
+            <td><span class="rank-badge-num">${rank}</span></td>
             <td>
               <div class="player-cell">
                 <div class="avatar">${getInitials(dev.name)}</div>
                 <span class="player-name">${dev.name}</span>
-                ${dev.bdev ? '<span class="bdev-tag">B DEV</span>' : ''}
               </div>
             </td>
-            <td><span class="rank-badge dhr">⚡ ${dev.dhr}</span></td>
-            <td><span class="rank-badge dlr">💎 ${dev.dlr}</span></td>
-            <td>${dev.bdev ? '✅' : '<span style="color:#52525b;">—</span>'}</td>
+            <td><span class="stat-pill dhr">⚡ ${dev.dhr}</span></td>
+            <td><span class="stat-pill dlr">💎 ${dev.dlr}</span></td>
+            <td>${dev.bdev ? '<span class="bdev-badge">👑 B DEV</span>' : '<span style="color:#3f3f4a;">—</span>'}</td>
             <td>${countryFlags[dev.country] || '🌍'} ${countryNames[dev.country] || dev.country}</td>
           </tr>`;
       }
@@ -482,22 +525,29 @@
       playerCountSpan.textContent = `${filtered.length} разработчиков`;
     }
 
-    countryPills.forEach(btn => {
-      btn.addEventListener('click', () => {
-        countryPills.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeCountry = btn.dataset.country;
+    countryChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        countryChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeCountry = chip.dataset.country;
         renderTable();
       });
     });
 
-    categoryTabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        categoryTabs.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeCategory = btn.dataset.cat;
+    navTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        navTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeTab = tab.dataset.tab;
         renderTable();
       });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+      }
+      if (e.key === 'F12') e.preventDefault();
     });
 
     renderTable();
