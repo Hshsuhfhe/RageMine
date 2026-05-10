@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>DEV RANK • глобальная таблица лидеров</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>DEV RANK • Global Leaderboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,439 +13,494 @@
     }
 
     body {
-      background: radial-gradient(circle at 10% 30%, #1a0e20, #03010a);
+      background: #0d0d12;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
+      color: #e4e4e7;
+      padding: 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #13131a;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid #252530;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.6);
+    }
+
+    .header {
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #16161f;
+      border-bottom: 1px solid #252530;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      border-radius: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 2rem 1.5rem;
-      margin: 0;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(139,92,246,0.3);
     }
 
-    .dev-panel {
-      max-width: 1050px;
-      width: 100%;
-      background: rgba(10, 5, 20, 0.7);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      border: 1px solid rgba(180, 100, 255, 0.25);
-      box-shadow: 0 35px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(200, 130, 255, 0.2), 0 0 50px rgba(160, 80, 255, 0.45);
-      border-radius: 3.5rem 3.5rem 2.8rem 2.8rem;
-      padding: 2.2rem 2.2rem 2.8rem;
-      transition: all 0.3s ease;
-    }
-
-    .header-section {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2.5rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: baseline;
-      gap: 0.7rem;
-    }
-
-    .brand h1 {
-      font-size: 2.6rem;
+    .logo-text h2 {
+      font-size: 1.25rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #f0c7ff, #b56bff, #6d28d9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.5px;
-      text-shadow: 0 0 22px #a855f7;
+      letter-spacing: -0.3px;
+      color: #f4f4f5;
     }
 
-    .badge {
-      background: #2e1065;
-      color: #e9d5ff;
-      padding: 0.3rem 1.2rem;
-      border-radius: 3rem;
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 1.2px;
-      border: 1px solid #c084fc;
-      box-shadow: 0 0 18px #a855f7;
-      backdrop-filter: blur(5px);
-    }
-
-    .country-selector {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      background: rgba(15, 5, 26, 0.6);
-      backdrop-filter: blur(10px);
-      padding: 0.5rem 1rem;
-      border-radius: 4rem;
-      border: 1px solid rgba(192, 132, 252, 0.5);
-    }
-
-    .country-btn {
-      background: transparent;
-      border: none;
-      color: #c7b0f0;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      font-size: 0.85rem;
-      padding: 0.5rem 1.1rem;
-      border-radius: 2.5rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
+    .logo-text span {
+      font-size: 0.7rem;
+      color: #a1a1aa;
       letter-spacing: 0.5px;
-      backdrop-filter: blur(4px);
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .country-btn.active {
-      background: #7e22ce;
-      color: #ffffff;
-      box-shadow: 0 0 25px #a855f7, 0 4px 12px rgba(168, 85, 247, 0.6);
-      border: 1px solid #d8b4fe;
-      transform: scale(1.03);
-    }
-
-    .country-btn:hover {
-      background: rgba(168, 85, 247, 0.3);
-      color: #f5d0fe;
-      border: 1px solid #c084fc;
-    }
-
-    .leaderboard {
-      margin-top: 1.2rem;
-      border-radius: 2.5rem;
-      overflow: hidden;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(215, 180, 255, 0.2);
-      box-shadow: 0 25px 40px rgba(0,0,0,0.8), inset 0 0 25px rgba(137, 70, 255, 0.25);
-    }
-
-    .table-header {
-      display: grid;
-      grid-template-columns: 80px 1fr 160px 110px;
-      padding: 1.2rem 2rem;
-      background: rgba(25, 10, 45, 0.75);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid #7e22ce;
-      color: #d8b4fe;
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 1.8px;
       text-transform: uppercase;
     }
 
-    .row {
-      display: grid;
-      grid-template-columns: 80px 1fr 160px 110px;
-      padding: 1.1rem 2rem;
-      align-items: center;
-      background: rgba(18, 7, 33, 0.5);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(147, 112, 219, 0.2);
-      transition: all 0.25s ease;
-      animation: fadeSlide 0.4s ease;
-      position: relative;
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: #1e1e28;
+      border-radius: 0.5rem;
+      padding: 0.25rem;
     }
 
-    .row:hover {
-      background: rgba(109, 40, 217, 0.35);
-      transform: scale(1.01) translateX(6px);
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
-      border-left: 4px solid #c084fc;
-      z-index: 2;
+    .tab-btn {
+      padding: 0.55rem 1.1rem;
+      border: none;
+      background: transparent;
+      color: #a1a1aa;
+      font-weight: 600;
+      font-size: 0.8rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.2px;
     }
 
-    @keyframes fadeSlide {
-      0% { opacity: 0; transform: translateY(14px); }
-      100% { opacity: 1; transform: translateY(0); }
+    .tab-btn.active {
+      background: #2a2a38;
+      color: #f4f4f5;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
     }
 
-    .rank-cell {
-      font-weight: 800;
-      font-size: 1.5rem;
+    .tab-btn:hover {
+      color: #d4d4d8;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .filter-bar {
+      padding: 0.75rem 1.75rem;
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .rank-1 { color: #fbbf24; text-shadow: 0 0 20px #f59e0b; }
-    .rank-2 { color: #c0c0c0; text-shadow: 0 0 14px #9ca3af; }
-    .rank-3 { color: #cd7f32; text-shadow: 0 0 14px #b45309; }
-    .rank-other { color: #a78bfa; }
-
-    .dev-name {
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: #f3e8ff;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 0.75rem;
+      background: #16161f;
+      border-bottom: 1px solid #22222e;
+      font-size: 0.8rem;
+      color: #a1a1aa;
+    }
+
+    .country-pills {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .country-pill {
+      padding: 0.35rem 0.85rem;
+      border-radius: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #1e1e28;
+      color: #a1a1aa;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.1px;
+    }
+
+    .country-pill.active {
+      background: #6366f1;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(99,102,241,0.4);
+    }
+
+    .country-pill:hover {
+      background: #2a2a38;
+      color: #e4e4e7;
+    }
+    .country-pill.active:hover {
+      background: #6366f1;
+    }
+
+    .sort-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #71717a;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    thead th {
+      padding: 0.9rem 1.5rem;
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #71717a;
+      background: #111118;
+      border-bottom: 1px solid #22222e;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 0.8rem 1.5rem;
+      border-bottom: 1px solid #1e1e28;
+      font-size: 0.88rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    tbody tr {
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
+      background: rgba(99, 102, 241, 0.06);
+    }
+
+    .rank-num {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #a1a1aa;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1e1e28;
+      border-radius: 0.35rem;
+    }
+
+    .rank-1 .rank-num {
+      background: #fbbf24;
+      color: #0d0d12;
+      box-shadow: 0 0 14px rgba(251,191,36,0.5);
+    }
+    .rank-2 .rank-num {
+      background: #a1a1aa;
+      color: #0d0d12;
+      box-shadow: 0 0 10px rgba(161,161,170,0.4);
+    }
+    .rank-3 .rank-num {
+      background: #cd7f32;
+      color: #0d0d12;
+      box-shadow: 0 0 10px rgba(205,127,50,0.4);
+    }
+
+    .player-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.35rem;
+      background: linear-gradient(135deg, #4c1d95, #5b21b6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #ddd6fe;
+      flex-shrink: 0;
+    }
+
+    .player-name {
+      font-weight: 700;
+      color: #f4f4f5;
+      letter-spacing: -0.2px;
     }
 
     .bdev-tag {
-      background: linear-gradient(135deg, #fbbf24, #d97706);
-      color: #0f0a1a;
+      background: #fbbf24;
+      color: #0d0d12;
+      font-size: 0.6rem;
       font-weight: 800;
-      font-size: 0.7rem;
-      padding: 0.25rem 0.9rem;
-      border-radius: 2rem;
-      letter-spacing: 0.8px;
-      box-shadow: 0 0 20px #f59e0b;
-      border: 1px solid #fde68a;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.25rem;
+      letter-spacing: 0.3px;
+      margin-left: 0.35rem;
+      text-transform: uppercase;
+      box-shadow: 0 0 8px rgba(251,191,36,0.4);
     }
 
     .rank-badge {
-      background: #1e1b4b;
-      padding: 0.3rem 1rem;
-      border-radius: 2rem;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #e9d5ff;
-      border: 1px solid #7e22ce;
-      background: rgba(109, 40, 217, 0.5);
-    }
-
-    .dhr-cell, .dlr-cell {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 0.3rem;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
-    }
-
-    .stat-active {
-      background: #1c1030;
-      padding: 0.3rem 1rem;
-      border-radius: 1.5rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #6d28d9;
-      color: #e2c6ff;
-      box-shadow: 0 0 8px #7e22ce;
-    }
-
-    .stat-inactive {
-      color: #4a3a6a;
-      text-decoration: line-through;
-      opacity: 0.55;
-    }
-
-    .empty-slot {
-      color: #6b6b8a;
-      font-style: italic;
-      font-size: 0.9rem;
-      opacity: 0.8;
+      font-size: 0.78rem;
+      background: #1e1e28;
+      color: #c4b5fd;
       letter-spacing: 0.3px;
     }
 
-    .crown {
-      font-size: 1.4rem;
-      filter: drop-shadow(0 0 12px gold);
+    .rank-badge.dhr {
+      background: rgba(99,102,241,0.15);
+      color: #a5b4fc;
     }
 
-    .footer-note {
-      margin-top: 2rem;
+    .rank-badge.dlr {
+      background: rgba(236,72,153,0.12);
+      color: #f9a8d4;
+    }
+
+    .empty-state {
+      color: #52525b;
+      font-style: italic;
+      font-size: 0.8rem;
+      padding: 0.5rem 0;
+    }
+
+    .footer-stats {
+      padding: 0.9rem 1.75rem;
+      background: #111118;
+      border-top: 1px solid #22222e;
+      font-size: 0.7rem;
+      color: #52525b;
       display: flex;
       justify-content: space-between;
-      color: #b197fc;
-      font-size: 0.75rem;
-      gap: 2rem;
-      border-top: 1px dashed #5b21b6;
-      padding-top: 1.3rem;
-      flex-wrap: wrap;
+      letter-spacing: 0.3px;
     }
 
-    button {
-      cursor: pointer;
-    }
-
-    @media (max-width: 700px) {
-      .dev-panel {
-        padding: 1.5rem;
-      }
-      .table-header, .row {
-        grid-template-columns: 55px 1fr 100px 85px;
-        padding: 0.9rem 0.7rem;
-        font-size: 0.7rem;
-      }
+    @media (max-width: 600px) {
+      body { padding: 0.5rem; }
+      .header { padding: 1rem; }
+      .filter-bar { padding: 0.75rem 1rem; }
+      thead th, tbody td { padding: 0.7rem 0.8rem; }
     }
   </style>
 </head>
 <body>
-<div class="dev-panel">
-  <div class="header-section">
-    <div class="brand">
-      <h1>DEV•RANK</h1>
-      <span class="badge">B-DEV ELITE</span>
+<div class="container">
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">DV</div>
+      <div class="logo-text">
+        <h2>DEV RANK</h2>
+        <span>Global Leaderboard</span>
+      </div>
     </div>
-    <div class="country-selector" id="countrySelector">
-      <button class="country-btn active" data-country="russia">🇷🇺 Россия</button>
-      <button class="country-btn" data-country="ukraine">🇺🇦 Украина</button>
-      <button class="country-btn" data-country="usa">🇺🇸 Америка</button>
-      <button class="country-btn" data-country="germany">🇩🇪 Германия</button>
+    <div class="tabs" id="categoryTabs">
+      <button class="tab-btn active" data-cat="overall">Overall</button>
+      <button class="tab-btn" data-cat="dhr">DHR</button>
+      <button class="tab-btn" data-cat="dlr">DLR</button>
+      <button class="tab-btn" data-cat="bdev">B DEV</button>
     </div>
   </div>
 
-  <div class="leaderboard">
-    <div class="table-header">
-      <span>#</span>
-      <span>РАЗРАБОТЧИК</span>
-      <span>АКТИВНЫЙ РАНГ</span>
-      <span>B-DEV</span>
+  <div class="filter-bar">
+    <div class="country-pills" id="countryPills">
+      <button class="country-pill active" data-country="all">🌍 Все</button>
+      <button class="country-pill" data-country="russia">🇷🇺 Россия</button>
+      <button class="country-pill" data-country="ukraine">🇺🇦 Украина</button>
+      <button class="country-pill" data-country="usa">🇺🇸 Америка</button>
+      <button class="country-pill" data-country="germany">🇩🇪 Германия</button>
     </div>
-    <div id="leaderboardBody">
-      <!-- JS генерирует строки -->
+    <div class="sort-indicator">
+      <span>🔽 DHR ↓</span>
     </div>
   </div>
-  <div class="footer-note">
-    <span>⚡ DHR 1-5 (HIGH RANK) · DLR 1-5 (LOW RANK, 5=лучший)</span>
-    <span>👑 B DEV — элитный статус</span>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Разработчик</th>
+          <th>DHR</th>
+          <th>DLR</th>
+          <th>B DEV</th>
+          <th>Страна</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <div class="footer-stats">
+    <span>DHR 1-5 (High Rank) · DLR 1-5 (Low Rank, 5=лучший)</span>
+    <span id="playerCount">0 разработчиков</span>
   </div>
 </div>
 
 <script>
-  (function() {
-    // ----- БАЗА ДАННЫХ РАЗРАБОТЧИКОВ -----
-    // У каждого разработчика есть ОДИН активный ранг: либо high (dhr), либо low (dlr).
-    // Поле bdev: true означает, что разработчик имеет статус B DEV (Best Developer).
-    const developersDB = {
-      russia: [
-        { name: "VoidCipher", dhr: 5, dlr: null, bdev: false },
-        { name: "NexaByte", dhr: null, dlr: 5, bdev: false },
-        { name: "KiberKot", dhr: 4, dlr: null, bdev: false },
-        { name: "Baraschki", dhr: 5, dlr: null, bdev: true }  // Барашки есть и в России (пример)
-      ],
-      ukraine: [
-        { name: "Devastator", dhr: 5, dlr: null, bdev: true },
-        { name: "PixelGhost", dhr: null, dlr: 4, bdev: false }
-      ],
-      usa: [
-        { name: "RootPhantom", dhr: 5, dlr: null, bdev: true },
-        { name: "SyntaxSam", dhr: null, dlr: 5, bdev: false },
-        { name: "NeonX", dhr: 4, dlr: null, bdev: false }
-      ],
-      germany: [
-        { name: "Baraschki", dhr: 5, dlr: null, bdev: true },  // 👑 БАРАШКИ В ГЕРМАНИИ B DEV DHR 5
-        { name: "KraftWerk", dhr: null, dlr: 5, bdev: false },
-        { name: "ByteBauer", dhr: 4, dlr: null, bdev: false },
-        { name: "NullRaum", dhr: null, dlr: 4, bdev: false },
-        { name: "SchattenDev", dhr: 3, dlr: null, bdev: false }
-      ]
+  (() => {
+    const developers = [
+      { name: "Baraschki", country: "russia", dhr: 5, dlr: 5, bdev: true },
+      { name: "VoidCipher", country: "russia", dhr: 4, dlr: 4, bdev: false },
+      { name: "NexaByte", country: "russia", dhr: 3, dlr: 5, bdev: false },
+      { name: "KiberKot", country: "russia", dhr: 5, dlr: 3, bdev: false },
+      { name: "Devastator", country: "ukraine", dhr: 5, dlr: 5, bdev: true },
+      { name: "PixelGhost", country: "ukraine", dhr: 4, dlr: 4, bdev: false },
+      { name: "RootPhantom", country: "usa", dhr: 5, dlr: 5, bdev: true },
+      { name: "SyntaxSam", country: "usa", dhr: 4, dlr: 5, bdev: false },
+      { name: "NeonX", country: "usa", dhr: 5, dlr: 4, bdev: false },
+      { name: "Baraschki", country: "germany", dhr: 5, dlr: 5, bdev: true },
+      { name: "KraftWerk", country: "germany", dhr: 4, dlr: 5, bdev: false },
+      { name: "ByteBauer", country: "germany", dhr: 4, dlr: 4, bdev: false },
+      { name: "NullRaum", country: "germany", dhr: 5, dlr: 3, bdev: false },
+      { name: "SchattenDev", country: "germany", dhr: 3, dlr: 4, bdev: false },
+      { name: "CyberFox", country: "russia", dhr: 2, dlr: 5, bdev: false },
+      { name: "GlitchMaster", country: "usa", dhr: 5, dlr: 2, bdev: true },
+    ];
+
+    const countryNames = {
+      russia: "Россия",
+      ukraine: "Украина",
+      usa: "Америка",
+      germany: "Германия"
     };
 
-    let currentCountry = "germany"; // По умолчанию показываем Германию, где Барашки B DEV
+    const countryFlags = {
+      russia: "🇷🇺",
+      ukraine: "🇺🇦",
+      usa: "🇺🇸",
+      germany: "🇩🇪"
+    };
 
-    const countryButtons = document.querySelectorAll('.country-btn');
-    const leaderboardBody = document.getElementById('leaderboardBody');
+    let activeCountry = 'all';
+    let activeCategory = 'overall';
 
-    // Функция для отрисовки таблицы
-    function renderLeaderboard(country) {
-      const devs = developersDB[country] || [];
-      
-      // Сортируем: сначала B DEV, затем по активному рангу (чем выше, тем лучше)
-      const sorted = [...devs].sort((a, b) => {
-        if (a.bdev && !b.bdev) return -1;
-        if (!a.bdev && b.bdev) return 1;
-        
-        // Получаем числовое значение ранга (DHR или DLR)
-        const rankA = a.dhr !== null ? a.dhr : (a.dlr !== null ? a.dlr : 0);
-        const rankB = b.dhr !== null ? b.dhr : (b.dlr !== null ? b.dlr : 0);
-        return rankB - rankA;
-      });
+    const tableBody = document.getElementById('tableBody');
+    const playerCountSpan = document.getElementById('playerCount');
+    const countryPills = document.querySelectorAll('.country-pill');
+    const categoryTabs = document.querySelectorAll('.tab-btn');
 
-      // Всегда показываем ровно 3 позиции
-      const top3 = [];
-      for (let i = 0; i < 3; i++) {
-        top3.push(i < sorted.length ? sorted[i] : null);
+    function getInitials(name) {
+      return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || name[0].toUpperCase();
+    }
+
+    function renderTable() {
+      let filtered = [...developers];
+
+      if (activeCountry !== 'all') {
+        filtered = filtered.filter(d => d.country === activeCountry);
       }
 
-      let html = '';
-      top3.forEach((dev, index) => {
-        const rank = index + 1;
-        let rankClass = 'rank-other';
+      filtered.sort((a, b) => {
+        if (b.dhr !== a.dhr) return b.dhr - a.dhr;
+        if (b.dlr !== a.dlr) return b.dlr - a.dlr;
+        return a.name.localeCompare(b.name);
+      });
+
+      if (activeCategory === 'bdev') {
+        filtered.sort((a, b) => (b.bdev ? 1 : 0) - (a.bdev ? 1 : 0) || b.dhr - a.dhr || b.dlr - a.dlr);
+      } else if (activeCategory === 'dhr') {
+        filtered.sort((a, b) => b.dhr - a.dhr || b.dlr - a.dlr);
+      } else if (activeCategory === 'dlr') {
+        filtered.sort((a, b) => b.dlr - a.dlr || b.dhr - a.dhr);
+      }
+
+      const top10 = filtered.slice(0, 10);
+      let rows = '';
+
+      for (let i = 0; i < 10; i++) {
+        const dev = top10[i] || null;
+        const rank = i + 1;
+        let rankClass = '';
         if (rank === 1) rankClass = 'rank-1';
         else if (rank === 2) rankClass = 'rank-2';
         else if (rank === 3) rankClass = 'rank-3';
 
-        const crownIcon = rank === 1 ? '<span class="crown">👑</span>' : '';
-
-        if (dev === null) {
-          // Пустое место
-          html += `
-            <div class="row">
-              <div class="rank-cell ${rankClass}">${crownIcon} ${rank}</div>
-              <div class="dev-name empty-slot">— нет участника —</div>
-              <div class="dhr-cell empty-slot">···</div>
-              <div class="dlr-cell empty-slot">···</div>
-            </div>
-          `;
-        } else {
-          // Формируем отображение активного ранга
-          let rankDisplay = '';
-          if (dev.dhr !== null) {
-            rankDisplay = `<span class="stat-active">⚡ DHR ${dev.dhr}</span>`;
-          } else if (dev.dlr !== null) {
-            rankDisplay = `<span class="stat-active">💎 DLR ${dev.dlr}</span>`;
-          } else {
-            rankDisplay = '<span class="stat-inactive">—</span>';
-          }
-
-          // Статус B DEV
-          const bdevCell = dev.bdev 
-            ? '<span class="bdev-tag">🔥 B DEV</span>' 
-            : '<span class="stat-inactive" style="text-decoration: none; opacity:0.6;">—</span>';
-
-          // Имя разработчика (может быть с доп. подписью)
-          const nameHtml = `
-            <span>${dev.name}</span>
-            ${dev.bdev ? '<span style="font-size:0.7rem; color:#fbbf24;">(DHR 5)</span>' : ''}
-          `;
-
-          html += `
-            <div class="row">
-              <div class="rank-cell ${rankClass}">${crownIcon} ${rank}</div>
-              <div class="dev-name">${nameHtml}</div>
-              <div class="dhr-cell">${rankDisplay}</div>
-              <div class="dlr-cell">${bdevCell}</div>
-            </div>
-          `;
+        if (!dev) {
+          rows += `
+            <tr>
+              <td><div class="rank-num">${rank}</div></td>
+              <td><div class="empty-state">— нет участника —</div></td>
+              <td><span class="empty-state">—</span></td>
+              <td><span class="empty-state">—</span></td>
+              <td><span class="empty-state">—</span></td>
+              <td><span class="empty-state">—</span></td>
+            </tr>`;
+          continue;
         }
-      });
 
-      leaderboardBody.innerHTML = html;
+        rows += `
+          <tr class="${rankClass}">
+            <td><div class="rank-num">${rank}</div></td>
+            <td>
+              <div class="player-cell">
+                <div class="avatar">${getInitials(dev.name)}</div>
+                <span class="player-name">${dev.name}</span>
+                ${dev.bdev ? '<span class="bdev-tag">B DEV</span>' : ''}
+              </div>
+            </td>
+            <td><span class="rank-badge dhr">⚡ ${dev.dhr}</span></td>
+            <td><span class="rank-badge dlr">💎 ${dev.dlr}</span></td>
+            <td>${dev.bdev ? '✅' : '<span style="color:#52525b;">—</span>'}</td>
+            <td>${countryFlags[dev.country] || '🌍'} ${countryNames[dev.country] || dev.country}</td>
+          </tr>`;
+      }
+
+      tableBody.innerHTML = rows;
+      playerCountSpan.textContent = `${filtered.length} разработчиков`;
     }
 
-    // Обработчики переключения стран
-    function setActiveCountry(country) {
-      currentCountry = country;
-      countryButtons.forEach(btn => {
-        const btnCountry = btn.getAttribute('data-country');
-        if (btnCountry === country) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-      renderLeaderboard(country);
-    }
-
-    countryButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const country = e.currentTarget.getAttribute('data-country');
-        if (country) {
-          setActiveCountry(country);
-        }
+    countryPills.forEach(btn => {
+      btn.addEventListener('click', () => {
+        countryPills.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCountry = btn.dataset.country;
+        renderTable();
       });
     });
 
-    // Инициализация: Германия активна по умолчанию (Барашки B DEV DHR 5)
-    setActiveCountry('germany');
+    categoryTabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryTabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.cat;
+        renderTable();
+      });
+    });
+
+    renderTable();
   })();
 </script>
 </body>
