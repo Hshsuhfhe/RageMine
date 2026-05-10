@@ -2,390 +2,195 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>DEV RANK • Global Leaderboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV RANK • Professional Leaderboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
+    :root {
+      --bg-body: #0d0d12;
+      --bg-card: #14141c;
+      --bg-row: #1a1a24;
+      --accent: #6366f1; /* Фирменный синий */
+      --gold: #fbbf24;
+      --text-main: #f1f5f9;
+      --text-dim: #94a3b8;
+      --border: #262633;
+      
+      /* Ранги по твоей логике */
+      --dhr-color: #4ade80; /* Зеленый для DHR */
+      --dlr-color: #f472b6; /* Розовый для DLR */
     }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    
     body {
-      background: #0a0a10;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      color: #ffffff;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 20px;
       display: flex;
-      align-items: stretch;
-      justify-content: stretch;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      padding: 0;
-      margin: 0;
+      justify-content: center;
     }
 
     .container {
       width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      background: #0d0d15;
+      max-width: 1100px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
       overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     }
 
-    .top-bar {
+    /* Верхняя панель (Категории) */
+    .top-nav {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1.5rem;
-      background: #111118;
-      border-bottom: 1px solid #1e1e2a;
-      flex-shrink: 0;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: #fff;
-      letter-spacing: -0.3px;
-    }
-
-    .logo svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .main-tabs {
-      display: flex;
-      gap: 0;
-      background: #1a1a26;
-      border-radius: 0.4rem;
-      overflow: hidden;
-      border: 1px solid #252535;
-    }
-
-    .main-tab {
-      padding: 0.5rem 1.2rem;
-      border: none;
-      background: transparent;
-      color: #999;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-      border-right: 1px solid #252535;
-      letter-spacing: -0.1px;
-    }
-
-    .main-tab:last-child {
-      border-right: none;
-    }
-    .main-tab.active {
-      background: #6366f1;
-      color: #fff;
-    }
-    .main-tab:hover:not(.active) {
-      color: #ccc;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
       background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
     }
 
-    .sub-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.4rem 1.5rem;
-      background: #0f0f17;
-      border-bottom: 1px solid #1a1a26;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .country-tabs {
-      display: flex;
-      gap: 0.25rem;
-      flex-wrap: wrap;
-    }
-
-    .country-tab {
-      padding: 0.35rem 0.9rem;
-      border-radius: 0.3rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      background: #161622;
-      color: #999;
-      border: none;
+    .nav-btn {
+      background: #1e1e2d;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
       cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-      letter-spacing: -0.1px;
+      transition: 0.2s;
     }
 
-    .country-tab.active {
-      background: #6366f1;
-      color: #fff;
-    }
-    .country-tab:hover:not(.active) {
-      color: #ddd;
-      background: #1e1e2e;
+    .nav-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
     }
 
-    .info-text {
-      font-size: 0.65rem;
-      color: #666;
-      letter-spacing: 0.2px;
-    }
-
-    .table-wrapper {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
-
-    .table-wrapper::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    .table-wrapper::-webkit-scrollbar-track {
-      background: #0a0a10;
-    }
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: #222;
-      border-radius: 3px;
-    }
-    .table-wrapper::-webkit-scrollbar-thumb:hover {
-      background: #333;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 750px;
-    }
-
-    thead {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    thead th {
-      padding: 0.55rem 1.2rem;
-      text-align: left;
-      font-size: 0.6rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #666;
-      background: #0d0d15;
-      border-bottom: 2px solid #1a1a26;
-      white-space: nowrap;
-    }
-
-    thead th:first-child {
-      padding-left: 1.5rem;
-    }
-
-    tbody td {
-      padding: 0.45rem 1.2rem;
-      border-bottom: 1px solid #14141f;
-      font-size: 0.78rem;
-      font-weight: 500;
-      white-space: nowrap;
-      color: #ccc;
-    }
-
-    tbody td:first-child {
-      padding-left: 1.5rem;
-    }
-
-    tbody tr {
-      transition: background 0.1s;
-    }
-
-    tbody tr:hover {
-      background: rgba(255,255,255,0.015);
-    }
-
-    .rank-num {
-      font-weight: 700;
-      color: #999;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 3px;
-    }
-
-    tr.top-1 .rank-num {
-      background: #fbbf24;
-      color: #000;
-      font-weight: 900;
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      box-shadow: 0 0 10px rgba(251,191,36,0.4);
-      animation: rank1Glow 2s ease-in-out infinite;
-    }
-
-    tr.top-2 .rank-num {
-      background: #a1a1aa;
-      color: #000;
-      font-weight: 800;
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      box-shadow: 0 0 8px rgba(161,161,170,0.3);
-    }
-
-    tr.top-3 .rank-num {
-      background: #cd7f32;
-      color: #000;
-      font-weight: 800;
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      box-shadow: 0 0 8px rgba(205,127,50,0.3);
-    }
-
-    @keyframes rank1Glow {
-      0%, 100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
-      50% { box-shadow: 0 0 20px rgba(251,191,36,0.7); }
-    }
-
-    .player-cell {
+    /* Панель стран */
+    .sub-nav {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      background: #1e1e30;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.65rem;
-      color: #999;
-      flex-shrink: 0;
-      text-transform: uppercase;
-    }
-
-    .player-name {
-      font-weight: 600;
-      color: #e0e0e0;
-      font-size: 0.8rem;
-    }
-
-    .bdev-tag {
-      display: inline-block;
-      background: #fbbf24;
-      color: #000;
-      font-size: 0.55rem;
-      font-weight: 800;
-      padding: 0.15rem 0.45rem;
-      border-radius: 3px;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-    }
-
-    .rank-badge {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      border-radius: 3px;
-      font-weight: 700;
-      font-size: 0.72rem;
-    }
-    .rank-badge.dhr {
-      background: rgba(99,102,241,0.2);
-      color: #a5b4fc;
-    }
-    .rank-badge.dlr {
-      background: rgba(236,72,153,0.2);
-      color: #f9a8d4;
-    }
-
-    .points {
-      font-weight: 600;
-      color: #bbb;
-      font-size: 0.78rem;
-    }
-
-    .empty-text {
-      color: #444;
-      font-style: italic;
-      font-size: 0.72rem;
-    }
-
-    .country-flag {
-      font-size: 0.75rem;
-    }
-
-    .footer {
-      padding: 0.4rem 1.5rem;
-      background: #0d0d15;
-      border-top: 1px solid #1a1a26;
-      font-size: 0.6rem;
-      color: #555;
-      display: flex;
       justify-content: space-between;
-      flex-shrink: 0;
-      letter-spacing: 0.2px;
+      padding: 15px 25px;
+      background: rgba(0,0,0,0.2);
     }
+
+    .country-tabs { display: flex; gap: 8px; }
+    .c-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .c-btn.active { background: #2d2d3d; color: white; }
+
+    .hint { font-size: 11px; color: var(--text-dim); font-style: italic; }
+
+    /* Таблица */
+    .table-wrapper { padding: 10px 20px 20px; overflow-x: auto; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+    
+    th {
+      text-align: left;
+      padding: 10px 15px;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .row { background: var(--bg-row); transition: 0.2s; }
+    .row:hover { background: #22222f; transform: translateY(-1px); }
+
+    td { padding: 12px 15px; vertical-align: middle; }
+    td:first-child { border-radius: 8px 0 0 8px; }
+    td:last-child { border-radius: 0 8px 8px 0; }
+
+    /* Оформление ТОП-1 по твоей логике */
+    .row.top-1 { 
+      background: linear-gradient(90deg, rgba(251, 191, 36, 0.1), var(--bg-row));
+      border-left: 2px solid var(--gold);
+    }
+    .rank-num { font-weight: 900; font-size: 16px; color: var(--text-dim); }
+    .top-1 .rank-num { color: var(--gold); font-size: 20px; }
+
+    /* Игрок */
+    .p-cell { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 34px; height: 34px;
+      background: #2d2d3f;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 12px; color: var(--accent);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .name-wrap { display: flex; flex-direction: column; }
+    .name { font-weight: 700; font-size: 14px; }
+    .pts { font-size: 11px; color: var(--text-dim); }
+
+    /* Твои ранги (DHR/DLR) */
+    .badge {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #0f0f16;
+      text-transform: uppercase;
+    }
+    .badge.dhr { color: var(--dhr-color); border: 1px solid rgba(74, 222, 128, 0.2); }
+    .badge.dlr { color: var(--dlr-color); border: 1px solid rgba(244, 114, 182, 0.2); }
+
+    /* Тег B DEV */
+    .bdev-tag {
+      background: var(--gold);
+      color: #000;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .flag { margin-right: 5px; opacity: 0.8; }
   </style>
 </head>
-<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+<body>
+
 <div class="container">
-  <div class="top-bar">
-    <div class="logo">
-      <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#6366f1"/><text x="6" y="17" font-size="12" font-weight="900" fill="#fff">DV</text></svg>
-      DEV RANK
-    </div>
-    <div class="main-tabs" id="mainTabs">
-      <button class="main-tab active" data-tab="overall">Overall</button>
-      <button class="main-tab" data-tab="dhr">DHR</button>
-      <button class="main-tab" data-tab="dlr">DLR</button>
-      <button class="main-tab" data-tab="bdev">B DEV</button>
-    </div>
+  <div class="top-nav" id="mainTabs">
+    <button class="nav-btn active" data-tab="overall">Overall</button>
+    <button class="nav-btn" data-tab="dhr">DHR</button>
+    <button class="nav-btn" data-tab="dlr">DLR</button>
+    <button class="nav-btn" data-tab="bdev">B DEV</button>
   </div>
 
-  <div class="sub-bar">
+  <div class="sub-nav">
     <div class="country-tabs" id="countryTabs">
-      <button class="country-tab active" data-country="all">Все</button>
-      <button class="country-tab" data-country="russia">Россия</button>
-      <button class="country-tab" data-country="ukraine">Украина</button>
-      <button class="country-tab" data-country="usa">Америка</button>
-      <button class="country-tab" data-country="germany">Германия</button>
+      <button class="c-btn active" data-country="all">Все</button>
+      <button class="c-btn" data-country="russia">Россия</button>
+      <button class="c-btn" data-country="ukraine">Украина</button>
+      <button class="c-btn" data-country="usa">США</button>
+      <button class="c-btn" data-country="germany">Германия</button>
     </div>
-    <div class="info-text">⚡ DHR 1-5 · 💎 DLR 1-5 · 👑 B DEV (только 1 в мире)</div>
+    <div class="hint">Уровни: 1-5 (Max)</div>
   </div>
 
   <div class="table-wrapper">
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Игрок</th>
+          <th style="width: 50px;">#</th>
+          <th>Разработчик</th>
           <th>Ранг</th>
-          <th>Поинты</th>
           <th>B DEV</th>
           <th>Страна</th>
         </tr>
@@ -393,171 +198,86 @@
       <tbody id="tableBody"></tbody>
     </table>
   </div>
-  <div class="footer">
-    <span>Developers Leaderboard</span>
-    <span id="playerCount">0 разработчиков</span>
-  </div>
 </div>
 
 <script>
-  (() => {
-    const developers = [
-      { name: "Baraschki", country: "germany", rankType: "dhr", rankValue: 5, bdev: true },
-      { name: "VoidCipher", country: "russia", rankType: "dhr", rankValue: 4, bdev: false },
-      { name: "NexaByte", country: "russia", rankType: "dlr", rankValue: 5, bdev: false },
-      { name: "KiberKot", country: "russia", rankType: "dhr", rankValue: 5, bdev: false },
-      { name: "Devastator", country: "ukraine", rankType: "dhr", rankValue: 5, bdev: false },
-      { name: "PixelGhost", country: "ukraine", rankType: "dlr", rankValue: 4, bdev: false },
-      { name: "RootPhantom", country: "usa", rankType: "dhr", rankValue: 5, bdev: false },
-      { name: "SyntaxSam", country: "usa", rankType: "dlr", rankValue: 5, bdev: false },
-      { name: "NeonX", country: "usa", rankType: "dhr", rankValue: 4, bdev: false },
-      { name: "KraftWerk", country: "germany", rankType: "dlr", rankValue: 5, bdev: false },
-      { name: "ByteBauer", country: "germany", rankType: "dhr", rankValue: 4, bdev: false },
-      { name: "NullRaum", country: "germany", rankType: "dhr", rankValue: 5, bdev: false },
-      { name: "SchattenDev", country: "germany", rankType: "dlr", rankValue: 4, bdev: false },
-      { name: "CyberFox", country: "russia", rankType: "dlr", rankValue: 5, bdev: false },
-      { name: "GlitchMaster", country: "usa", rankType: "dhr", rankValue: 3, bdev: false },
-      { name: "StormCoder", country: "ukraine", rankType: "dhr", rankValue: 4, bdev: false },
-      { name: "DataWraith", country: "usa", rankType: "dlr", rankValue: 4, bdev: false },
-      { name: "HexPulse", country: "russia", rankType: "dhr", rankValue: 3, bdev: false },
-      { name: "NullByte", country: "germany", rankType: "dlr", rankValue: 3, bdev: false },
-    ];
+  const developers = [
+    { name: "Baraschki", country: "germany", type: "dhr", val: 5, bdev: true, pts: 550 },
+    { name: "VoidCipher", country: "russia", type: "dhr", val: 4, bdev: false, pts: 450 },
+    { name: "NexaByte", country: "russia", type: "dlr", val: 5, bdev: false, pts: 420 },
+    { name: "KiberKot", country: "russia", type: "dhr", val: 5, bdev: false, pts: 500 },
+    { name: "Devastator", country: "ukraine", type: "dhr", val: 5, bdev: false, pts: 510 },
+    { name: "PixelGhost", country: "ukraine", type: "dlr", val: 4, bdev: false, pts: 340 },
+    { name: "RootPhantom", country: "usa", type: "dhr", val: 5, bdev: false, pts: 505 },
+    { name: "SyntaxSam", country: "usa", type: "dlr", val: 5, bdev: false, pts: 410 },
+    { name: "KraftWerk", country: "germany", type: "dlr", val: 5, bdev: false, pts: 405 },
+    { name: "NullRaum", country: "germany", type: "dhr", val: 5, bdev: false, pts: 500 }
+  ];
 
-    const countryNames = {
-      russia: "Россия", ukraine: "Украина", usa: "США", germany: "Германия"
-    };
-    const countryFlags = {
-      russia: "🇷🇺", ukraine: "🇺🇦", usa: "🇺🇸", germany: "🇩🇪"
-    };
+  const flags = { russia: "🇷🇺", ukraine: "🇺🇦", usa: "🇺🇸", germany: "🇩🇪" };
+  const names = { russia: "Russia", ukraine: "Ukraine", usa: "USA", germany: "Germany" };
 
-    let activeCountry = 'all';
-    let activeTab = 'overall';
+  let activeTab = 'overall';
+  let activeCountry = 'all';
 
-    const tableBody = document.getElementById('tableBody');
-    const playerCountSpan = document.getElementById('playerCount');
-    const countryTabs = document.querySelectorAll('.country-tab');
-    const mainTabs = document.querySelectorAll('.main-tab');
+  function render() {
+    let filtered = [...developers];
 
-    function getInitials(name) {
-      const parts = name.trim().split(/\s+/);
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-      return name.slice(0, 2).toUpperCase();
-    }
+    if (activeCountry !== 'all') filtered = filtered.filter(d => d.country === activeCountry);
+    
+    // Сортировка по твоей логике (B DEV всегда сверху, потом очки)
+    filtered.sort((a, b) => (b.bdev - a.bdev) || (b.pts - a.pts));
 
-    function getPoints(dev) {
-      if (dev.rankType === 'dhr') return dev.rankValue * 100 + 50;
-      return dev.rankValue * 80 + 20;
-    }
+    if (activeTab === 'dhr') filtered = filtered.filter(d => d.type === 'dhr');
+    if (activeTab === 'dlr') filtered = filtered.filter(d => d.type === 'dlr');
+    if (activeTab === 'bdev') filtered = filtered.filter(d => d.bdev);
 
-    function renderTable() {
-      let filtered = [...developers];
-
-      if (activeCountry !== 'all') {
-        filtered = filtered.filter(d => d.country === activeCountry);
-      }
-
-      const bdevHolder = filtered.find(d => d.bdev === true);
-      if (bdevHolder) {
-        filtered.forEach(d => {
-          if (d !== bdevHolder) d.bdev = false;
-        });
-      }
-
-      if (activeTab === 'bdev') {
-        filtered.sort((a, b) => (b.bdev ? 1 : 0) - (a.bdev ? 1 : 0) || getPoints(b) - getPoints(a));
-      } else if (activeTab === 'dhr') {
-        filtered.sort((a, b) => {
-          const aVal = a.rankType === 'dhr' ? a.rankValue : 0;
-          const bVal = b.rankType === 'dhr' ? b.rankValue : 0;
-          return bVal - aVal || getPoints(b) - getPoints(a);
-        });
-      } else if (activeTab === 'dlr') {
-        filtered.sort((a, b) => {
-          const aVal = a.rankType === 'dlr' ? a.rankValue : 0;
-          const bVal = b.rankType === 'dlr' ? b.rankValue : 0;
-          return bVal - aVal || getPoints(b) - getPoints(a);
-        });
-      } else {
-        filtered.sort((a, b) => (b.bdev ? 1 : 0) - (a.bdev ? 1 : 0) || getPoints(b) - getPoints(a));
-      }
-
-      const top20 = filtered.slice(0, 20);
-      let rows = '';
-
-      for (let i = 0; i < 20; i++) {
-        const dev = top20[i] || null;
-        const rank = i + 1;
-        let rowClass = '';
-        if (rank === 1) rowClass = 'top-1';
-        else if (rank === 2) rowClass = 'top-2';
-        else if (rank === 3) rowClass = 'top-3';
-
-        if (!dev) {
-          rows += `
-            <tr>
-              <td><span class="rank-num">${rank}</span></td>
-              <td><span class="empty-text">— нет участника —</span></td>
-              <td><span class="empty-text">—</span></td>
-              <td><span class="empty-text">—</span></td>
-              <td><span class="empty-text">—</span></td>
-              <td><span class="empty-text">—</span></td>
-            </tr>`;
-          continue;
-        }
-
-        const rankDisplay = dev.rankType === 'dhr'
-          ? `<span class="rank-badge dhr">DHR ${dev.rankValue}</span>`
-          : `<span class="rank-badge dlr">DLR ${dev.rankValue}</span>`;
-
-        const points = getPoints(dev);
-
-        rows += `
-          <tr class="${rowClass}">
-            <td><span class="rank-num">${rank}</span></td>
-            <td>
-              <div class="player-cell">
-                <div class="avatar">${getInitials(dev.name)}</div>
-                <span class="player-name">${dev.name}</span>
+    const html = filtered.map((d, i) => {
+      const rank = i + 1;
+      return `
+        <tr class="row ${rank === 1 ? 'top-1' : ''}">
+          <td class="rank-num">${rank}.</td>
+          <td>
+            <div class="p-cell">
+              <div class="avatar">${d.name[0]}</div>
+              <div class="name-wrap">
+                <span class="name">${d.name}</span>
+                <span class="pts">${d.pts} XP</span>
               </div>
-            </td>
-            <td>${rankDisplay}</td>
-            <td><span class="points">${points}</span></td>
-            <td>${dev.bdev ? '<span class="bdev-tag">B DEV</span>' : '<span style="color:#444;">—</span>'}</td>
-            <td><span class="country-flag">${countryFlags[dev.country] || '🌍'} ${countryNames[dev.country] || dev.country}</span></td>
-          </tr>`;
-      }
+            </div>
+          </td>
+          <td><span class="badge ${d.type}">${d.type.toUpperCase()} ${d.val}</span></td>
+          <td>${d.bdev ? '<span class="bdev-tag">B DEV</span>' : '<span style="opacity:0.2">—</span>'}</td>
+          <td style="font-size: 12px; color: var(--text-dim)">
+            <span class="flag">${flags[d.country]}</span> ${names[d.country]}
+          </td>
+        </tr>
+      `;
+    }).join('');
 
-      tableBody.innerHTML = rows;
-      playerCountSpan.textContent = `${filtered.length} разработчиков`;
+    document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding: 40px; color: #444;">Нет данных</td></tr>';
+  }
+
+  // Слушатели событий
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelector('.nav-btn.active').classList.remove('active');
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      render();
     }
+  });
 
-    countryTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        countryTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        activeCountry = tab.dataset.country;
-        renderTable();
-      });
-    });
+  document.querySelectorAll('.c-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelector('.c-btn.active').classList.remove('active');
+      btn.classList.add('active');
+      activeCountry = btn.dataset.country;
+      render();
+    }
+  });
 
-    mainTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        mainTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        activeTab = tab.dataset.tab;
-        renderTable();
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-      }
-      if (e.key === 'F12') e.preventDefault();
-    });
-
-    renderTable();
-  })();
+  render();
 </script>
 </body>
 </html>
