@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOPDEV | Leaderboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>MCTIERS - Player Rankings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Основные стили страницы */
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --gold: #ffb800;
-            --silver: #bdc3c7;
-            --bronze: #cd7f32;
-            --accent: #5865f2;
+            --bg-color: #10131c;
+            --card-bg: #161a24;
             --text-main: #ffffff;
-            --text-dim: #8b949e;
+            --text-muted: #8b949e;
+            --accent: #5865f2;
+            --search-bg: #1e2330;
+            --border-color: #2d333b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,311 +26,346 @@
             overflow-x: hidden;
         }
 
-        /* --- Шапка --- */
+        /* --- Шапка сайта (Header) --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background: rgba(22, 27, 34, 0.8);
+            padding: 15px 40px;
+            background: rgba(16, 19, 28, 0.95);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #30363d;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--gold);
+            letter-spacing: 1px;
+            color: #ffb800; /* Золотой цвет лого */
             text-transform: uppercase;
         }
 
+        /* --- Поисковая система --- */
+        .search-container {
+            position: relative;
+            width: 280px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
         .search-bar {
-            background: #0d1117;
-            border: 1px solid #30363d;
+            width: 100%;
+            background: var(--search-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 8px 15px;
+            padding: 10px 15px 10px 38px;
             color: white;
-            width: 300px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
 
         .search-bar:focus {
             outline: none;
             border-color: var(--accent);
-            width: 350px;
-            box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
         }
 
-        /* --- Таблица --- */
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .dev-row {
-            display: grid;
-            grid-template-columns: 60px 80px 1fr 120px 250px;
-            align-items: center;
-            background: var(--card-bg);
-            margin-bottom: 8px;
-            padding: 12px 20px;
-            border-radius: 6px;
-            transition: all 0.4s ease;
-            border: 1px solid transparent;
-            animation: fadeIn 0.5s ease backwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dev-row:hover {
-            transform: translateX(10px);
-            border-color: #30363d;
-            background: #1c2128;
-        }
-
-        /* --- Призовые места и СИЯНИЕ --- */
-        .rank-num { font-weight: 800; font-size: 18px; }
-
-        .rank-1 { border-left: 4px solid var(--gold); }
-        .rank-2 { border-left: 4px solid var(--silver); }
-        .rank-3 { border-left: 4px solid var(--bronze); }
-
-        .gold-shimmer {
-            color: var(--gold);
-            text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
-            animation: shimmer 2s infinite linear;
-        }
-
-        .silver-shimmer {
-            color: var(--silver);
-            text-shadow: 0 0 10px rgba(189, 195, 199, 0.5);
-            animation: shimmer 2.5s infinite linear;
-        }
-
-        .bronze-shimmer {
-            color: var(--bronze);
-            text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
-            animation: shimmer 3s infinite linear;
-        }
-
-        @keyframes shimmer {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.6) drop-shadow(0 0 15px currentColor); }
-            100% { filter: brightness(1); }
-        }
-
-        /* --- Аватары --- */
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            background: #30363d;
-            overflow: hidden;
-        }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        .nickname { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
-        .rank-label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; }
-
-        /* --- Теги рангов --- */
-        .tag {
-            padding: 4px 8px;
+        .search-hint {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2d333b;
+            color: var(--text-muted);
+            padding: 2px 6px;
             border-radius: 4px;
             font-size: 11px;
-            font-weight: 800;
-            text-align: center;
-        }
-        .tag-bdev { background: rgba(255, 184, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
-        .tag-dhr { background: rgba(88, 101, 242, 0.1); color: #7289da; border: 1px solid #7289da; }
-        .tag-dlr { background: rgba(139, 148, 158, 0.1); color: #8b949e; border: 1px solid #484f58; }
-
-        /* --- Критерии справа --- */
-        .criteria-list {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .criterion {
-            width: 32px;
-            height: 32px;
-            background: #0d1117;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            cursor: help;
-            font-size: 14px;
-            border: 1px solid #30363d;
-        }
-
-        .criterion::after {
-            content: attr(data-title);
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: #f0f6fc;
-            color: #0d1117;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
             pointer-events: none;
-            transition: all 0.2s ease;
-            font-weight: 700;
         }
 
-        .criterion:hover::after {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
+        /* --- Главный контент --- */
+        .main-content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            padding-bottom: 50px;
         }
 
-        /* --- Виджет оценки --- */
-        .assess-widget {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #238636, #2ea043);
-            padding: 15px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            z-index: 1000;
-        }
-
-        .assess-widget:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 15px 40px rgba(46, 160, 67, 0.4);
-        }
-
-        .assess-widget span {
-            color: white;
-            font-weight: 800;
+        /* --- Таблица заголовков --- */
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 100px 1fr 150px;
+            padding: 10px 25px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
+        /* --- Стили строк игроков --- */
+        .player-row {
+            display: grid;
+            grid-template-columns: 80px 100px 1fr 150px;
+            align-items: center;
+            background: var(--card-bg);
+            margin-bottom: 8px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .player-row:hover {
+            transform: translateX(5px);
+            background: #1c212e;
+            border-color: #3e4451;
+        }
+
+        /* --- Призовые блоки (1, 2, 3) - БЕЗ персонажей --- */
+        .rank-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Эффект скоса и сияния, как на 1 фото */
+        .rank-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -50%;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-25deg);
+        }
+
+        .gold-rank {
+            background: linear-gradient(135deg, #ffb800 0%, #ff8a00 100%);
+            box-shadow: 0 4px 15px rgba(255, 184, 0, 0.3);
+        }
+
+        .silver-rank {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+            box-shadow: 0 4px 15px rgba(189, 195, 199, 0.3);
+        }
+
+        .bronze-rank {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        /* Обычные номера для остальных */
+        .normal-rank {
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            width: 45px;
+        }
+
+        /* --- Аватары (заглушки) --- */
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #2d333b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* --- Инфо об игроке --- */
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .player-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .player-status {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- Национальности (Флаги) --- */
+        .flag-container {
+            display: flex;
+            justify-content: flex-end; /* Выравнивание по правому краю */
+            padding-right: 20px;
+        }
+
+        .flag-icon {
+            width: 28px;
+            height: 20px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Класс для скрытия элементов при поиске */
         .hidden { display: none !important; }
+
     </style>
 </head>
 <body>
 
     <header class="header">
-        <div class="logo">TopDev</div>
-        <input type="text" class="search-bar" id="search" placeholder="Поиск разработчика по имени...">
+        <div class="logo">MCTIERS</div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-bar" id="playerSearch" placeholder="Search player...">
+            <span class="search-hint">/</span>
+        </div>
     </header>
 
-    <div class="container" id="leaderboard">
-        <div class="dev-row rank-1" data-name="baraschki">
-            <div class="rank-num gold-shimmer">1.</div>
-            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Baraschki" alt="av"></div>
-            <div class="info">
-                <div class="nickname">Baraschki</div>
-                <div class="rank-label">Global Top Developer</div>
-            </div>
-            <div class="tag tag-bdev">B DEV</div>
-            <div class="criteria-list">
-                <div class="criterion" data-title="Настройка">⚙️</div>
-                <div class="criterion" data-title="Разработка">💻</div>
-                <div class="criterion" data-title="Знания">🧠</div>
-                <div class="criterion" data-title="Архитектура">🏗️</div>
-                <div class="criterion" data-title="Скорость">⚡</div>
-            </div>
+    <main class="main-content">
+        <div class="table-header">
+            <div>Rank</div>
+            <div>Avatar</div>
+            <div>Player</div>
+            <div style="text-align: right; padding-right: 20px;">Region</div>
         </div>
 
-        <div class="dev-row rank-2" data-name="cyberninja">
-            <div class="rank-num silver-shimmer">2.</div>
-            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="av"></div>
-            <div class="info">
-                <div class="nickname">CyberNinja</div>
-                <div class="rank-label">Senior Backend</div>
+        <div id="playerList">
+            
+            <div class="player-row" data-name="itzrealme">
+                <div class="rank-box gold-rank">1</div>
+                <div class="avatar-placeholder">IR</div>
+                <div class="player-info">
+                    <div class="player-name">ItzRealMe</div>
+                    <div class="player-status">Combat Master (330 points)</div>
+                </div>
+                <div class="flag-container">
+                    <img src="https://flagcdn.com/w40/us.png" alt="USA" class="flag-icon" title="North America">
+                </div>
             </div>
-            <div class="tag tag-dhr">DHR 5</div>
-            <div class="criteria-list">
-                <div class="criterion" data-title="Настройка">⚙️</div>
-                <div class="criterion" data-title="Разработка">💻</div>
-                <div class="criterion" data-title="Безопасность">🛡️</div>
-            </div>
-        </div>
 
-        <div class="dev-row rank-3" data-name="nullpointer">
-            <div class="rank-num bronze-shimmer">3.</div>
-            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Max" alt="av"></div>
-            <div class="info">
-                <div class="nickname">NullPointer</div>
-                <div class="rank-label">Fullstack Expert</div>
+            <div class="player-row" data-name="coldified">
+                <div class="rank-box silver-rank">2</div>
+                <div class="avatar-placeholder">CO</div>
+                <div class="player-info">
+                    <div class="player-name">Coldified</div>
+                    <div class="player-status">Combat Master (326 points)</div>
+                </div>
+                <div class="flag-container">
+                    <img src="https://flagcdn.com/w40/gb.png" alt="UK" class="flag-icon" title="Europe">
+                </div>
             </div>
-            <div class="tag tag-dhr">DHR 3</div>
-            <div class="criteria-list">
-                <div class="criterion" data-title="Знания">🧠</div>
-                <div class="criterion" data-title="Разработка">💻</div>
-                <div class="criterion" data-title="Логика">🧩</div>
-            </div>
-        </div>
 
-        <div class="dev-row" data-name="junior_dev">
-            <div class="rank-num">4.</div>
-            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Junior" alt="av"></div>
-            <div class="info">
-                <div class="nickname">Junior_Dev</div>
-                <div class="rank-label">Learning Fast</div>
+            <div class="player-row" data-name="swight">
+                <div class="rank-box bronze-rank">3</div>
+                <div class="avatar-placeholder">SW</div>
+                <div class="player-info">
+                    <div class="player-name">Swight</div>
+                    <div class="player-status">Combat Master (290 points)</div>
+                </div>
+                <div class="flag-container">
+                    <img src="https://flagcdn.com/w40/ca.png" alt="Canada" class="flag-icon" title="North America">
+                </div>
             </div>
-            <div class="tag tag-dlr">DLR 2</div>
-            <div class="criteria-list">
-                <div class="criterion" data-title="Настройка">⚙️</div>
-                <div class="criterion" data-title="Знания">🧠</div>
-            </div>
-        </div>
-    </div>
 
-    <a href="https://t.me/Franzosren?text=я%20хочу%20пройти%20тест" class="assess-widget">
-        <span>Оцени себя</span>
-    </a>
+            </div>
+    </main>
 
     <script>
-        // Плавный поиск
-        const searchInput = document.getElementById('search');
-        const rows = document.querySelectorAll('.dev-row');
+        // Имитация базы данных игроков (национальности взяты красивые)
+        const playersData = [
+            { name: "Janekv", status: "Combat Ace", points: 245, flag: "pl", region: "Europe" },
+            { name: "BlvckWlf", status: "Combat Ace", points: 226, flag: "de", region: "Europe" },
+            { name: "Kylaz", status: "Combat Ace", points: 226, flag: "fr", region: "North America" },
+            { name: "Ninoroc15", status: "Combat Ace", points: 211, flag: "es", region: "Europe" },
+            { name: "Lurrn", status: "Combat Ace", points: 186, flag: "it", region: "Europe" },
+            { name: "Arsakha", status: "Combat Ace", points: 177, flag: "jp", region: "Asia" },
+            { name: "yMiau", status: "Combat Ace", points: 177, flag: "kr", region: "Europe" },
+            { name: "Juan_Clean", status: "Combat Ace", points: 165, flag: "mx", region: "North America" },
+            { name: "ShadowStorm", status: "Elite Veteran", points: 150, flag: "br", region: "South America" },
+            { name: "PixelKnight", status: "Elite Veteran", points: 145, flag: "au", region: "Australia" },
+            { name: "NovaStrike", status: "Rising Star", points: 130, flag: "se", region: "Europe" },
+            { name: "ViperKing", status: "Rising Star", points: 122, flag: "za", region: "Africa" },
+            { name: "GamerPro99", status: "Recruit", points: 90, flag: "nl", region: "Europe" }
+        ];
+
+        const playerList = document.getElementById('playerList');
+
+        // Функция генерации строк для обычных игроков (начиная с 4 места)
+        function generatePlayers() {
+            playersData.forEach((player, index) => {
+                const rank = index + 4; // Старт с 4 места
+                const initials = player.name.substring(0, 2).toUpperCase();
+
+                const rowHtml = `
+                    <div class="player-row" data-name="${player.name.toLowerCase()}">
+                        <div class="normal-rank">${rank}.</div>
+                        <div class="avatar-placeholder">${initials}</div>
+                        <div class="player-info">
+                            <div class="player-name">${player.name}</div>
+                            <div class="player-status">${player.status} (${player.points} points)</div>
+                        </div>
+                        <div class="flag-container">
+                            <img src="https://flagcdn.com/w40/${player.flag}.png" alt="${player.flag}" class="flag-icon" title="${player.region}">
+                        </div>
+                    </div>
+                `;
+                playerList.insertAdjacentHTML('beforeend', rowHtml);
+            });
+        }
+
+        // Запуск генерации при загрузке
+        generatePlayers();
+
+        // --- ЛОГИКА ПОИСКА ---
+        const searchInput = document.getElementById('playerSearch');
+        const allPlayerRows = document.querySelectorAll('.player-row');
 
         searchInput.addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
-            
-            rows.forEach(row => {
-                const name = row.getAttribute('data-name').toLowerCase();
-                if (name.includes(val)) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            allPlayerRows.forEach(row => {
+                const playerName = row.getAttribute('data-name');
+                
+                if (playerName.includes(searchTerm)) {
                     row.classList.remove('hidden');
-                    row.style.opacity = '1';
-                    row.style.transform = 'scale(1)';
                 } else {
-                    row.style.opacity = '0';
-                    row.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        if (row.style.opacity === '0') row.classList.add('hidden');
-                    }, 300);
+                    row.classList.add('hidden');
                 }
             });
         });
 
-        // Небольшая задержка анимации для каждой строки при загрузке
-        rows.forEach((row, index) => {
-            row.style.animationDelay = `${index * 0.05}s`;
+        // Горячая клавиша '/' для фокуса на поиске
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault(); // Предотвратить ввод '/' в поиск
+                searchInput.focus();
+            }
         });
+
     </script>
 </body>
 </html>
