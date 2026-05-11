@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOPDEV | Developer Rankings</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>TOPDEV | Professional Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0d1117;
@@ -17,156 +17,133 @@
             --silver: #bdc3c7;
             --bronze: #cd7f32;
             --accent: #5865f2;
+            --success: #238636;
         }
 
+        /* Базовые настройки */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
         body { 
             background-color: var(--bg-color); 
             color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            overflow-y: scroll;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- Навигация --- */
+        /* --- Навигация (Верхняя панель) --- */
         .navbar {
             background: var(--header-bg);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 50px; height: 70px; position: sticky; top: 0; z-index: 1000;
+            padding: 0 40px; height: 80px; position: sticky; top: 0; z-index: 1000;
         }
-        .logo { 
-            color: var(--gold); font-weight: 900; font-size: 24px; 
-            letter-spacing: -1px; text-transform: uppercase;
+        .nav-left { display: flex; align-items: center; gap: 30px; }
+        .logo { color: var(--gold); font-weight: 900; font-size: 26px; letter-spacing: -1px; }
+        
+        .nav-menu { display: flex; gap: 20px; }
+        .nav-link { 
+            color: var(--text-main); text-decoration: none; font-size: 14px; 
+            font-weight: 600; transition: 0.3s; cursor: pointer;
         }
-        .search-wrapper {
-            background: #0d1117; border-radius: 10px; padding: 10px 15px;
-            display: flex; align-items: center; border: 1px solid var(--border);
-            width: 350px; transition: 0.3s;
+        .nav-link:hover { color: var(--text-bright); }
+
+        /* Поиск из прошлого раза */
+        .search-container { position: relative; width: 350px; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #484f58; }
+        .search-bar {
+            width: 100%; background: #0d1117; border: 1px solid var(--border);
+            border-radius: 12px; padding: 12px 20px 12px 45px; color: white;
+            font-size: 14px; outline: none; transition: 0.3s; cursor: text;
         }
-        .search-wrapper:focus-within { border-color: var(--accent); }
-        .search-wrapper input { 
-            background: transparent; border: none; color: white; 
-            outline: none; margin-left: 10px; font-size: 14px; width: 100%; cursor: text;
+        .search-bar:focus { border-color: var(--accent); }
+        .search-hint {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            background: #21262d; color: #8b949e; padding: 2px 6px; border-radius: 4px; font-size: 11px;
         }
 
-        /* --- Контейнер --- */
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-
-        /* --- Заголовки таблицы --- */
-        .table-head {
-            display: grid; grid-template-columns: 100px 1fr 150px 250px;
-            padding: 10px 25px; font-size: 12px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px; color: #484f58;
+        /* --- Основной макет (Сетка) --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            gap: 30px;
         }
 
-        /* --- Строка игрока --- */
+        /* --- Список разработчиков --- */
         .row {
-            display: grid; grid-template-columns: 100px 1fr 150px 250px;
-            background: var(--card-bg); margin-bottom: 6px; border-radius: 8px;
-            align-items: center; cursor: pointer; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden; border: 1px solid transparent;
+            display: grid; grid-template-columns: 140px 1fr 180px 320px;
+            background: var(--card-bg); margin-bottom: 15px; border-radius: 12px;
+            height: 100px; align-items: center; cursor: pointer; border: 1px solid transparent;
+            animation: fadeInScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
-        .row:hover { 
-            background: #1c2128; border-color: #484f58; 
-            transform: scale(1.01) translateX(5px);
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
+        .row:hover { background: #1c2128; border-color: #444c56; transform: translateX(5px); }
 
-        /* --- Треугольные блоки (Трапеции) для ТОП-3 --- */
-        .rank-box {
-            height: 70px; width: 85px;
+        /* Трапеция для всех мест */
+        .rank-poly {
+            height: 100%; width: 110px;
             display: flex; align-items: center; justify-content: center;
             clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
-            position: relative;
         }
-        .rank-box span {
-            font-weight: 900; font-size: 32px; color: white;
-            padding-right: 15px; text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
+        .rank-poly span { font-weight: 900; font-size: 36px; color: white; font-style: italic; margin-right: 15px; }
+        .p-1 { background: linear-gradient(135deg, #ffb800, #ff8a00); }
+        .p-2 { background: linear-gradient(135deg, #bdc3c7, #2c3e50); }
+        .p-3 { background: linear-gradient(135deg, #cd7f32, #7d4411); }
+        .p-other { background: linear-gradient(135deg, #2d333b, #161b22); }
 
-        /* Анимация сияния */
-        @keyframes shimmer {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.3) contrast(1.2); }
-            100% { filter: brightness(1); }
-        }
+        .nickname { font-size: 22px; font-weight: 800; color: white; }
+        .player-id { font-size: 11px; color: #484f58; font-family: monospace; }
 
-        .poly-1 { background: linear-gradient(135deg, #ffb800, #ff8a00); animation: shimmer 2s infinite; }
-        .poly-2 { background: linear-gradient(135deg, #bdc3c7, #606c88); animation: shimmer 2.5s infinite; }
-        .poly-3 { background: linear-gradient(135deg, #cd7f32, #59330e); animation: shimmer 3s infinite; }
-
-        .rank-normal { padding-left: 35px; font-weight: 800; font-size: 20px; color: #484f58; }
-
-        /* --- Имя и Ранг --- */
-        .player-core { display: flex; flex-direction: column; gap: 4px; }
-        .nickname { font-weight: 700; font-size: 18px; color: var(--text-bright); }
-
-        /* --- Ранги с ободком (Neon Badges) --- */
         .badge {
-            padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 800;
-            text-align: center; text-transform: uppercase; width: fit-content;
-            border: 2px solid transparent;
+            padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800;
+            text-transform: uppercase; border: 2px solid transparent; text-align: center;
         }
-        .bdev { 
-            background: rgba(255, 184, 0, 0.1); color: var(--gold); 
-            border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 184, 0, 0.2);
-        }
-        .dhr { background: rgba(88, 101, 242, 0.1); color: #5865f2; border-color: #5865f2; }
-        .dlr { background: rgba(139, 148, 158, 0.05); color: #8b949e; border-color: #30363d; }
+        .bdev { background: rgba(255,184,0,0.1); color: var(--gold); border-color: var(--gold); }
+        .dhr { background: rgba(88,101,242,0.1); color: #5865f2; border-color: #5865f2; }
+        .dlr { background: rgba(139,148,158,0.1); color: #8b949e; border-color: #30363d; }
 
-        /* --- Иконки критериев --- */
-        .tiers { display: flex; gap: 10px; justify-content: flex-end; padding-right: 30px; }
+        /* --- ИКОНКИ КРИТЕРИЕВ (Вместо смайликов) --- */
+        .tiers { display: flex; gap: 12px; justify-content: flex-end; padding-right: 40px; }
         .tier-icon {
-            width: 34px; height: 34px; background: #0d1117; border-radius: 8px;
-            border: 1px solid var(--border); display: flex; align-items: center; 
-            justify-content: center; position: relative; transition: 0.3s;
+            width: 42px; height: 42px; background: #0d1117; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #30363d; transition: 0.3s; position: relative;
         }
-        .tier-icon:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .tier-icon svg { width: 18px; height: 18px; transition: 0.3s; }
         
-        .tier-icon::after {
-            content: attr(data-title); position: absolute; bottom: 45px;
-            background: white; color: black; padding: 5px 10px; border-radius: 4px;
-            font-size: 11px; font-weight: 800; white-space: nowrap;
-            opacity: 0; pointer-events: none; transition: 0.2s;
-        }
-        .tier-icon:hover::after { opacity: 1; }
+        /* Цвета для разных типов иконок */
+        .t-setup { stroke: #f66a0a; } .t-code { stroke: #2188ff; }
+        .t-brain { stroke: #34d058; } .t-bolt { stroke: #e3b341; }
 
-        /* --- Модальное окно --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 2000; display: none;
-            align-items: center; justify-content: center; backdrop-filter: blur(8px);
+        .tier-icon:hover { 
+            transform: translateY(-5px); border-color: currentColor; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.05);
         }
-        .modal-content {
+
+        /* --- Боковая панель (ИНФОРМАЦИЯ / ПРАВИЛА) --- */
+        .sidebar-card {
             background: var(--header-bg); border: 1px solid var(--border);
-            padding: 40px; border-radius: 20px; width: 450px; text-align: center;
-            animation: modalIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            border-radius: 12px; padding: 25px; margin-bottom: 20px;
         }
-        @keyframes modalIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .modal-name { font-size: 32px; font-weight: 900; color: white; margin-bottom: 5px; }
-        .modal-badge { margin: 15px auto; }
-        .modal-info-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            margin-top: 25px; text-align: left; padding: 20px; background: #0d1117; border-radius: 12px;
+        .side-title { 
+            color: white; font-size: 18px; font-weight: 800; 
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
         }
-        .info-item label { font-size: 11px; text-transform: uppercase; color: #484f58; display: block; }
-        .info-item span { color: white; font-weight: 600; }
+        .side-content { font-size: 13px; line-height: 1.6; color: var(--text-main); }
+        .rule-item { margin-bottom: 10px; display: flex; gap: 10px; }
+        .rule-num { color: var(--gold); font-weight: 800; }
 
-        .btn-close { 
-            margin-top: 30px; padding: 12px 30px; background: var(--accent); 
-            border: none; color: white; border-radius: 8px; font-weight: 700; cursor: pointer;
+        .btn-contact {
+            width: 100%; padding: 15px; background: var(--success);
+            color: white; border: none; border-radius: 8px; font-weight: 800;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            text-decoration: none; display: block; text-align: center;
         }
-
-        /* --- Виджет связи --- */
-        .tg-widget {
-            position: fixed; bottom: 40px; right: 40px;
-            background: linear-gradient(135deg, #2ea043, #238636);
-            color: white; padding: 18px 30px; border-radius: 50px;
-            text-decoration: none; font-weight: 800; font-size: 14px;
-            box-shadow: 0 10px 30px rgba(35, 134, 54, 0.4);
-            transition: 0.3s; z-index: 1000;
-        }
-        .tg-widget:hover { transform: scale(1.05) translateY(-5px); }
+        .btn-contact:hover { filter: brightness(1.2); transform: scale(1.02); }
 
         .hidden { display: none !important; }
     </style>
@@ -174,109 +151,123 @@
 <body>
 
 <nav class="navbar">
-    <div class="logo">TOPDEV</div>
-    <div class="search-wrapper">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#484f58" stroke-width="3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="searchInput" placeholder="Поиск разработчика по нику...">
+    <div class="nav-left">
+        <div class="logo">TOPDEV</div>
+        <div class="nav-menu">
+            <a class="nav-link">ТОПЫ</a>
+            <a class="nav-link">ПРАВИЛА</a>
+            <a class="nav-link">API</a>
+        </div>
+    </div>
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Поиск по нику...">
+        <span class="search-hint">/</span>
     </div>
 </nav>
 
-<div class="container">
-    <div class="table-head">
-        <div>Ранг</div>
-        <div>Разработчик</div>
-        <div>Статус</div>
-        <div style="text-align: right; padding-right: 30px;">Критерии</div>
-    </div>
-    <div id="playerList"></div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-        <div class="modal-name" id="mName">Baraschki</div>
-        <div id="mBadgeContainer"></div>
-        <div class="modal-info-grid">
-            <div class="info-item"><label>Языки</label><span>JS, Python, C++</span></div>
-            <div class="info-item"><label>Проектов</label><span>128 Завершено</span></div>
-            <div class="info-item"><label>Опыт</label><span>Senior (6 лет)</span></div>
-            <div class="info-item"><label>Репозитории</label><span>450 ⭐</span></div>
+<div class="main-layout">
+    <div id="devList">
         </div>
-        <button class="btn-close" onclick="closeModal()">ПОНЯТНО</button>
-    </div>
-</div>
 
-<a href="https://t.me/Franzosren?text=я%20хочу%20пройти%20тест" class="tg-widget">ОЦЕНИ СЕБЯ</a>
+    <aside>
+        <div class="sidebar-card">
+            <div class="side-title">📝 ИНФОРМАЦИЯ</div>
+            <div class="side-content">
+                TOPDEV — это независимый рейтинг разработчиков. Мы оцениваем качество кода, скорость работы и глубину знаний.
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="side-title">⚖️ ПРАВИЛА</div>
+            <div class="side-content">
+                <div class="rule-item"><span class="rule-num">01.</span> Быть вежливым</div>
+                <div class="rule-item"><span class="rule-num">02.</span> Только чистый код</div>
+                <div class="rule-item"><span class="rule-num">03.</span> Соблюдение дедлайнов</div>
+            </div>
+        </div>
+
+        <a href="https://t.me/Franzosren" class="btn-contact">СВЯЗАТЬСЯ С НАМИ</a>
+    </aside>
+</div>
 
 <script>
-    const players = [
-        { name: "Baraschki", rank: "B DEV", type: "bdev", desc: "Главный архитектор систем. Эксперт во всем." },
-        { name: "Coldified", rank: "DHR 5", type: "dhr", desc: "Специалист по высоконагруженным бэкендам." },
-        { name: "Swight", rank: "DHR 4", type: "dhr", desc: "Мастер Frontend-анимаций и UI/UX." },
-        { name: "Janekv", rank: "DHR 2", type: "dhr", desc: "DevOps инженер, знающий всё про Docker." },
-        { name: "BlvckWlf", rank: "DLR 5", type: "dlr", desc: "Активно растущий Fullstack разработчик." },
-        { name: "Kylaz", rank: "DLR 5", type: "dlr", desc: "Специалист по безопасности и аудиту кода." },
-        { name: "Ninoroc15", rank: "DLR 4", type: "dlr", desc: "Python-разработчик, фанат Data Science." },
-        { name: "Lurrn", rank: "DLR 3", type: "dlr", desc: "Мастер скриптов и автоматизации процессов." },
-        { name: "Arsakha", rank: "DLR 2", type: "dlr", desc: "Интересуется блокчейном и Web3." },
-        { name: "yMiau", rank: "DLR 1", type: "dlr", desc: "Начинающий разработчик на Swift." },
-        { name: "PixelLord", rank: "DLR 1", type: "dlr", desc: "Создает инди-игры на Unity." },
-        { name: "CyberGhost", rank: "DLR 1", type: "dlr", desc: "Эксперт по Linux-системам." }
+    const developers = [
+        { name: "Baraschki", rank: "B DEV", type: "bdev" },
+        { name: "Coldified", rank: "DHR 5", type: "dhr" },
+        { name: "Swight", rank: "DHR 4", type: "dhr" },
+        { name: "Janekv", rank: "DHR 2", type: "dhr" },
+        { name: "BlvckWlf", rank: "DLR 5", type: "dlr" },
+        { name: "Kylaz", rank: "DLR 5", type: "dlr" },
+        { name: "Ninoroc15", rank: "DLR 4", type: "dlr" },
+        { name: "Lurrn", rank: "DLR 3", type: "dlr" },
+        { name: "Arsakha", rank: "DLR 2", type: "dlr" },
+        { name: "yMiau", rank: "DLR 1", type: "dlr" },
+        { name: "Nexus", rank: "DLR 1", type: "dlr" },
+        { name: "Cyber", rank: "DHR 1", type: "dhr" },
+        { name: "Viper", rank: "DLR 5", type: "dlr" },
+        { name: "Ghost", rank: "DLR 2", type: "dlr" },
+        { name: "Pixel", rank: "DLR 4", type: "dlr" },
+        { name: "Zero", rank: "DLR 1", type: "dlr" }
     ];
 
-    const listContainer = document.getElementById('playerList');
+    const container = document.getElementById('devList');
 
-    function renderPlayers() {
-        players.forEach((p, i) => {
-            const pos = i + 1;
-            const row = document.createElement('div');
-            row.className = 'row';
-            row.dataset.name = p.name.toLowerCase();
-            row.onclick = () => openModal(p);
+    developers.forEach((dev, i) => {
+        const num = i + 1;
+        const randomUUID = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.style.animationDelay = `${i * 0.05}s`;
+        row.dataset.name = dev.name.toLowerCase();
 
-            let rankHtml;
-            if(pos <= 3) {
-                rankHtml = `<div class="rank-box poly-${pos}"><span>${pos}.</span></div>`;
-            } else {
-                rankHtml = `<div class="rank-normal">${pos}.</div>`;
-            }
+        let polyClass = 'p-other';
+        if(num === 1) polyClass = 'p-1';
+        if(num === 2) polyClass = 'p-2';
+        if(num === 3) polyClass = 'p-3';
 
-            row.innerHTML = `
-                ${rankHtml}
-                <div class="player-core">
-                    <span class="nickname">${p.name}</span>
-                    <span style="font-size: 11px; color: #484f58;">ID: 000${pos}</span>
+        row.innerHTML = `
+            <div class="rank-poly ${polyClass}"><span>${num}.</span></div>
+            <div>
+                <div class="nickname">${dev.name}</div>
+                <div class="player-id">UUID: ${randomUUID}</div>
+            </div>
+            <div><div class="badge ${dev.type}">${dev.rank}</div></div>
+            <div class="tiers">
+                <div class="tier-icon t-setup">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 </div>
-                <div><div class="badge ${p.type}">${p.rank}</div></div>
-                <div class="tiers">
-                    <div class="tier-icon" data-title="Настройка">⚙️</div>
-                    <div class="tier-icon" data-title="Разработка">💻</div>
-                    <div class="tier-icon" data-title="Знания">🧠</div>
-                    <div class="tier-icon" data-title="Скорость">⚡</div>
+                <div class="tier-icon t-code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 </div>
-            `;
-            listContainer.appendChild(row);
-        });
-    }
+                <div class="tier-icon t-brain">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+                <div class="tier-icon t-bolt">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+            </div>
+        `;
+        container.appendChild(row);
+    });
 
-    function openModal(player) {
-        document.getElementById('mName').innerText = player.name;
-        document.getElementById('mBadgeContainer').innerHTML = `<div class="badge ${player.type}" style="margin: 0 auto;">${player.rank}</div>`;
-        document.getElementById('modalOverlay').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').style.display = 'none';
-    }
-
-    // Поиск
-    document.getElementById('searchInput').addEventListener('input', (e) => {
+    // Логика поиска
+    const search = document.getElementById('searchInput');
+    search.addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
         document.querySelectorAll('.row').forEach(r => {
             r.classList.toggle('hidden', !r.dataset.name.includes(val));
         });
     });
 
-    renderPlayers();
+    // Горячая клавиша "/"
+    document.addEventListener('keydown', (e) => {
+        if (e.key === '/') {
+            e.preventDefault();
+            search.focus();
+        }
+    });
 </script>
+
 </body>
 </html>
