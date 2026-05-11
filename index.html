@@ -1,255 +1,336 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MC TIERS • DEV RANK</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #0a0a0c;
-      --bg-panel: #111116;
-      --bg-row: #16161e;
-      --accent-orange: #ff9d00;
-      --text-gray: #71717a;
-      --border: #1f1f27;
-      
-      /* Tier Colors - как на MCTiers */
-      --ht1: #ff4747; --lt1: #ff8c42;
-      --ht2: #cc66ff; --lt2: #a366ff;
-      --ht3: #47a3ff; --lt3: #47d1ff;
-      --ht4: #4ade80;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPDEV | Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --gold: #ffb800;
+            --silver: #bdc3c7;
+            --bronze: #cd7f32;
+            --accent: #5865f2;
+            --text-main: #ffffff;
+            --text-dim: #8b949e;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    
-    body {
-      background: var(--bg-dark);
-      color: #fff;
-      padding: 40px 10px;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    .mctiers-container {
-      max-width: 1050px;
-      margin: 0 auto;
-      background: var(--bg-panel);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
 
-    /* Навигация как на картинке */
-    .header-nav {
-      display: flex;
-      justify-content: center;
-      padding: 15px;
-      gap: 10px;
-      background: rgba(0,0,0,0.2);
-      border-bottom: 1px solid var(--border);
-    }
+        /* --- Шапка --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #30363d;
+        }
 
-    .nav-tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      color: var(--text-gray);
-      transition: 0.2s;
-    }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
 
-    .nav-tab.active { color: #fff; border-bottom: 2px solid var(--accent-orange); }
-    .nav-tab svg { width: 22px; height: 22px; fill: currentColor; }
-    .nav-tab span { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .search-bar {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: white;
+            width: 300px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    /* Панель стран */
-    .filter-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 25px;
-      background: rgba(255,255,255,0.02);
-    }
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent);
+            width: 350px;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+        }
 
-    .countries { display: flex; gap: 8px; }
-    .country-btn {
-      background: #1c1c24;
-      border: 1px solid var(--border);
-      color: var(--text-gray);
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .country-btn.active { background: var(--accent-orange); color: #000; border-color: var(--accent-orange); }
+        /* --- Таблица --- */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    /* Таблица */
-    .content { padding: 15px 20px; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-    
-    th {
-      text-align: left;
-      padding: 0 15px 10px;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: var(--text-gray);
-    }
+        .dev-row {
+            display: grid;
+            grid-template-columns: 60px 80px 1fr 120px 250px;
+            align-items: center;
+            background: var(--card-bg);
+            margin-bottom: 8px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transition: all 0.4s ease;
+            border: 1px solid transparent;
+            animation: fadeIn 0.5s ease backwards;
+        }
 
-    .player-row { background: var(--bg-row); transition: 0.15s; }
-    .player-row:hover { background: #1c1c28; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    td { padding: 12px 15px; }
-    td:first-child { border-radius: 6px 0 0 6px; }
-    td:last-child { border-radius: 0 6px 6px 0; }
+        .dev-row:hover {
+            transform: translateX(10px);
+            border-color: #30363d;
+            background: #1c2128;
+        }
 
-    /* Топ-1 дизайн */
-    .player-row.top-1 {
-      background: linear-gradient(90deg, rgba(255, 157, 0, 0.08) 0%, var(--bg-row) 100%);
-      border-left: 2px solid var(--accent-orange);
-    }
-    .rank-num { font-weight: 900; color: var(--text-gray); font-size: 16px; }
-    .top-1 .rank-num { color: var(--accent-orange); }
+        /* --- Призовые места и СИЯНИЕ --- */
+        .rank-num { font-weight: 800; font-size: 18px; }
 
-    /* Инфо игрока */
-    .player-info { display: flex; align-items: center; gap: 15px; }
-    .skin-head { width: 36px; height: 36px; background: #2a2a35; border-radius: 4px; overflow: hidden; }
-    .name-stack { display: flex; flex-direction: column; }
-    .player-name { font-weight: 700; font-size: 14px; color: #eee; }
-    .player-sub { font-size: 10px; color: var(--text-gray); margin-top: 2px; }
+        .rank-1 { border-left: 4px solid var(--gold); }
+        .rank-2 { border-left: 4px solid var(--silver); }
+        .rank-3 { border-left: 4px solid var(--bronze); }
 
-    /* Твои ранги в стиле MCTiers */
-    .tier-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 6px;
-      border-radius: 3px;
-      font-size: 9px;
-      font-weight: 900;
-      background: #000;
-      margin-right: 5px;
-    }
-    .HT1 { color: var(--ht1); border: 1px solid rgba(255,71,71,0.3); }
-    .LT2 { color: var(--lt2); border: 1px solid rgba(163,102,255,0.3); }
-    .HT3 { color: var(--ht3); border: 1px solid rgba(71,163,255,0.3); }
-    
-    /* Регион тег */
-    .region-tag {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background: #222;
-    }
-    .EU { color: #4ade80; } .NA { color: #f87171; }
+        .gold-shimmer {
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+            animation: shimmer 2s infinite linear;
+        }
 
-    .bdev-badge {
-      background: var(--accent-orange);
-      color: #000;
-      font-size: 9px;
-      font-weight: 900;
-      padding: 2px 5px;
-      border-radius: 2px;
-      text-transform: uppercase;
-    }
-  </style>
+        .silver-shimmer {
+            color: var(--silver);
+            text-shadow: 0 0 10px rgba(189, 195, 199, 0.5);
+            animation: shimmer 2.5s infinite linear;
+        }
+
+        .bronze-shimmer {
+            color: var(--bronze);
+            text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+            animation: shimmer 3s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.6) drop-shadow(0 0 15px currentColor); }
+            100% { filter: brightness(1); }
+        }
+
+        /* --- Аватары --- */
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #30363d;
+            overflow: hidden;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .nickname { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+        .rank-label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; }
+
+        /* --- Теги рангов --- */
+        .tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .tag-bdev { background: rgba(255, 184, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
+        .tag-dhr { background: rgba(88, 101, 242, 0.1); color: #7289da; border: 1px solid #7289da; }
+        .tag-dlr { background: rgba(139, 148, 158, 0.1); color: #8b949e; border: 1px solid #484f58; }
+
+        /* --- Критерии справа --- */
+        .criteria-list {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .criterion {
+            width: 32px;
+            height: 32px;
+            background: #0d1117;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: help;
+            font-size: 14px;
+            border: 1px solid #30363d;
+        }
+
+        .criterion::after {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #f0f6fc;
+            color: #0d1117;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            font-weight: 700;
+        }
+
+        .criterion:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* --- Виджет оценки --- */
+        .assess-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #238636, #2ea043);
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            z-index: 1000;
+        }
+
+        .assess-widget:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(46, 160, 67, 0.4);
+        }
+
+        .assess-widget span {
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
 
-<div class="mctiers-container">
-  <div class="header-nav">
-    <div class="nav-tab active">
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <span>Overall</span>
-    </div>
-    <div class="nav-tab">
-      <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.44c-.31.17-.69.17-1 0l-7.97-4.44c-.31-.17-.53-.5-.53-.88v-9c0-.38.21-.71.53-.88l7.97-4.44c.31-.17.69-.17 1 0l7.97 4.44c.32.17.53.5.53.88v9z"/></svg>
-      <span>DHR</span>
-    </div>
-    <div class="nav-tab">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
-      <span>DLR</span>
-    </div>
-  </div>
+    <header class="header">
+        <div class="logo">TopDev</div>
+        <input type="text" class="search-bar" id="search" placeholder="Поиск разработчика по имени...">
+    </header>
 
-  <div class="filter-bar">
-    <div class="countries" id="countryFilter">
-      <button class="country-btn active" data-c="all">All</button>
-      <button class="country-btn" data-c="russia">RU</button>
-      <button class="country-btn" data-c="ukraine">UA</button>
-      <button class="country-btn" data-c="usa">US</button>
-      <button class="country-btn" data-c="germany">DE</button>
-    </div>
-    <div style="font-size: 11px; color: var(--text-gray); font-weight: 600;">SERVER IP: dev.rank.com</div>
-  </div>
-
-  <div class="content">
-    <table>
-      <thead>
-        <tr>
-          <th style="width: 40px;">#</th>
-          <th>Player</th>
-          <th>Region</th>
-          <th>Tiers / Rank</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        </tbody>
-    </table>
-  </div>
-</div>
-
-<script>
-  // Твоя база данных (Твоя логика)
-  const developers = [
-    { name: "ItzRealMe", pts: 550, region: "NA", country: "usa", type: "DHR", val: 5, bdev: true },
-    { name: "coldified", pts: 530, region: "EU", country: "germany", type: "DHR", val: 5, bdev: false },
-    { name: "VoidCipher", pts: 490, region: "EU", country: "russia", type: "DHR", val: 4, bdev: false },
-    { name: "Janekv", pts: 420, region: "EU", country: "germany", type: "DLR", val: 5, bdev: false },
-    { name: "KiberKot", pts: 410, region: "EU", country: "russia", type: "DLR", val: 4, bdev: false },
-    { name: "Devastator", pts: 390, region: "EU", country: "ukraine", type: "DLR", val: 3, bdev: false }
-  ];
-
-  function render(filter = 'all') {
-    const table = document.getElementById('tableBody');
-    const filtered = filter === 'all' ? developers : developers.filter(d => d.country === filter);
-    
-    table.innerHTML = filtered.map((d, i) => `
-      <tr class="player-row ${i === 0 && filter === 'all' ? 'top-1' : ''}">
-        <td class="rank-num">${i + 1}.</td>
-        <td>
-          <div class="player-info">
-            <div class="skin-head" style="background: hsl(${i * 60}, 50%, 40%)"></div>
-            <div class="name-stack">
-              <span class="player-name">${d.name} ${d.bdev ? '<span class="bdev-badge">B DEV</span>' : ''}</span>
-              <span class="player-sub">Combat Master (${d.pts} points)</span>
+    <div class="container" id="leaderboard">
+        <div class="dev-row rank-1" data-name="baraschki">
+            <div class="rank-num gold-shimmer">1.</div>
+            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Baraschki" alt="av"></div>
+            <div class="info">
+                <div class="nickname">Baraschki</div>
+                <div class="rank-label">Global Top Developer</div>
             </div>
-          </div>
-        </td>
-        <td><span class="region-tag ${d.region}">${d.region}</span></td>
-        <td>
-          <div style="display: flex;">
-            <span class="tier-box HT1">${d.type} ${d.val}</span>
-            <span class="tier-box LT2">LT2</span>
-            <span class="tier-box HT3" style="opacity: 0.3;">-</span>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-  }
+            <div class="tag tag-bdev">B DEV</div>
+            <div class="criteria-list">
+                <div class="criterion" data-title="Настройка">⚙️</div>
+                <div class="criterion" data-title="Разработка">💻</div>
+                <div class="criterion" data-title="Знания">🧠</div>
+                <div class="criterion" data-title="Архитектура">🏗️</div>
+                <div class="criterion" data-title="Скорость">⚡</div>
+            </div>
+        </div>
 
-  // Логика кнопок
-  document.querySelectorAll('.country-btn').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelector('.country-btn.active').classList.remove('active');
-      btn.classList.add('active');
-      render(btn.dataset.c);
-    };
-  });
+        <div class="dev-row rank-2" data-name="cyberninja">
+            <div class="rank-num silver-shimmer">2.</div>
+            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="av"></div>
+            <div class="info">
+                <div class="nickname">CyberNinja</div>
+                <div class="rank-label">Senior Backend</div>
+            </div>
+            <div class="tag tag-dhr">DHR 5</div>
+            <div class="criteria-list">
+                <div class="criterion" data-title="Настройка">⚙️</div>
+                <div class="criterion" data-title="Разработка">💻</div>
+                <div class="criterion" data-title="Безопасность">🛡️</div>
+            </div>
+        </div>
 
-  render();
-</script>
+        <div class="dev-row rank-3" data-name="nullpointer">
+            <div class="rank-num bronze-shimmer">3.</div>
+            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Max" alt="av"></div>
+            <div class="info">
+                <div class="nickname">NullPointer</div>
+                <div class="rank-label">Fullstack Expert</div>
+            </div>
+            <div class="tag tag-dhr">DHR 3</div>
+            <div class="criteria-list">
+                <div class="criterion" data-title="Знания">🧠</div>
+                <div class="criterion" data-title="Разработка">💻</div>
+                <div class="criterion" data-title="Логика">🧩</div>
+            </div>
+        </div>
+
+        <div class="dev-row" data-name="junior_dev">
+            <div class="rank-num">4.</div>
+            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Junior" alt="av"></div>
+            <div class="info">
+                <div class="nickname">Junior_Dev</div>
+                <div class="rank-label">Learning Fast</div>
+            </div>
+            <div class="tag tag-dlr">DLR 2</div>
+            <div class="criteria-list">
+                <div class="criterion" data-title="Настройка">⚙️</div>
+                <div class="criterion" data-title="Знания">🧠</div>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://t.me/Franzosren?text=я%20хочу%20пройти%20тест" class="assess-widget">
+        <span>Оцени себя</span>
+    </a>
+
+    <script>
+        // Плавный поиск
+        const searchInput = document.getElementById('search');
+        const rows = document.querySelectorAll('.dev-row');
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                if (name.includes(val)) {
+                    row.classList.remove('hidden');
+                    row.style.opacity = '1';
+                    row.style.transform = 'scale(1)';
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        if (row.style.opacity === '0') row.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        });
+
+        // Небольшая задержка анимации для каждой строки при загрузке
+        rows.forEach((row, index) => {
+            row.style.animationDelay = `${index * 0.05}s`;
+        });
+    </script>
 </body>
 </html>
