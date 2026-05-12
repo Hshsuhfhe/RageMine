@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOPDEV | Rankings</title>
+    <title>TOPDEV | Рейтинг разработчиков</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg: #070b12;
             --panel: #0e1420;
-            --panel-2: #131b29;
             --stroke: #1a2538;
             --text: #d9e1ee;
             --muted: #7f8ca3;
@@ -32,19 +31,17 @@
         body {
             background: #060910;
             background-image:
-                radial-gradient(ellipse at 50% 0%, rgba(55, 201, 120, 0.04) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 30%, rgba(90, 111, 240, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 70%, rgba(176, 124, 255, 0.04) 0%, transparent 50%),
-                repeating-linear-gradient(0deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 32px),
-                repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 32px);
+                radial-gradient(ellipse at 50% 0%, rgba(55, 201, 120, 0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 30%, rgba(90, 111, 240, 0.04) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.007) 0px, rgba(255, 255, 255, 0.007) 1px, transparent 1px, transparent 32px),
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.007) 0px, rgba(255, 255, 255, 0.007) 1px, transparent 1px, transparent 32px);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
-            image-rendering: crisp-edges;
+            position: relative;
         }
 
-        /* Pixel grid overlay */
         body::after {
             content: '';
             position: fixed;
@@ -60,6 +57,7 @@
                 repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 24px);
         }
 
+        /* HEADER */
         .header {
             height: 72px;
             border-bottom: 2px solid #1a2538;
@@ -72,7 +70,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 32px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
         }
 
         .logo {
@@ -83,6 +81,7 @@
             text-shadow: 0 0 40px rgba(255, 190, 61, 0.3);
             user-select: none;
             letter-spacing: -1px;
+            cursor: pointer;
         }
 
         .logo span {
@@ -104,14 +103,15 @@
             transition: .2s;
             letter-spacing: 0.5px;
             border: 2px solid transparent;
+            cursor: pointer;
         }
 
         .nav a:hover,
         .nav a.active {
             color: #fff;
-            background: var(--panel-2);
+            background: #131b29;
             border-color: #2d3d55;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
         }
 
         .search {
@@ -132,7 +132,7 @@
 
         .search:focus {
             border-color: #3a5070;
-            box-shadow: 0 0 20px rgba(90,111,240,0.15);
+            box-shadow: 0 0 20px rgba(90, 111, 240, 0.15);
         }
 
         .search::placeholder {
@@ -140,6 +140,7 @@
             font-weight: 500;
         }
 
+        /* WRAPPER */
         .wrapper {
             width: 100%;
             max-width: 1500px;
@@ -149,7 +150,16 @@
             z-index: 1;
         }
 
-        /* TABS - no emojis */
+        /* PAGE SECTIONS */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* TABS */
         .tabs {
             display: flex;
             gap: 8px;
@@ -185,7 +195,7 @@
             border-color: #3a5070;
             background: #111927;
             color: #e8eef7;
-            box-shadow: 0 0 24px rgba(255,190,61,0.06), inset 0 0 0 1px rgba(255,190,61,0.04);
+            box-shadow: 0 0 24px rgba(255, 190, 61, 0.06), inset 0 0 0 1px rgba(255, 190, 61, 0.04);
         }
 
         .tab.active::after {
@@ -196,7 +206,7 @@
             width: 60%;
             height: 2px;
             background: var(--gold);
-            box-shadow: 0 0 12px rgba(255,190,61,0.5);
+            box-shadow: 0 0 12px rgba(255, 190, 61, 0.5);
         }
 
         .tab:hover {
@@ -211,7 +221,7 @@
             border: 2px solid #1a2538;
             border-radius: 2px;
             overflow: hidden;
-            box-shadow: 0 12px 48px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.02);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
         }
 
         .info-bar {
@@ -256,7 +266,7 @@
             align-items: center;
             min-height: 92px;
             padding: 0 28px;
-            border-bottom: 1px solid rgba(255,255,255,0.025);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.025);
             transition: .2s;
             cursor: pointer;
             position: relative;
@@ -264,7 +274,7 @@
 
         .row:hover {
             background: #111b28;
-            box-shadow: inset 3px 0 0 rgba(90,111,240,0.3);
+            box-shadow: inset 3px 0 0 rgba(90, 111, 240, 0.3);
             transform: translateX(2px);
         }
 
@@ -287,11 +297,10 @@
             color: #fff;
             position: relative;
             user-select: none;
-            border: 2px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
-        /* Top 3 special block designs */
         .place.gold {
             background: linear-gradient(135deg, #ffd95e 0%, #c8850f 100%);
             border-color: #e6a817;
@@ -317,18 +326,33 @@
         }
 
         @keyframes pulseGold {
-            0%,100%{ box-shadow: 0 0 25px rgba(255,190,61,0.5), 0 0 50px rgba(255,190,61,0.2); }
-            50%{ box-shadow: 0 0 40px rgba(255,210,80,0.7), 0 0 70px rgba(255,190,61,0.35); }
+            0%,
+            100% {
+                box-shadow: 0 0 25px rgba(255, 190, 61, 0.5), 0 0 50px rgba(255, 190, 61, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 210, 80, 0.7), 0 0 70px rgba(255, 190, 61, 0.35);
+            }
         }
 
         @keyframes pulseSilver {
-            0%,100%{ box-shadow: 0 0 20px rgba(183,195,211,0.4), 0 0 40px rgba(183,195,211,0.15); }
-            50%{ box-shadow: 0 0 32px rgba(200,210,225,0.6), 0 0 55px rgba(183,195,211,0.3); }
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(183, 195, 211, 0.4), 0 0 40px rgba(183, 195, 211, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 32px rgba(200, 210, 225, 0.6), 0 0 55px rgba(183, 195, 211, 0.3);
+            }
         }
 
         @keyframes pulseBronze {
-            0%,100%{ box-shadow: 0 0 18px rgba(205,138,74,0.35), 0 0 36px rgba(205,138,74,0.12); }
-            50%{ box-shadow: 0 0 28px rgba(215,150,85,0.55), 0 0 50px rgba(205,138,74,0.25); }
+            0%,
+            100% {
+                box-shadow: 0 0 18px rgba(205, 138, 74, 0.35), 0 0 36px rgba(205, 138, 74, 0.12);
+            }
+            50% {
+                box-shadow: 0 0 28px rgba(215, 150, 85, 0.55), 0 0 50px rgba(205, 138, 74, 0.25);
+            }
         }
 
         .player {
@@ -355,7 +379,6 @@
             position: relative;
         }
 
-        /* Pixel notch */
         .avatar::after {
             content: '';
             position: absolute;
@@ -398,12 +421,27 @@
             border: 1px solid;
         }
 
-        .region.eu { background: rgba(55,201,120,.08); color: #50e28d; border-color: rgba(55,201,120,.2); }
-        .region.na { background: rgba(255,95,109,.08); color: #ff6c79; border-color: rgba(255,95,109,.2); }
-        .region.as { background: rgba(176,124,255,.08); color: #c49aff; border-color: rgba(176,124,255,.2); }
-        .region.sa { background: rgba(255,190,61,.08); color: #ffce67; border-color: rgba(255,190,61,.2); }
+        .region.eu {
+            background: rgba(55, 201, 120, .08);
+            color: #50e28d;
+            border-color: rgba(55, 201, 120, .2);
+        }
+        .region.na {
+            background: rgba(255, 95, 109, .08);
+            color: #ff6c79;
+            border-color: rgba(255, 95, 109, .2);
+        }
+        .region.as {
+            background: rgba(176, 124, 255, .08);
+            color: #c49aff;
+            border-color: rgba(176, 124, 255, .2);
+        }
+        .region.sa {
+            background: rgba(255, 190, 61, .08);
+            color: #ffce67;
+            border-color: rgba(255, 190, 61, .2);
+        }
 
-        /* Rank column now only shows rank badge */
         .rank-col {
             display: flex;
             justify-content: flex-end;
@@ -423,34 +461,37 @@
 
         .rank.dlr {
             color: #b4c0cf;
-            background: rgba(180,192,207,.06);
-            border-color: rgba(180,192,207,.2);
+            background: rgba(180, 192, 207, .06);
+            border-color: rgba(180, 192, 207, .2);
         }
-
         .rank.dhr {
             color: #73a5ff;
-            background: rgba(90,111,240,.08);
-            border-color: rgba(90,111,240,.25);
+            background: rgba(90, 111, 240, .08);
+            border-color: rgba(90, 111, 240, .25);
         }
-
         .rank.bdev {
             color: #ffce67;
-            background: rgba(255,190,61,.08);
-            border-color: rgba(255,190,61,.3);
+            background: rgba(255, 190, 61, .08);
+            border-color: rgba(255, 190, 61, .3);
             animation: bdevGlow 2s infinite;
         }
 
         @keyframes bdevGlow {
-            0%,100%{ box-shadow: 0 0 10px rgba(255,190,61,0.2); }
-            50%{ box-shadow: 0 0 24px rgba(255,190,61,0.4); }
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 190, 61, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 24px rgba(255, 190, 61, 0.4);
+            }
         }
 
         /* LEGEND */
         .legend {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 12px;
-            margin-top: 32px;
+            margin-top: 28px;
         }
 
         .legend-card {
@@ -463,7 +504,7 @@
 
         .legend-card:hover {
             border-color: #2d3d55;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .legend-card h3 {
@@ -479,15 +520,6 @@
             font-weight: 500;
         }
 
-        .footer {
-            padding: 48px 20px;
-            text-align: center;
-            color: #4a5a70;
-            font-size: 13px;
-            letter-spacing: 0.4px;
-            user-select: none;
-        }
-
         /* MODAL */
         .modal-overlay {
             position: fixed;
@@ -495,7 +527,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(6px);
             z-index: 1000;
             display: flex;
@@ -519,7 +551,7 @@
             max-width: 480px;
             padding: 28px;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             transform: translateY(20px);
             transition: transform 0.25s;
         }
@@ -598,32 +630,68 @@
             border-radius: 2px;
             font-weight: 700;
             font-size: 13px;
+            color: #cdd6e8;
         }
 
-        .modal-tiers {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tier-block {
-            background: #0f1622;
-            border: 2px solid #1e2b3d;
+        /* FLOATING BUTTON */
+        .apply-button {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #182233;
+            border: 2px solid #3a5070;
+            color: #fff;
+            padding: 12px 24px;
             border-radius: 2px;
-            padding: 8px 12px;
+            font-weight: 800;
+            font-size: 16px;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            z-index: 998;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: .2s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 12px;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .apply-button:hover {
+            background: #1f2e42;
+            border-color: #ffbe3d;
+            box-shadow: 0 10px 28px rgba(255, 190, 61, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .apply-button .icon {
+            font-size: 20px;
+        }
+
+        /* FOOTER */
+        .footer {
+            padding: 32px 20px;
+            text-align: center;
+            color: #4a5a70;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            user-select: none;
+            border-top: 1px solid #1a2538;
+            margin-top: 40px;
         }
 
         @media(max-width:1200px) {
             .board {
                 overflow: auto;
             }
-            .board-header, .row {
+            .board-header,
+            .row {
                 min-width: 1000px;
+            }
+            .header {
+                padding: 0 16px;
+            }
+            .search {
+                width: 180px;
             }
         }
     </style>
@@ -631,195 +699,255 @@
 <body>
 
     <header class="header">
-        <div class="logo">TOP<span>DEV</span></div>
+        <div class="logo" id="logoHome">TOP<span>DEV</span></div>
         <nav class="nav">
-            <a href="#">Home</a>
-            <a href="#" class="active">Rankings</a>
-            <a href="#">Discord</a>
-            <a href="#">API Docs</a>
+            <a class="nav-link active" data-page="home">Главная</a>
+            <a class="nav-link" data-page="rankings">Рейтинг</a>
+            <a class="nav-link" data-page="info">Информация</a>
+            <a class="nav-link" data-page="apply">Подать заявку</a>
         </nav>
-        <input type="text" class="search" placeholder="Search player..." id="searchInput">
+        <input type="text" class="search" placeholder="Поиск игрока..." id="searchInput" style="display:none;">
     </header>
 
     <div class="wrapper">
-        <div class="tabs">
-            <div class="tab active"><span>Overall</span></div>
-            <div class="tab"><span>Combat</span></div>
-            <div class="tab"><span>Building</span></div>
-            <div class="tab"><span>Algorithms</span></div>
-            <div class="tab"><span>Systems</span></div>
-            <div class="tab"><span>Security</span></div>
-            <div class="tab"><span>Cloud</span></div>
-        </div>
-
-        <div class="board">
-            <div class="info-bar">
-                <div class="info-pill">TOPDEV Competitive Developer Ranking</div>
-                <div class="info-pill">Season 2026</div>
-                <div class="info-pill">12 Players Ranked</div>
-            </div>
-
-            <div class="board-header">
-                <div>#</div>
-                <div>Player</div>
-                <div>Region</div>
-                <div style="text-align:right;">Rank</div>
-            </div>
-
-            <!-- 1 - B DEV -->
-            <div class="row" data-player='{"name":"Baraschki","points":330,"region":"NA","rankClass":"bdev","rankTitle":"B DEV","avatarLetter":"B","tiers":[{"icon":"⚔️","level":"HT3"},{"icon":"⛏️","level":"HT1"},{"icon":"🧠","level":"HT1"},{"icon":"💎","level":"HT1"},{"icon":"🔥","level":"HT2"}]}'>
-                <div class="rank-box"><div class="place gold">1</div></div>
-                <div class="player">
-                    <div class="avatar">B</div>
-                    <div><h2>Baraschki</h2><p>Best Developer • 330 pts</p></div>
-                </div>
-                <div><div class="region na">NA</div></div>
-                <div class="rank-col"><div class="rank bdev">B DEV</div></div>
-            </div>
-
-            <!-- 2 - DHR 5 -->
-            <div class="row" data-player='{"name":"Coldified","points":326,"region":"EU","rankClass":"dhr","rankTitle":"DHR 5","avatarLetter":"C","tiers":[{"icon":"⚔️","level":"LT1"},{"icon":"⛏️","level":"LT1"},{"icon":"💎","level":"LT3"},{"icon":"🧠","level":"HT1"},{"icon":"🛡️","level":"HT2"}]}'>
-                <div class="rank-box"><div class="place silver">2</div></div>
-                <div class="player">
-                    <div class="avatar">C</div>
-                    <div><h2>Coldified</h2><p>Dev High Rank • 326 pts</p></div>
-                </div>
-                <div><div class="region eu">EU</div></div>
-                <div class="rank-col"><div class="rank dhr">DHR 5</div></div>
-            </div>
-
-            <!-- 3 - DHR 4 -->
-            <div class="row" data-player='{"name":"Swight","points":320,"region":"AS","rankClass":"dhr","rankTitle":"DHR 4","avatarLetter":"S","tiers":[{"icon":"⚔️","level":"HT2"},{"icon":"⛏️","level":"HT1"},{"icon":"💎","level":"HT2"},{"icon":"🧠","level":"HT1"},{"icon":"☁️","level":"LT3"}]}'>
-                <div class="rank-box"><div class="place bronze">3</div></div>
-                <div class="player">
-                    <div class="avatar">S</div>
-                    <div><h2>Swight</h2><p>Dev High Rank • 320 pts</p></div>
-                </div>
-                <div><div class="region as">AS</div></div>
-                <div class="rank-col"><div class="rank dhr">DHR 4</div></div>
-            </div>
-
-            <!-- 4 - DHR 3 -->
-            <div class="row" data-player='{"name":"NetherMind","points":290,"region":"NA","rankClass":"dhr","rankTitle":"DHR 3","avatarLetter":"N","tiers":[{"icon":"🔥","level":"HT2"},{"icon":"🧠","level":"HT1"},{"icon":"⚔️","level":"LT2"},{"icon":"🛡️","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">4</div></div>
-                <div class="player">
-                    <div class="avatar">N</div>
-                    <div><h2>NetherMind</h2><p>Dev High Rank • 290 pts</p></div>
-                </div>
-                <div><div class="region na">NA</div></div>
-                <div class="rank-col"><div class="rank dhr">DHR 3</div></div>
-            </div>
-
-            <!-- 5 - DHR 2 -->
-            <div class="row" data-player='{"name":"PixelBlade","points":268,"region":"EU","rankClass":"dhr","rankTitle":"DHR 2","avatarLetter":"P","tiers":[{"icon":"⚔️","level":"HT1"},{"icon":"⛏️","level":"LT3"},{"icon":"💎","level":"LT2"},{"icon":"☁️","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">5</div></div>
-                <div class="player">
-                    <div class="avatar">P</div>
-                    <div><h2>PixelBlade</h2><p>Dev High Rank • 268 pts</p></div>
-                </div>
-                <div><div class="region eu">EU</div></div>
-                <div class="rank-col"><div class="rank dhr">DHR 2</div></div>
-            </div>
-
-            <!-- 6 - DHR 1 -->
-            <div class="row" data-player='{"name":"CraftMaster","points":252,"region":"AS","rankClass":"dhr","rankTitle":"DHR 1","avatarLetter":"C","tiers":[{"icon":"⛏️","level":"HT3"},{"icon":"🧠","level":"LT2"},{"icon":"🔥","level":"LT1"},{"icon":"⚔️","level":"LT3"}]}'>
-                <div class="rank-box"><div class="place normal">6</div></div>
-                <div class="player">
-                    <div class="avatar">C</div>
-                    <div><h2>CraftMaster</h2><p>Dev High Rank • 252 pts</p></div>
-                </div>
-                <div><div class="region as">AS</div></div>
-                <div class="rank-col"><div class="rank dhr">DHR 1</div></div>
-            </div>
-
-            <!-- 7 - DLR 5 -->
-            <div class="row" data-player='{"name":"Janekv","points":240,"region":"EU","rankClass":"dlr","rankTitle":"DLR 5","avatarLetter":"J","tiers":[{"icon":"⚔️","level":"LT3"},{"icon":"⛏️","level":"LT2"},{"icon":"💎","level":"LT2"},{"icon":"🧠","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">7</div></div>
-                <div class="player">
-                    <div class="avatar">J</div>
-                    <div><h2>Janekv</h2><p>Dev Low Rank • 240 pts</p></div>
-                </div>
-                <div><div class="region eu">EU</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 5</div></div>
-            </div>
-
-            <!-- 8 - DLR 4 -->
-            <div class="row" data-player='{"name":"RedstoneX","points":218,"region":"NA","rankClass":"dlr","rankTitle":"DLR 4","avatarLetter":"R","tiers":[{"icon":"🧠","level":"LT3"},{"icon":"🔥","level":"LT2"},{"icon":"🛡️","level":"LT2"},{"icon":"☁️","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">8</div></div>
-                <div class="player">
-                    <div class="avatar">R</div>
-                    <div><h2>RedstoneX</h2><p>Dev Low Rank • 218 pts</p></div>
-                </div>
-                <div><div class="region na">NA</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 4</div></div>
-            </div>
-
-            <!-- 9 - DLR 3 -->
-            <div class="row" data-player='{"name":"EnderCode","points":195,"region":"EU","rankClass":"dlr","rankTitle":"DLR 3","avatarLetter":"E","tiers":[{"icon":"☁️","level":"LT3"},{"icon":"⚔️","level":"LT2"},{"icon":"💎","level":"LT1"},{"icon":"🧠","level":"LT2"}]}'>
-                <div class="rank-box"><div class="place normal">9</div></div>
-                <div class="player">
-                    <div class="avatar">E</div>
-                    <div><h2>EnderCode</h2><p>Dev Low Rank • 195 pts</p></div>
-                </div>
-                <div><div class="region eu">EU</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 3</div></div>
-            </div>
-
-            <!-- 10 - DLR 2 -->
-            <div class="row" data-player='{"name":"DiamondDuke","points":172,"region":"SA","rankClass":"dlr","rankTitle":"DLR 2","avatarLetter":"D","tiers":[{"icon":"💎","level":"LT3"},{"icon":"⛏️","level":"LT2"},{"icon":"⚔️","level":"LT1"},{"icon":"🔥","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">10</div></div>
-                <div class="player">
-                    <div class="avatar">D</div>
-                    <div><h2>DiamondDuke</h2><p>Dev Low Rank • 172 pts</p></div>
-                </div>
-                <div><div class="region sa">SA</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 2</div></div>
-            </div>
-
-            <!-- 11 - DLR 1 -->
-            <div class="row" data-player='{"name":"IronFist","points":148,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"I","tiers":[{"icon":"🛡️","level":"LT3"},{"icon":"⚔️","level":"LT1"},{"icon":"🔥","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">11</div></div>
-                <div class="player">
-                    <div class="avatar">I</div>
-                    <div><h2>IronFist</h2><p>Dev Low Rank • 148 pts</p></div>
-                </div>
-                <div><div class="region na">NA</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
-            </div>
-
-            <!-- 12 - DLR 1 -->
-            <div class="row" data-player='{"name":"BlockWizard","points":130,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B","tiers":[{"icon":"⛏️","level":"LT2"},{"icon":"🧠","level":"LT1"},{"icon":"☁️","level":"LT1"}]}'>
-                <div class="rank-box"><div class="place normal">12</div></div>
-                <div class="player">
-                    <div class="avatar">B</div>
-                    <div><h2>BlockWizard</h2><p>Dev Low Rank • 130 pts</p></div>
-                </div>
-                <div><div class="region eu">EU</div></div>
-                <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+        <!-- СТРАНИЦА "ГЛАВНАЯ" -->
+        <div class="page active" id="page-home">
+            <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
+                <h1 style="font-size:34px;margin-bottom:20px;">Добро пожаловать в <span style="color:#ffbe3d;">TOPDEV</span></h1>
+                <p style="font-size:18px;color:#bcc8d8;line-height:1.6;margin-bottom:28px;">
+                    Платформа для соревновательного ранжирования лучших разработчиков Minecraft‑проектов.
+                    Здесь вы найдёте рейтинг игроков по их вкладу в строительство, редстоун, моды, плагины и многое другое.
+                </p>
+                <p style="color:#7a8da3;font-size:15px;">
+                    Система рангов: <strong>DLR 1–5</strong> (Developer Low Rank), <strong>DHR 1–5</strong> (Developer High Rank) и высший титул <strong style="color:#ffce67;">B DEV</strong> (Best Developer).
+                    Присоединяйтесь к сообществу и поднимайтесь в топе!
+                </p>
             </div>
         </div>
 
-        <div class="legend">
-            <div class="legend-card">
-                <h3 style="color:#b4c0cf;">DLR 1-5</h3>
-                <p><strong>Developer Low Rank</strong> — Base competitive developers. DLR 5 is the strongest level in the DLR division.</p>
+        <!-- СТРАНИЦА "РЕЙТИНГ" -->
+        <div class="page" id="page-rankings">
+            <div class="tabs">
+                <div class="tab active"><span>Общий</span></div>
+                <div class="tab"><span>Строительство</span></div>
+                <div class="tab"><span>Редстоун</span></div>
+                <div class="tab"><span>Моды</span></div>
+                <div class="tab"><span>Плагины</span></div>
+                <div class="tab"><span>Оптимизация</span></div>
+                <div class="tab"><span>Системы</span></div>
             </div>
-            <div class="legend-card">
-                <h3 style="color:#73a5ff;">DHR 1-5</h3>
-                <p><strong>Developer High Rank</strong> — Advanced competitive developers. DHR 5 is close to elite TOPDEV status.</p>
-            </div>
-            <div class="legend-card">
-                <h3 style="color:#ffce67;">B DEV</h3>
-                <p><strong>Best Developer</strong> — Highest possible TOPDEV title. Reserved only for the #1 competitive developer.</p>
+
+            <div class="board">
+                <div class="info-bar">
+                    <div class="info-pill">Текущий рейтинг разработчиков</div>
+                    <div class="info-pill">Сезон 2026</div>
+                    <div class="info-pill">20 участников</div>
+                </div>
+
+                <div class="board-header">
+                    <div>#</div>
+                    <div>Игрок</div>
+                    <div>Регион</div>
+                    <div style="text-align:right;">Ранг</div>
+                </div>
+
+                <!-- 1 место B DEV -->
+                <div class="row" data-player='{"name":"Baraschki","points":330,"region":"NA","rankClass":"bdev","rankTitle":"B DEV","avatarLetter":"B"}'>
+                    <div class="rank-box"><div class="place gold">1</div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>Baraschki</h2><p>Лучший разработчик • 330 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank bdev">B DEV</div></div>
+                </div>
+
+                <!-- 2 место DHR 5 -->
+                <div class="row" data-player='{"name":"Coldified","points":326,"region":"EU","rankClass":"dhr","rankTitle":"DHR 5","avatarLetter":"C"}'>
+                    <div class="rank-box"><div class="place silver">2</div></div>
+                    <div class="player"><div class="avatar">C</div><div><h2>Coldified</h2><p>Dev High Rank • 326 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 5</div></div>
+                </div>
+
+                <!-- 3 место DHR 4 -->
+                <div class="row" data-player='{"name":"Swight","points":320,"region":"AS","rankClass":"dhr","rankTitle":"DHR 4","avatarLetter":"S"}'>
+                    <div class="rank-box"><div class="place bronze">3</div></div>
+                    <div class="player"><div class="avatar">S</div><div><h2>Swight</h2><p>Dev High Rank • 320 очков</p></div></div>
+                    <div><div class="region as">AS</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 4</div></div>
+                </div>
+
+                <!-- 4 - DHR 3 -->
+                <div class="row" data-player='{"name":"NetherMind","points":290,"region":"NA","rankClass":"dhr","rankTitle":"DHR 3","avatarLetter":"N"}'>
+                    <div class="rank-box"><div class="place normal">4</div></div>
+                    <div class="player"><div class="avatar">N</div><div><h2>NetherMind</h2><p>Dev High Rank • 290 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 3</div></div>
+                </div>
+
+                <!-- 5 - DHR 2 -->
+                <div class="row" data-player='{"name":"PixelBlade","points":268,"region":"EU","rankClass":"dhr","rankTitle":"DHR 2","avatarLetter":"P"}'>
+                    <div class="rank-box"><div class="place normal">5</div></div>
+                    <div class="player"><div class="avatar">P</div><div><h2>PixelBlade</h2><p>Dev High Rank • 268 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 2</div></div>
+                </div>
+
+                <!-- 6 - DHR 1 -->
+                <div class="row" data-player='{"name":"CraftMaster","points":252,"region":"AS","rankClass":"dhr","rankTitle":"DHR 1","avatarLetter":"C"}'>
+                    <div class="rank-box"><div class="place normal">6</div></div>
+                    <div class="player"><div class="avatar">C</div><div><h2>CraftMaster</h2><p>Dev High Rank • 252 очков</p></div></div>
+                    <div><div class="region as">AS</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 1</div></div>
+                </div>
+
+                <!-- 7 - DLR 5 -->
+                <div class="row" data-player='{"name":"Janekv","points":240,"region":"EU","rankClass":"dlr","rankTitle":"DLR 5","avatarLetter":"J"}'>
+                    <div class="rank-box"><div class="place normal">7</div></div>
+                    <div class="player"><div class="avatar">J</div><div><h2>Janekv</h2><p>Dev Low Rank • 240 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 5</div></div>
+                </div>
+
+                <!-- 8 - DLR 4 -->
+                <div class="row" data-player='{"name":"RedstoneX","points":218,"region":"NA","rankClass":"dlr","rankTitle":"DLR 4","avatarLetter":"R"}'>
+                    <div class="rank-box"><div class="place normal">8</div></div>
+                    <div class="player"><div class="avatar">R</div><div><h2>RedstoneX</h2><p>Dev Low Rank • 218 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 4</div></div>
+                </div>
+
+                <!-- 9 - DLR 3 -->
+                <div class="row" data-player='{"name":"EnderCode","points":195,"region":"EU","rankClass":"dlr","rankTitle":"DLR 3","avatarLetter":"E"}'>
+                    <div class="rank-box"><div class="place normal">9</div></div>
+                    <div class="player"><div class="avatar">E</div><div><h2>EnderCode</h2><p>Dev Low Rank • 195 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 3</div></div>
+                </div>
+
+                <!-- 10 - DLR 2 -->
+                <div class="row" data-player='{"name":"DiamondDuke","points":172,"region":"SA","rankClass":"dlr","rankTitle":"DLR 2","avatarLetter":"D"}'>
+                    <div class="rank-box"><div class="place normal">10</div></div>
+                    <div class="player"><div class="avatar">D</div><div><h2>DiamondDuke</h2><p>Dev Low Rank • 172 очков</p></div></div>
+                    <div><div class="region sa">SA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 2</div></div>
+                </div>
+
+                <!-- 11 - DLR 1 -->
+                <div class="row" data-player='{"name":"IronFist","points":148,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"I"}'>
+                    <div class="rank-box"><div class="place normal">11</div></div>
+                    <div class="player"><div class="avatar">I</div><div><h2>IronFist</h2><p>Dev Low Rank • 148 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+
+                <!-- 12 - DLR 1 -->
+                <div class="row" data-player='{"name":"BlockWizard","points":130,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                    <div class="rank-box"><div class="place normal">12</div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BlockWizard</h2><p>Dev Low Rank • 130 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+
+                <!-- Новые игроки с 13 по 20 -->
+                <div class="row" data-player='{"name":"StoneCutter","points":115,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
+                    <div class="rank-box"><div class="place normal">13</div></div>
+                    <div class="player"><div class="avatar">S</div><div><h2>StoneCutter</h2><p>Dev Low Rank • 115 очков</p></div></div>
+                    <div><div class="region as">AS</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"MinePro","points":102,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
+                    <div class="rank-box"><div class="place normal">14</div></div>
+                    <div class="player"><div class="avatar">M</div><div><h2>MinePro</h2><p>Dev Low Rank • 102 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"RedKing","points":95,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"R"}'>
+                    <div class="rank-box"><div class="place normal">15</div></div>
+                    <div class="player"><div class="avatar">R</div><div><h2>RedKing</h2><p>Dev Low Rank • 95 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"ModMaster","points":88,"region":"SA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
+                    <div class="rank-box"><div class="place normal">16</div></div>
+                    <div class="player"><div class="avatar">M</div><div><h2>ModMaster</h2><p>Dev Low Rank • 88 очков</p></div></div>
+                    <div><div class="region sa">SA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"PluginWiz","points":76,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"P"}'>
+                    <div class="rank-box"><div class="place normal">17</div></div>
+                    <div class="player"><div class="avatar">P</div><div><h2>PluginWiz</h2><p>Dev Low Rank • 76 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"BuildCraft","points":64,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                    <div class="rank-box"><div class="place normal">18</div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BuildCraft</h2><p>Dev Low Rank • 64 очков</p></div></div>
+                    <div><div class="region as">AS</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"SkyDev","points":52,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
+                    <div class="rank-box"><div class="place normal">19</div></div>
+                    <div class="player"><div class="avatar">S</div><div><h2>SkyDev</h2><p>Dev Low Rank • 52 очков</p></div></div>
+                    <div><div class="region na">NA</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
+                <div class="row" data-player='{"name":"BlockTech","points":40,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                    <div class="rank-box"><div class="place normal">20</div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BlockTech</h2><p>Dev Low Rank • 40 очков</p></div></div>
+                    <div><div class="region eu">EU</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                </div>
             </div>
         </div>
+
+        <!-- СТРАНИЦА "ИНФОРМАЦИЯ" -->
+        <div class="page" id="page-info">
+            <div class="legend">
+                <div class="legend-card">
+                    <h3 style="color:#b4c0cf;">◼ DLR 1–5</h3>
+                    <p><strong>Developer Low Rank</strong> — начальный соревновательный уровень. DLR 5 — сильнейший в этой лиге. Игроки с DLR 1 только начинают свой путь.</p>
+                </div>
+                <div class="legend-card">
+                    <h3 style="color:#73a5ff;">◼ DHR 1–5</h3>
+                    <p><strong>Developer High Rank</strong> — продвинутые разработчики. DHR 5 находится в шаге от элитного статуса TOPDEV. Эти участники задают стандарты.</p>
+                </div>
+                <div class="legend-card">
+                    <h3 style="color:#ffce67;">◼ B DEV</h3>
+                    <p><strong>Best Developer</strong> — высшее звание TOPDEV. Присваивается только лучшему разработчику сезона. Абсолютный чемпион.</p>
+                </div>
+            </div>
+            <p style="color:#7a8da3;margin-top:20px;font-size:14px;max-width:700px;">
+                Рейтинг обновляется ежемесячно на основе активности в проектах Minecraft: строительство, редстоун-механизмы, модификации, плагины, оптимизация серверов и системная интеграция.
+            </p>
+        </div>
+
+        <!-- СТРАНИЦА "ПОДАТЬ ЗАЯВКУ" -->
+        <div class="page" id="page-apply">
+            <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
+                <h2 style="margin-bottom:20px;">Хотите присоединиться к TOPDEV?</h2>
+                <p style="color:#bcc8d8;font-size:16px;margin-bottom:30px;">
+                    Чтобы пройти тестирование и попасть в рейтинг, свяжитесь с нами через Telegram.
+                    Нажмите на кнопку ниже — ваш ник и желание участвовать будут отправлены автоматически.
+                </p>
+                <a href="https://t.me/Franzosren?text=Здравствуйте!%20Я%20хочу%20пройти%20тест%20на%20TOPDEV." target="_blank"
+                   style="display:inline-block;background:#182233;border:2px solid #3a5070;color:#fff;padding:14px 28px;border-radius:2px;font-weight:800;font-size:16px;text-decoration:none;letter-spacing:0.5px;">
+                    Подать заявку в Telegram
+                </a>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Плавающая кнопка подачи заявки -->
+    <a href="https://t.me/Franzosren?text=Здравствуйте!%20Я%20хочу%20пройти%20тест%20на%20TOPDEV." target="_blank"
+       class="apply-button" title="Подать заявку">
+        <span class="icon">&#9993;</span> Подать заявку
+    </a>
+
     <footer class="footer">
-        TOPDEV 2026 — Competitive Developer Ranking Platform &nbsp;|&nbsp; DLR 1-5 &bull; DHR 1-5 &bull; B DEV
+        &copy; TOPDEV 2026 — Платформа соревновательного рейтинга разработчиков Minecraft &nbsp;|&nbsp; DLR 1–5 &bull; DHR 1–5 &bull; B DEV
     </footer>
 
-    <!-- PLAYER MODAL -->
+    <!-- МОДАЛЬНОЕ ОКНО ИГРОКА -->
     <div class="modal-overlay" id="playerModal">
         <div class="modal">
             <button class="modal-close" id="closeModal">&times;</button>
@@ -830,20 +958,54 @@
                 <div class="stat" id="modalPoints"></div>
                 <div class="stat" id="modalRegion"></div>
             </div>
-            <div><strong>Tier Specializations</strong></div>
-            <div class="modal-tiers" id="modalTiers"></div>
         </div>
     </div>
 
     <script>
+        // --- Переключение страниц ---
+        const pages = {
+            home: document.getElementById('page-home'),
+            rankings: document.getElementById('page-rankings'),
+            info: document.getElementById('page-info'),
+            apply: document.getElementById('page-apply')
+        };
+        const navLinks = document.querySelectorAll('.nav-link');
         const searchInput = document.getElementById('searchInput');
-        const rows = document.querySelectorAll('.row');
-        const modalOverlay = document.getElementById('playerModal');
-        const closeModalBtn = document.getElementById('closeModal');
+        const logoHome = document.getElementById('logoHome');
 
-        // Search filter
-        searchInput.addEventListener('input', e => {
+        function switchPage(pageId) {
+            // Скрываем все страницы
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+            // Показываем нужную
+            if (pages[pageId]) pages[pageId].classList.add('active');
+
+            // Обновляем активную ссылку
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) link.classList.add('active');
+            });
+
+            // Показываем поиск только на странице рейтинга
+            searchInput.style.display = (pageId === 'rankings') ? 'block' : 'none';
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                switchPage(page);
+            });
+        });
+
+        logoHome.addEventListener('click', () => switchPage('home'));
+
+        // Изначально показываем главную (уже active), но если нужно начать с рейтинга, можно изменить класс
+        // Оставим главную по умолчанию.
+
+        // --- Поиск по игрокам (только на странице рейтинга) ---
+        searchInput.addEventListener('input', (e) => {
             const value = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#page-rankings .row');
             rows.forEach(row => {
                 const h2 = row.querySelector('h2');
                 if (!h2) return;
@@ -852,54 +1014,40 @@
             });
         });
 
-        // Tab switching (visual only)
-        document.querySelectorAll('.tab').forEach(tab => {
+        // Переключение вкладок (чисто визуальное)
+        document.querySelectorAll('#page-rankings .tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('#page-rankings .tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
             });
         });
 
-        // Player click -> modal
-        rows.forEach(row => {
+        // --- Модальное окно игрока ---
+        const modalOverlay = document.getElementById('playerModal');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        document.querySelectorAll('#page-rankings .row').forEach(row => {
             row.addEventListener('click', () => {
                 const dataAttr = row.getAttribute('data-player');
                 if (!dataAttr) return;
                 const player = JSON.parse(dataAttr);
 
-                // Populate modal
                 document.getElementById('modalAvatar').textContent = player.avatarLetter;
                 document.getElementById('modalName').textContent = player.name;
-                document.getElementById('modalPoints').textContent = `Points: ${player.points}`;
-                document.getElementById('modalRegion').textContent = `Region: ${player.region}`;
+                document.getElementById('modalPoints').textContent = `Очки: ${player.points}`;
+                document.getElementById('modalRegion').textContent = `Регион: ${player.region}`;
 
                 const rankBadge = document.getElementById('modalRankBadge');
                 rankBadge.textContent = player.rankTitle;
                 rankBadge.className = 'modal-rank rank ' + player.rankClass;
 
-                // Tiers
-                const tiersContainer = document.getElementById('modalTiers');
-                tiersContainer.innerHTML = '';
-                player.tiers.forEach(t => {
-                    const block = document.createElement('div');
-                    block.className = 'tier-block';
-                    block.innerHTML = `<span>${t.icon}</span> <span>${t.level}</span>`; // icons remain only in modal detail
-                    tiersContainer.appendChild(block);
-                });
-
                 modalOverlay.classList.add('active');
             });
         });
 
-        // Close modal
-        closeModalBtn.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-
+        closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
         modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
-            }
+            if (e.target === modalOverlay) modalOverlay.classList.remove('active');
         });
     </script>
 </body>
