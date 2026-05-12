@@ -159,62 +159,6 @@
             display: block;
         }
 
-        /* TABS */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: thin;
-            scrollbar-color: #1f2a3b transparent;
-        }
-
-        .tab {
-            min-width: 120px;
-            height: 68px;
-            background: var(--panel);
-            border: 2px solid #1a2538;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: .2s;
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            padding: 0 20px;
-            font-weight: 800;
-            font-size: 14px;
-            color: #8ea0b9;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .tab.active {
-            border-color: #3a5070;
-            background: #111927;
-            color: #e8eef7;
-            box-shadow: 0 0 24px rgba(255, 190, 61, 0.06), inset 0 0 0 1px rgba(255, 190, 61, 0.04);
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 20%;
-            width: 60%;
-            height: 2px;
-            background: var(--gold);
-            box-shadow: 0 0 12px rgba(255, 190, 61, 0.5);
-        }
-
-        .tab:hover {
-            transform: translateY(-2px);
-            border-color: #2d3d55;
-            background: #111927;
-        }
-
         /* MAIN BOARD */
         .board {
             background: #0a1019;
@@ -667,6 +611,31 @@
             font-size: 20px;
         }
 
+        /* BIG BUTTON ON HOME PAGE */
+        .big-top-button {
+            display: inline-block;
+            margin-top: 24px;
+            background: #182233;
+            border: 2px solid #3a5070;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 2px;
+            font-weight: 800;
+            font-size: 18px;
+            text-decoration: none;
+            letter-spacing: 0.8px;
+            transition: .2s;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .big-top-button:hover {
+            background: #1f2e42;
+            border-color: #ffbe3d;
+            box-shadow: 0 10px 28px rgba(255, 190, 61, 0.15);
+            transform: translateY(-2px);
+        }
+
         /* FOOTER */
         .footer {
             padding: 32px 20px;
@@ -712,31 +681,22 @@
     <div class="wrapper">
         <!-- СТРАНИЦА "ГЛАВНАЯ" -->
         <div class="page active" id="page-home">
-            <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
+            <div style="max-width:700px;margin:0 auto;padding:40px 20px;text-align:center;">
                 <h1 style="font-size:34px;margin-bottom:20px;">Добро пожаловать в <span style="color:#ffbe3d;">TOPDEV</span></h1>
                 <p style="font-size:18px;color:#bcc8d8;line-height:1.6;margin-bottom:28px;">
                     Платформа для соревновательного ранжирования лучших разработчиков Minecraft‑проектов.
                     Здесь вы найдёте рейтинг игроков по их вкладу в строительство, редстоун, моды, плагины и многое другое.
                 </p>
-                <p style="color:#7a8da3;font-size:15px;">
+                <p style="color:#7a8da3;font-size:15px;margin-bottom:20px;">
                     Система рангов: <strong>DLR 1–5</strong> (Developer Low Rank), <strong>DHR 1–5</strong> (Developer High Rank) и высший титул <strong style="color:#ffce67;">B DEV</strong> (Best Developer).
                     Присоединяйтесь к сообществу и поднимайтесь в топе!
                 </p>
+                <a class="big-top-button" id="viewTopButton">Посмотреть топы</a>
             </div>
         </div>
 
-        <!-- СТРАНИЦА "РЕЙТИНГ" -->
+        <!-- СТРАНИЦА "РЕЙТИНГ" (без вкладок) -->
         <div class="page" id="page-rankings">
-            <div class="tabs">
-                <div class="tab active"><span>Общий</span></div>
-                <div class="tab"><span>Строительство</span></div>
-                <div class="tab"><span>Редстоун</span></div>
-                <div class="tab"><span>Моды</span></div>
-                <div class="tab"><span>Плагины</span></div>
-                <div class="tab"><span>Оптимизация</span></div>
-                <div class="tab"><span>Системы</span></div>
-            </div>
-
             <div class="board">
                 <div class="info-bar">
                     <div class="info-pill">Текущий рейтинг разработчиков</div>
@@ -847,49 +807,63 @@
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
 
-                <!-- Новые игроки с 13 по 20 -->
+                <!-- 13 - DLR 1 -->
                 <div class="row" data-player='{"name":"StoneCutter","points":115,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
                     <div class="rank-box"><div class="place normal">13</div></div>
                     <div class="player"><div class="avatar">S</div><div><h2>StoneCutter</h2><p>Dev Low Rank • 115 очков</p></div></div>
                     <div><div class="region as">AS</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 14 - DLR 1 -->
                 <div class="row" data-player='{"name":"MinePro","points":102,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
                     <div class="rank-box"><div class="place normal">14</div></div>
                     <div class="player"><div class="avatar">M</div><div><h2>MinePro</h2><p>Dev Low Rank • 102 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 15 - DLR 1 -->
                 <div class="row" data-player='{"name":"RedKing","points":95,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"R"}'>
                     <div class="rank-box"><div class="place normal">15</div></div>
                     <div class="player"><div class="avatar">R</div><div><h2>RedKing</h2><p>Dev Low Rank • 95 очков</p></div></div>
                     <div><div class="region na">NA</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 16 - DLR 1 -->
                 <div class="row" data-player='{"name":"ModMaster","points":88,"region":"SA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
                     <div class="rank-box"><div class="place normal">16</div></div>
                     <div class="player"><div class="avatar">M</div><div><h2>ModMaster</h2><p>Dev Low Rank • 88 очков</p></div></div>
                     <div><div class="region sa">SA</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 17 - DLR 1 -->
                 <div class="row" data-player='{"name":"PluginWiz","points":76,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"P"}'>
                     <div class="rank-box"><div class="place normal">17</div></div>
                     <div class="player"><div class="avatar">P</div><div><h2>PluginWiz</h2><p>Dev Low Rank • 76 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 18 - DLR 1 -->
                 <div class="row" data-player='{"name":"BuildCraft","points":64,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
                     <div class="rank-box"><div class="place normal">18</div></div>
                     <div class="player"><div class="avatar">B</div><div><h2>BuildCraft</h2><p>Dev Low Rank • 64 очков</p></div></div>
                     <div><div class="region as">AS</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 19 - DLR 1 -->
                 <div class="row" data-player='{"name":"SkyDev","points":52,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
                     <div class="rank-box"><div class="place normal">19</div></div>
                     <div class="player"><div class="avatar">S</div><div><h2>SkyDev</h2><p>Dev Low Rank • 52 очков</p></div></div>
                     <div><div class="region na">NA</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
+
+                <!-- 20 - DLR 1 -->
                 <div class="row" data-player='{"name":"BlockTech","points":40,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
                     <div class="rank-box"><div class="place normal">20</div></div>
                     <div class="player"><div class="avatar">B</div><div><h2>BlockTech</h2><p>Dev Low Rank • 40 очков</p></div></div>
@@ -974,18 +948,14 @@
         const logoHome = document.getElementById('logoHome');
 
         function switchPage(pageId) {
-            // Скрываем все страницы
             Object.values(pages).forEach(p => p.classList.remove('active'));
-            // Показываем нужную
             if (pages[pageId]) pages[pageId].classList.add('active');
 
-            // Обновляем активную ссылку
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.dataset.page === pageId) link.classList.add('active');
             });
 
-            // Показываем поиск только на странице рейтинга
             searchInput.style.display = (pageId === 'rankings') ? 'block' : 'none';
         }
 
@@ -999,10 +969,10 @@
 
         logoHome.addEventListener('click', () => switchPage('home'));
 
-        // Изначально показываем главную (уже active), но если нужно начать с рейтинга, можно изменить класс
-        // Оставим главную по умолчанию.
+        // Кнопка "Посмотреть топы" на главной
+        document.getElementById('viewTopButton').addEventListener('click', () => switchPage('rankings'));
 
-        // --- Поиск по игрокам (только на странице рейтинга) ---
+        // --- Поиск по игрокам ---
         searchInput.addEventListener('input', (e) => {
             const value = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('#page-rankings .row');
@@ -1011,14 +981,6 @@
                 if (!h2) return;
                 const name = h2.textContent.toLowerCase();
                 row.style.display = name.includes(value) ? 'grid' : 'none';
-            });
-        });
-
-        // Переключение вкладок (чисто визуальное)
-        document.querySelectorAll('#page-rankings .tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('#page-rankings .tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
             });
         });
 
