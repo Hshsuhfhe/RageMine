@@ -57,7 +57,7 @@
                 repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 24px);
         }
 
-        /* HEADER */
+        /* HEADER - навигация всегда по центру */
         .header {
             height: 72px;
             border-bottom: 2px solid #1a2538;
@@ -68,9 +68,28 @@
             z-index: 999;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             padding: 0 32px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-left {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-center {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-right {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            min-width: 260px;
+            justify-content: flex-end;
         }
 
         .logo {
@@ -104,6 +123,7 @@
             letter-spacing: 0.5px;
             border: 2px solid transparent;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .nav a:hover,
@@ -243,24 +263,26 @@
             user-select: none;
             border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background-size: 200% 200%;
         }
 
+        /* Переливы вместо свечения */
         .place.gold {
-            background: linear-gradient(135deg, #ffd95e 0%, #c8850f 100%);
+            background: linear-gradient(135deg, #ffe066, #d89e0c, #b87b04);
             border-color: #e6a817;
-            animation: pulseGold 2s infinite;
+            animation: shimmerGold 3s ease infinite;
         }
 
         .place.silver {
-            background: linear-gradient(135deg, #d7dce3 0%, #8897ab 100%);
+            background: linear-gradient(135deg, #e2e8f0, #9aa4b5, #6b7a8f);
             border-color: #b0bcca;
-            animation: pulseSilver 2.5s infinite;
+            animation: shimmerSilver 3.5s ease infinite;
         }
 
         .place.bronze {
-            background: linear-gradient(135deg, #ffb06b 0%, #8d5327 100%);
+            background: linear-gradient(135deg, #ffbd7a, #b86e3a, #8a4b20);
             border-color: #b4723c;
-            animation: pulseBronze 3s infinite;
+            animation: shimmerBronze 4s ease infinite;
         }
 
         .place.normal {
@@ -269,34 +291,22 @@
             border-color: #2d3d55;
         }
 
-        @keyframes pulseGold {
-            0%,
-            100% {
-                box-shadow: 0 0 25px rgba(255, 190, 61, 0.5), 0 0 50px rgba(255, 190, 61, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 210, 80, 0.7), 0 0 70px rgba(255, 190, 61, 0.35);
-            }
+        @keyframes shimmerGold {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        @keyframes pulseSilver {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(183, 195, 211, 0.4), 0 0 40px rgba(183, 195, 211, 0.15);
-            }
-            50% {
-                box-shadow: 0 0 32px rgba(200, 210, 225, 0.6), 0 0 55px rgba(183, 195, 211, 0.3);
-            }
+        @keyframes shimmerSilver {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        @keyframes pulseBronze {
-            0%,
-            100% {
-                box-shadow: 0 0 18px rgba(205, 138, 74, 0.35), 0 0 36px rgba(205, 138, 74, 0.12);
-            }
-            50% {
-                box-shadow: 0 0 28px rgba(215, 150, 85, 0.55), 0 0 50px rgba(205, 138, 74, 0.25);
-            }
+        @keyframes shimmerBronze {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .player {
@@ -417,17 +427,13 @@
             color: #ffce67;
             background: rgba(255, 190, 61, .08);
             border-color: rgba(255, 190, 61, .3);
-            animation: bdevGlow 2s infinite;
+            animation: bdevShimmer 2s ease infinite;
         }
 
-        @keyframes bdevGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 10px rgba(255, 190, 61, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 24px rgba(255, 190, 61, 0.4);
-            }
+        @keyframes bdevShimmer {
+            0% { border-color: rgba(255, 190, 61, 0.3); box-shadow: 0 0 6px rgba(255, 190, 61, 0.1); }
+            50% { border-color: rgba(255, 210, 80, 0.8); box-shadow: 0 0 16px rgba(255, 190, 61, 0.25); }
+            100% { border-color: rgba(255, 190, 61, 0.3); box-shadow: 0 0 6px rgba(255, 190, 61, 0.1); }
         }
 
         /* LEGEND */
@@ -627,6 +633,7 @@
             transition: .2s;
             text-transform: uppercase;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
         }
 
         .big-top-button:hover {
@@ -660,7 +667,10 @@
                 padding: 0 16px;
             }
             .search {
-                width: 180px;
+                width: 160px;
+            }
+            .header-right {
+                min-width: 160px;
             }
         }
     </style>
@@ -668,14 +678,20 @@
 <body>
 
     <header class="header">
-        <div class="logo" id="logoHome">TOP<span>DEV</span></div>
-        <nav class="nav">
-            <a class="nav-link active" data-page="home">Главная</a>
-            <a class="nav-link" data-page="rankings">Рейтинг</a>
-            <a class="nav-link" data-page="info">Информация</a>
-            <a class="nav-link" data-page="apply">Подать заявку</a>
-        </nav>
-        <input type="text" class="search" placeholder="Поиск игрока..." id="searchInput" style="display:none;">
+        <div class="header-left">
+            <div class="logo" id="logoHome">TOP<span>DEV</span></div>
+        </div>
+        <div class="header-center">
+            <nav class="nav">
+                <a class="nav-link active" data-page="home">Главная</a>
+                <a class="nav-link" data-page="rankings">Рейтинг</a>
+                <a class="nav-link" data-page="info">Информация</a>
+                <a class="nav-link" data-page="apply">Подать заявку</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <input type="text" class="search" placeholder="Поиск игрока..." id="searchInput" style="display:none;">
+        </div>
     </header>
 
     <div class="wrapper">
@@ -791,7 +807,7 @@
                     <div class="rank-col"><div class="rank dlr">DLR 2</div></div>
                 </div>
 
-                <!-- 11 - DLR 1 -->
+                <!-- 11 - DLR 1 (первый DLR1) -->
                 <div class="row" data-player='{"name":"IronFist","points":148,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"I"}'>
                     <div class="rank-box"><div class="place normal">11</div></div>
                     <div class="player"><div class="avatar">I</div><div><h2>IronFist</h2><p>Dev Low Rank • 148 очков</p></div></div>
@@ -799,76 +815,76 @@
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
 
-                <!-- 12 - DLR 1 -->
-                <div class="row" data-player='{"name":"BlockWizard","points":130,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                <!-- 12 - DLR 2 -->
+                <div class="row" data-player='{"name":"BlockWizard","points":135,"region":"EU","rankClass":"dlr","rankTitle":"DLR 2","avatarLetter":"B"}'>
                     <div class="rank-box"><div class="place normal">12</div></div>
-                    <div class="player"><div class="avatar">B</div><div><h2>BlockWizard</h2><p>Dev Low Rank • 130 очков</p></div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BlockWizard</h2><p>Dev Low Rank • 135 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 2</div></div>
                 </div>
 
-                <!-- 13 - DLR 1 -->
-                <div class="row" data-player='{"name":"StoneCutter","points":115,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
+                <!-- 13 - DLR 3 -->
+                <div class="row" data-player='{"name":"StoneCutter","points":125,"region":"AS","rankClass":"dlr","rankTitle":"DLR 3","avatarLetter":"S"}'>
                     <div class="rank-box"><div class="place normal">13</div></div>
-                    <div class="player"><div class="avatar">S</div><div><h2>StoneCutter</h2><p>Dev Low Rank • 115 очков</p></div></div>
+                    <div class="player"><div class="avatar">S</div><div><h2>StoneCutter</h2><p>Dev Low Rank • 125 очков</p></div></div>
                     <div><div class="region as">AS</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 3</div></div>
                 </div>
 
-                <!-- 14 - DLR 1 -->
-                <div class="row" data-player='{"name":"MinePro","points":102,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
+                <!-- 14 - DLR 4 -->
+                <div class="row" data-player='{"name":"MinePro","points":118,"region":"EU","rankClass":"dlr","rankTitle":"DLR 4","avatarLetter":"M"}'>
                     <div class="rank-box"><div class="place normal">14</div></div>
-                    <div class="player"><div class="avatar">M</div><div><h2>MinePro</h2><p>Dev Low Rank • 102 очков</p></div></div>
+                    <div class="player"><div class="avatar">M</div><div><h2>MinePro</h2><p>Dev Low Rank • 118 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 4</div></div>
                 </div>
 
-                <!-- 15 - DLR 1 -->
-                <div class="row" data-player='{"name":"RedKing","points":95,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"R"}'>
+                <!-- 15 - DLR 5 -->
+                <div class="row" data-player='{"name":"RedKing","points":110,"region":"NA","rankClass":"dlr","rankTitle":"DLR 5","avatarLetter":"R"}'>
                     <div class="rank-box"><div class="place normal">15</div></div>
-                    <div class="player"><div class="avatar">R</div><div><h2>RedKing</h2><p>Dev Low Rank • 95 очков</p></div></div>
+                    <div class="player"><div class="avatar">R</div><div><h2>RedKing</h2><p>Dev Low Rank • 110 очков</p></div></div>
                     <div><div class="region na">NA</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 5</div></div>
                 </div>
 
-                <!-- 16 - DLR 1 -->
-                <div class="row" data-player='{"name":"ModMaster","points":88,"region":"SA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"M"}'>
+                <!-- 16 - DHR 1 -->
+                <div class="row" data-player='{"name":"ModMaster","points":105,"region":"SA","rankClass":"dhr","rankTitle":"DHR 1","avatarLetter":"M"}'>
                     <div class="rank-box"><div class="place normal">16</div></div>
-                    <div class="player"><div class="avatar">M</div><div><h2>ModMaster</h2><p>Dev Low Rank • 88 очков</p></div></div>
+                    <div class="player"><div class="avatar">M</div><div><h2>ModMaster</h2><p>Dev High Rank • 105 очков</p></div></div>
                     <div><div class="region sa">SA</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 1</div></div>
                 </div>
 
-                <!-- 17 - DLR 1 -->
-                <div class="row" data-player='{"name":"PluginWiz","points":76,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"P"}'>
+                <!-- 17 - DHR 2 -->
+                <div class="row" data-player='{"name":"PluginWiz","points":98,"region":"EU","rankClass":"dhr","rankTitle":"DHR 2","avatarLetter":"P"}'>
                     <div class="rank-box"><div class="place normal">17</div></div>
-                    <div class="player"><div class="avatar">P</div><div><h2>PluginWiz</h2><p>Dev Low Rank • 76 очков</p></div></div>
+                    <div class="player"><div class="avatar">P</div><div><h2>PluginWiz</h2><p>Dev High Rank • 98 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dhr">DHR 2</div></div>
                 </div>
 
                 <!-- 18 - DLR 1 -->
-                <div class="row" data-player='{"name":"BuildCraft","points":64,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                <div class="row" data-player='{"name":"BuildCraft","points":85,"region":"AS","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
                     <div class="rank-box"><div class="place normal">18</div></div>
-                    <div class="player"><div class="avatar">B</div><div><h2>BuildCraft</h2><p>Dev Low Rank • 64 очков</p></div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BuildCraft</h2><p>Dev Low Rank • 85 очков</p></div></div>
                     <div><div class="region as">AS</div></div>
                     <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
                 </div>
 
-                <!-- 19 - DLR 1 -->
-                <div class="row" data-player='{"name":"SkyDev","points":52,"region":"NA","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"S"}'>
+                <!-- 19 - DLR 2 -->
+                <div class="row" data-player='{"name":"SkyDev","points":72,"region":"NA","rankClass":"dlr","rankTitle":"DLR 2","avatarLetter":"S"}'>
                     <div class="rank-box"><div class="place normal">19</div></div>
-                    <div class="player"><div class="avatar">S</div><div><h2>SkyDev</h2><p>Dev Low Rank • 52 очков</p></div></div>
+                    <div class="player"><div class="avatar">S</div><div><h2>SkyDev</h2><p>Dev Low Rank • 72 очков</p></div></div>
                     <div><div class="region na">NA</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 2</div></div>
                 </div>
 
-                <!-- 20 - DLR 1 -->
-                <div class="row" data-player='{"name":"BlockTech","points":40,"region":"EU","rankClass":"dlr","rankTitle":"DLR 1","avatarLetter":"B"}'>
+                <!-- 20 - DLR 3 -->
+                <div class="row" data-player='{"name":"BlockTech","points":60,"region":"EU","rankClass":"dlr","rankTitle":"DLR 3","avatarLetter":"B"}'>
                     <div class="rank-box"><div class="place normal">20</div></div>
-                    <div class="player"><div class="avatar">B</div><div><h2>BlockTech</h2><p>Dev Low Rank • 40 очков</p></div></div>
+                    <div class="player"><div class="avatar">B</div><div><h2>BlockTech</h2><p>Dev Low Rank • 60 очков</p></div></div>
                     <div><div class="region eu">EU</div></div>
-                    <div class="rank-col"><div class="rank dlr">DLR 1</div></div>
+                    <div class="rank-col"><div class="rank dlr">DLR 3</div></div>
                 </div>
             </div>
         </div>
