@@ -6,191 +6,220 @@
     <title>BDev | Портфолио</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* Полный сброс и база */
+        /* Базовые настройки */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Запрещаем текстовый курсор на всех элементах, кроме кликабельных */
         body, h1, h2, h3, h4, h5, h6, p, div, section, header, footer, span, article, aside {
             cursor: default;
         }
         
-        a, button, .btn, .project-card, .plugin-item, .contact-item, .stat-item {
+        a, button, .btn, .project-card, .plugin-item, .stat-item, .download-btn {
             cursor: pointer;
         }
 
+        /* КРУТОЙ АНИМИРОВАННЫЙ ФОН */
         body {
-            background-color: #060606; /* Максимально темный фон без градиентов */
-            color: #d1d5db;
             font-family: 'Inter', sans-serif;
-            line-height: 2.2; /* Огромный межстрочный интервал */
+            line-height: 2.2;
+            color: #d1d5db;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0a0a0a, #1a0f2e, #0d1f3c, #0a0a0a);
+            background-size: 400% 400%;
+            animation: gradientMove 18s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Легкая дымка сверху для глубины */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: -1;
         }
 
         .container {
             max-width: 1300px;
             margin: 0 auto;
             padding: 60px 40px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Шапка с огромными отступами снизу */
+        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 50px 0;
-            border-bottom: 1px solid #1a1a1a;
-            margin-bottom: 160px;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 140px;
         }
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2.0rem;
             color: #ffffff;
             letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(100, 100, 255, 0.2);
         }
 
         nav a {
-            color: #888;
+            color: #999;
             text-decoration: none;
-            margin-left: 40px;
+            margin-left: 35px;
             transition: 0.3s;
             font-weight: 500;
-            font-size: 1.1rem;
+            font-size: 1.0rem;
         }
-        nav a:hover { color: #ffffff; }
+        nav a:hover { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
 
         /* Герой */
         .hero {
             text-align: center;
-            padding: 100px 0 160px;
+            padding: 80px 0 120px;
         }
 
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4.2rem;
+            font-size: 3.8rem;
             color: #ffffff;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(80, 80, 255, 0.2);
         }
 
         .hero .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #aaa;
             letter-spacing: 3px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
         .hero .desc {
-            max-width: 800px;
-            margin: 0 auto 60px;
-            color: #999;
-            font-size: 1.15rem;
+            max-width: 750px;
+            margin: 0 auto 50px;
+            color: #bbb;
+            font-size: 1.1rem;
         }
 
         .stats {
             display: flex;
             justify-content: center;
-            gap: 100px;
-            margin-bottom: 80px;
+            gap: 80px;
+            margin-bottom: 70px;
         }
 
         .stat-item {
             text-align: center;
             transition: 0.3s;
         }
-        .stat-item:hover { transform: scale(1.05); }
+        .stat-item:hover { transform: scale(1.06); }
 
         .stat-number {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             color: #fff;
             font-weight: 600;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         .stat-label { 
-            color: #777; 
-            font-size: 1.0rem; 
+            color: #888; 
+            font-size: 0.9rem; 
             margin-top: 5px;
         }
 
         .btn-primary {
-            background-color: #ffffff;
-            color: #060606;
-            padding: 18px 60px;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            color: #0a0a0a;
+            padding: 16px 50px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
             display: inline-block;
             transition: 0.3s;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 20px rgba(255,255,255,0.1);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 30px rgba(255,255,255,0.15);
         }
         .btn-primary:hover { 
-            background-color: #e0e0e0; 
             transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(255,255,255,0.25);
         }
 
-        /* Секции с огромными отступами */
+        /* Секции */
         .section { 
-            padding: 160px 0; 
-            border-top: 1px solid #141414;
+            padding: 140px 0; 
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
             color: #fff;
             letter-spacing: 2px;
         }
 
         .section-description {
-            color: #888;
+            color: #999;
             margin-bottom: 50px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             max-width: 700px;
         }
 
         /* Навыки */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
         }
 
         .skill-card {
-            background: #0e0e0e;
-            padding: 50px;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(5px);
+            padding: 45px;
             border-radius: 16px;
-            border: 1px solid #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.06);
             transition: 0.3s;
         }
         .skill-card:hover { 
-            border-color: #555; 
+            border-color: rgba(255,255,255,0.2); 
             transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.05);
         }
 
         .skill-card h3 { 
-            margin-bottom: 25px; 
+            margin-bottom: 20px; 
             color: #fff; 
-            font-size: 1.4rem; 
+            font-size: 1.3rem; 
             font-weight: 600;
         }
-        .skill-card p { color: #999; line-height: 2.2; }
+        .skill-card p { color: #bbb; line-height: 2.2; }
 
-        /* Портфолио */
+        /* Портфолио (6 проектов) */
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 50px;
+            gap: 40px;
         }
 
         .project-card {
-            background: #0e0e0e;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(5px);
             border-radius: 16px;
-            padding: 40px;
-            border: 1px solid #1a1a1a;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.06);
             transition: 0.3s;
             text-decoration: none;
             color: inherit;
@@ -198,146 +227,127 @@
             height: 100%;
         }
         .project-card:hover { 
-            border-color: #888; 
+            border-color: rgba(255,255,255,0.3); 
             transform: translateY(-6px);
-            box-shadow: 0 12px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 12px 50px rgba(0,0,0,0.5);
+            background: rgba(255,255,255,0.06);
         }
         .project-card .title {
             font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
         }
         .project-card .description {
-            color: #aaa;
-            font-size: 1.0rem;
+            color: #ccc;
+            font-size: 0.95rem;
         }
         .project-card .tag {
             display: inline-block;
-            background: #1a1a1a;
-            padding: 6px 18px;
+            background: rgba(255,255,255,0.06);
+            padding: 5px 18px;
             border-radius: 30px;
-            color: #888;
-            font-size: 0.85rem;
+            color: #aaa;
+            font-size: 0.8rem;
             margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
 
         /* Плагины */
         .plugins-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 50px;
+            gap: 40px;
         }
 
         .plugin-item {
-            background: #0e0e0e;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(5px);
             border-radius: 16px;
-            padding: 40px;
-            border: 1px solid #1a1a1a;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.06);
             transition: 0.3s;
         }
         .plugin-item:hover { 
-            border-color: #888; 
+            border-color: rgba(255,255,255,0.2); 
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
         }
 
         .plugin-item .name {
             font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.4rem;
-            margin-bottom: 8px;
+            font-size: 1.3rem;
+            margin-bottom: 6px;
             font-weight: 600;
         }
         .plugin-item .version {
-            font-size: 0.85rem;
-            color: #777;
-            background: #1a1a1a;
-            padding: 3px 16px;
+            font-size: 0.8rem;
+            color: #888;
+            background: rgba(255,255,255,0.04);
+            padding: 2px 14px;
             border-radius: 20px;
             display: inline-block;
             margin-top: 5px;
         }
         .plugin-item .desc {
-            color: #aaa;
-            margin-top: 20px;
-            line-height: 2.2;
+            color: #bbb;
+            margin-top: 18px;
+            line-height: 2.0;
             font-size: 0.95rem;
         }
 
-        /* Контакты */
-        .contacts-section {
-            padding: 160px 0;
-            border-top: 1px solid #141414;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .contacts-grid {
-            display: flex;
-            gap: 80px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .contact-item {
-            background: #0e0e0e;
-            padding: 40px 70px;
-            border-radius: 16px;
-            border: 1px solid #1a1a1a;
+        /* Кнопка скачивания архива */
+        .download-section {
             text-align: center;
-            transition: 0.3s;
-            text-decoration: none;
-            color: inherit;
+            margin-top: 80px;
         }
-        .contact-item:hover {
-            border-color: #888;
-            transform: scale(1.04);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-        }
-        .contact-item .label {
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-        .contact-item .value {
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #6c63ff, #3f3d99);
             color: #fff;
-            font-size: 1.3rem;
-            font-weight: 600;
+            padding: 18px 55px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 30px rgba(108, 99, 255, 0.4);
+        }
+        .download-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 50px rgba(108, 99, 255, 0.6);
         }
 
         /* Футер */
         footer {
-            border-top: 1px solid #141414;
-            padding: 80px 0 60px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 0 40px;
             text-align: center;
             color: #555;
             margin-top: 60px;
         }
         footer .socials a { 
             color: #888; 
-            margin: 0 25px; 
+            margin: 0 20px; 
             text-decoration: none; 
-            font-size: 1.0rem; 
+            font-size: 0.9rem; 
             transition: 0.3s; 
         }
         footer .socials a:hover { color: #fff; }
 
-        /* Адаптив */
+        /* Адаптивность */
         @media (max-width: 1024px) {
             .portfolio-grid, .plugins-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats { gap: 60px; }
+            .stats { gap: 40px; }
+            .hero h1 { font-size: 3.2rem; }
         }
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.8rem; }
-            .stats { flex-direction: column; gap: 40px; }
-            header { flex-direction: column; gap: 30px; }
-            nav a { margin: 0 20px; }
+            .hero h1 { font-size: 2.4rem; }
+            .stats { flex-direction: column; gap: 30px; }
+            header { flex-direction: column; gap: 25px; }
+            nav a { margin: 0 15px; }
             .portfolio-grid, .plugins-grid { grid-template-columns: 1fr; }
-            .contacts-grid { flex-direction: column; align-items: center; }
-            .contact-item { width: 100%; max-width: 350px; }
         }
     </style>
 </head>
@@ -349,7 +359,7 @@
         <nav>
             <a href="#">Главная</a>
             <a href="#portfolio">Портфолио</a>
-            <a href="#contacts">Контакты</a>
+            <a href="#plugins">Плагины</a>
         </nav>
     </header>
 
@@ -376,10 +386,8 @@
             </div>
         </div>
 
-        <a href="#contacts" class="btn-primary">Связь со мной</a>
+        <a href="#plugins" class="btn-primary">Смотреть плагины</a>
     </section>
-
-    <!-- ОГРОМНОЕ РАССТОЯНИЕ МЕЖДУ СЕКЦИЯМИ (160px уже заложено в padding) -->
 
     <section class="section" id="competencies">
         <h2 class="section-title">Компетенции</h2>
@@ -401,7 +409,7 @@
 
     <section class="section" id="portfolio">
         <h2 class="section-title">Мои проекты</h2>
-        <p class="section-description">Создал более 6 серверов и 3 сайта. Ниже представлены некоторые из них.</p>
+        <p class="section-description">Создал более 6 серверов и 3 сайта. Посмотрите на некоторые из них.</p>
         <div class="portfolio-grid">
             <a href="#" class="project-card">
                 <div class="title">Survival World</div>
@@ -418,12 +426,27 @@
                 <div class="description">Официальный сайт для сообщества. Адаптивный дизайн, умная админ-панель.</div>
                 <div class="tag">Веб-сайт • 2000+ посещений</div>
             </a>
+            <a href="#" class="project-card">
+                <div class="title">Faction Wars</div>
+                <div class="description">Клановые войны с захватом территорий. Сложная система привилегий.</div>
+                <div class="tag">Сервер • 200+ игроков</div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="title">Prison Reborn</div>
+                <div class="description">Тюремный сервер с рангами и непрерывной системой заработка.</div>
+                <div class="tag">Сервер • 150+ игроков</div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="title">DevLauncher</div>
+                <div class="description">Собственный лаунчер с автоматическими обновлениями и модами.</div>
+                <div class="tag">Приложение • 500+ загрузок</div>
+            </a>
         </div>
     </section>
 
     <section class="section" id="plugins">
         <h2 class="section-title">Плагины</h2>
-        <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры.</p>
+        <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры. Вы можете скачать их архив по ссылке ниже.</p>
         <div class="plugins-grid">
             <div class="plugin-item">
                 <div class="name">BAntirelog</div>
@@ -456,28 +479,19 @@
                 <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков.</div>
             </div>
         </div>
-    </section>
 
-    <section class="contacts-section" id="contacts">
-        <h2 class="section-title" style="text-align: center;">Контакты</h2>
-        <p class="section-description" style="text-align: center; max-width: 600px;">Свяжитесь со мной любым удобным способом</p>
-        <div class="contacts-grid">
-            <a href="https://t.me/Franzosren" class="contact-item" target="_blank">
-                <div class="label">Telegram</div>
-                <div class="value">@Franzosren</div>
-            </a>
-            <a href="https://discordapp.com/users/kot01078" class="contact-item" target="_blank">
-                <div class="label">Discord</div>
-                <div class="value">kot01078</div>
+        <!-- Ссылка на архив с плагинами -->
+        <div class="download-section">
+            <a href="https://workupload.com/archive/dk7XXsqPeR" target="_blank" class="download-btn">
+                ⬇ Скачать архив с плагинами
             </a>
         </div>
     </section>
 
     <footer>
         <div class="socials">
-            <a href="https://t.me/Franzosren" target="_blank">Telegram</a>
-            <a href="https://discordapp.com/users/kot01078" target="_blank">Discord</a>
             <a href="#">GitHub</a>
+            <a href="#">Email</a>
         </div>
         <p style="margin-top: 25px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
     </footer>
