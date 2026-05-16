@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDev | Профиль</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <title>BDev | Портфолио</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* Базовые настройки и сброс */
+        /* Базовые настройки */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Курсор по умолчанию на всех элементах, кроме ссылок и кнопок */
+        body, p, h1, h2, h3, h4, h5, h6, span, div, section, article, aside, footer, header, nav {
+            cursor: default;
+        }
+        
         body {
             background-color: #0b0b0b;
             color: #d1d5db;
             font-family: 'Inter', sans-serif;
-            line-height: 1.8;
+            line-height: 2.0; /* Увеличено для лучшей читаемости */
+        }
+        
+        a, button, .btn, .socials a, nav a {
+            cursor: pointer;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 40px;
         }
 
         /* Шапка */
@@ -26,9 +36,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 30px 0;
+            padding: 40px 0;
             border-bottom: 1px solid #222;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
         .logo {
@@ -41,7 +51,7 @@
         nav a {
             color: #888;
             text-decoration: none;
-            margin-left: 25px;
+            margin-left: 30px;
             transition: 0.3s;
             font-weight: 500;
         }
@@ -50,27 +60,28 @@
         /* Герой */
         .hero {
             text-align: center;
-            padding: 60px 0 80px;
+            padding: 80px 0 100px;
         }
 
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.2rem;
+            font-size: 3.6rem;
             color: #ffffff;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
         }
 
         .hero .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #aaa;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
         .hero .desc {
-            max-width: 700px;
-            margin: 0 auto 40px;
+            max-width: 800px;
+            margin: 0 auto 50px;
             color: #999;
             font-size: 1.1rem;
         }
@@ -78,8 +89,8 @@
         .stats {
             display: flex;
             justify-content: center;
-            gap: 60px;
-            margin-bottom: 50px;
+            gap: 80px;
+            margin-bottom: 60px;
         }
 
         .stat-item {
@@ -88,7 +99,7 @@
 
         .stat-number {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: #fff;
             font-weight: 600;
         }
@@ -102,39 +113,46 @@
         .btn {
             background-color: #ffffff;
             color: #0b0b0b;
-            padding: 14px 45px;
+            padding: 16px 50px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 700;
             display: inline-block;
             transition: 0.3s;
+            font-size: 1.1rem;
         }
         .btn:hover { background-color: #e0e0e0; }
 
         /* Секции */
         .section { 
-            padding: 70px 0; 
+            padding: 100px 0; 
             border-top: 1px solid #1a1a1a;
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 40px;
+            font-size: 2.0rem;
+            margin-bottom: 50px;
             color: #fff;
             letter-spacing: 1px;
+        }
+
+        .section-description {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
         }
 
         /* Навыки */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
         }
 
         .skill-card {
             background: #141414;
-            padding: 35px;
+            padding: 40px;
             border-radius: 8px;
             border: 1px solid #222;
             transition: 0.3s;
@@ -142,24 +160,24 @@
         .skill-card:hover { border-color: #555; }
 
         .skill-card h3 { 
-            margin-bottom: 15px; 
+            margin-bottom: 20px; 
             color: #fff; 
-            font-size: 1.2rem; 
+            font-size: 1.3rem; 
             font-weight: 600;
         }
-        .skill-card p { color: #999; line-height: 1.8; }
+        .skill-card p { color: #999; line-height: 2.0; }
 
         /* Плагины */
         .plugins-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            gap: 40px;
         }
 
         .plugin-item {
             background: #141414;
             border-radius: 8px;
-            padding: 25px 30px;
+            padding: 30px 35px;
             border: 1px solid #222;
             transition: 0.3s;
         }
@@ -168,51 +186,52 @@
         .plugin-item .name {
             font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
             font-weight: 600;
         }
         .plugin-item .version {
             font-size: 0.8rem;
             color: #777;
             background: #1f1f1f;
-            padding: 2px 12px;
+            padding: 2px 14px;
             border-radius: 20px;
             display: inline-block;
             margin-top: 5px;
         }
         .plugin-item .desc {
             color: #aaa;
-            margin-top: 15px;
-            line-height: 1.7;
+            margin-top: 18px;
+            line-height: 2.0;
             font-size: 0.95rem;
         }
 
         /* Футер */
         footer {
             border-top: 1px solid #1a1a1a;
-            padding: 50px 0 30px;
+            padding: 60px 0 40px;
             text-align: center;
             color: #555;
-            margin-top: 40px;
+            margin-top: 60px;
         }
         footer .socials a { 
             color: #888; 
-            margin: 0 15px; 
+            margin: 0 20px; 
             text-decoration: none; 
             font-size: 0.9rem; 
             transition: 0.3s; 
         }
         footer .socials a:hover { color: #fff; }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .stats { flex-direction: column; gap: 20px; }
-            header { flex-direction: column; gap: 15px; }
-            nav a { margin: 0 15px; }
+        @media (max-width: 1024px) {
             .plugins-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats { gap: 40px; }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .stats { flex-direction: column; gap: 30px; }
+            header { flex-direction: column; gap: 20px; }
+            nav a { margin: 0 15px; }
             .plugins-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -230,10 +249,10 @@
     </header>
 
     <section class="hero">
-        <div class="subtitle">BDEV – ТЕХНИЧЕСКИЙ АДМИНИСТРАТОР И MINECRAFT ДЕВЕЛОПЕР</div>
+        <div class="subtitle">BDEV – ТЕХНИЧЕСКИЙ АДМИНИСТРАТОР И MINECRAFT РАЗРАБОТЧИК</div>
         <h1>Код. Сервера. Архитектура.</h1>
         <p class="desc">
-            Привет. Я BDev. Профессиональный технический администратор и разработчик плагинов для Minecraft. 
+            Профессиональный технический администратор и разработчик плагинов для Minecraft. 
             Создаю стабильные, безопасные и высоконагруженные проекты от идеи до полноценного запуска.
         </p>
 
@@ -274,44 +293,68 @@
     </section>
 
     <section class="section">
-        <h2 class="section-title">Плагины (6 из 10+)</h2>
-        <p style="color:#888; margin-bottom:35px;">Плагины, написанные мной для стабильной работы игровых проектов.</p>
+        <h2 class="section-title">Плагины</h2>
+        <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры.</p>
         <div class="plugins-grid">
             
             <div class="plugin-item">
                 <div class="name">BAntirelog</div>
                 <div class="version">v2.0.0</div>
-                <div class="desc">Система блокировки выхода из игры в бою. Конфигурируемые наказания и интерфейсы.</div>
+                <div class="desc">Система предотвращения выхода из игры во время боевых действий. Конфигурация времени блокировки и наказаний.</div>
             </div>
 
             <div class="plugin-item">
                 <div class="name">BChat</div>
                 <div class="version">v2.0.0</div>
-                <div class="desc">Многофункциональный чат-менеджер. Контроль сообщений, каналы, форматирование и фильтрация.</div>
+                <div class="desc">Многофункциональный чат-менеджер с поддержкой форматирования, приватных каналов и фильтрации сообщений.</div>
             </div>
 
             <div class="plugin-item">
                 <div class="name">BKill</div>
                 <div class="version">v2.0.0</div>
-                <div class="desc">Система PvP статистики, рейтингов и наград. Ведение истории боев для серверов выживания.</div>
+                <div class="desc">Система отслеживания PvP-статистики, рейтингов игроков и автоматической выдачи наград за убийства.</div>
             </div>
 
             <div class="plugin-item">
                 <div class="name">BMine</div>
                 <div class="version">v2.0.0</div>
-                <div class="desc">Автоматическое восстановление блоков в шахтах. Динамическая система добычи ресурсов.</div>
+                <div class="desc">Автоматическое восстановление блоков в шахтах с динамической настройкой скорости восстановления и состава руд.</div>
             </div>
 
             <div class="plugin-item">
                 <div class="name">BReport</div>
                 <div class="version">v2.0.0</div>
-                <div class="desc">Сервис приема жалоб на игроков. Понятный интерфейс для модерации и автоматизация оповещений.</div>
+                <div class="desc">Удобная система приёма и обработки жалоб на игроков с оповещением модерации и автоматическим созданием тикетов.</div>
             </div>
 
             <div class="plugin-item">
                 <div class="name">BStones</div>
                 <div class="version">v1.0.0</div>
-                <div class="desc">Генерация руд и кастомных каменных блоков. Гибкая настройка выпадения ресурсов.</div>
+                <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков в генерацию мира с гибкой настройкой.</div>
+            </div>
+
+            <div class="plugin-item">
+                <div class="name">BCombat</div>
+                <div class="version">v2.0.0</div>
+                <div class="desc">Добавление сложных механик боя: комбо-атаки, критические удары, откаты способностей и системы защиты.</div>
+            </div>
+
+            <div class="plugin-item">
+                <div class="name">BEconomy</div>
+                <div class="version">v1.5.0</div>
+                <div class="desc">Стабильная экономическая система с поддержкой валют, транзакций, налогов, аукционов и централизованного хранения.</div>
+            </div>
+
+            <div class="plugin-item">
+                <div class="name">BShop</div>
+                <div class="version">v1.2.0</div>
+                <div class="desc">Создание торговых точек, GUI-магазинов, системы спроса и предложения для игроков с автоматической балансировкой цен.</div>
+            </div>
+
+            <div class="plugin-item">
+                <div class="name">BEvents</div>
+                <div class="version">v2.0.0</div>
+                <div class="desc">Проведение кастомных игровых ивентов: битвы, паркур, квесты с призами, авто-старт и гибкая система наград.</div>
             </div>
 
         </div>
