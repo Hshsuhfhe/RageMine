@@ -18,15 +18,15 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            line-height: 2.2;
-            color: #d1d5db;
+            line-height: 2.0;
+            color: #c8c8d0;
             min-height: 100vh;
-            background-color: #060612;
+            background-color: #07070d; 
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- ФОН: СЕТКА + ВОЛНЫ --- */
+        /* --- ТЕМНЫЙ ФОН С ВОЛНАМИ (ПРИЛИВ) --- */
         .bg-container {
             position: fixed;
             top: 0;
@@ -35,89 +35,67 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            background: radial-gradient(circle at 20% 30%, #1a1a3e, #060612 70%);
+            background: #07070d;
         }
 
-        /* Сетка */
-        .grid-overlay {
+        .ocean {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                linear-gradient(rgba(160, 160, 255, 0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(160, 160, 255, 0.15) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(1000px) rotateX(30deg) rotateZ(-15deg);
-            animation: gridMove 30s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(1000px) rotateX(30deg) rotateZ(-15deg) translateY(0px); }
-            100% { transform: perspective(1000px) rotateX(30deg) rotateZ(-15deg) translateY(60px); }
-        }
-
-        /* Волны, которые плавно двигаются по сетке */
-        .wave-container {
-            position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 60%;
             pointer-events: none;
-            animation: waveFloat 12s ease-in-out infinite alternate;
         }
 
-        .wave-gradient {
-            width: 200%;
-            height: 200%;
+        /* Волны, набегающие снизу (эффект прилива) */
+        .wave {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            background: radial-gradient(ellipse at 30% 50%, rgba(140, 80, 255, 0.4) 0%, transparent 50%);
-            border-radius: 50%;
-            filter: blur(40px);
-            animation: waveGradient 15s ease-in-out infinite alternate;
+            bottom: -10px;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2311112a' fill-opacity='0.3' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,218.7C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
+            background-size: 1440px 200px;
+            animation: waveMove 8s linear infinite;
+            opacity: 0.5;
         }
 
-        .wave-gradient:nth-child(2) {
-            animation-delay: 5s;
-            background: radial-gradient(ellipse at 70% 80%, rgba(60, 130, 255, 0.3) 0%, transparent 50%);
+        .wave:nth-child(2) {
+            bottom: -20px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23151540' fill-opacity='0.5' d='M0,160L48,170.7C96,181,192,203,288,186.7C384,171,480,117,576,117.3C672,117,768,171,864,170.7C960,171,1056,117,1152,112C1248,107,1344,149,1392,170.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
+            background-size: 1440px 250px;
+            animation: waveMove 10s linear infinite alternate;
+            opacity: 0.6;
         }
 
-        @keyframes waveFloat {
-            0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(-40px) scale(1.05); }
+        .wave:nth-child(3) {
+            bottom: -30px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23202060' fill-opacity='0.8' d='M0,160L60,170.7C120,181,240,203,360,186.7C480,171,600,117,720,117.3C840,117,960,171,1080,170.7C1200,171,1320,117,1380,96L1440,74.7L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
+            background-size: 1440px 300px;
+            animation: waveMove 12s linear infinite;
+            opacity: 0.7;
         }
 
-        @keyframes waveGradient {
-            0% { transform: translate(0px, 0px); }
-            100% { transform: translate(60px, 40px); }
+        @keyframes waveMove {
+            0% { transform: translateX(0px); }
+            100% { transform: translateX(-720px); }
         }
 
-        /* Свечение */
         .glow-spot {
             position: absolute;
-            top: 20%;
-            right: 20%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(50, 50, 255, 0.2), transparent 70%);
+            top: 10%;
+            right: 15%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(60, 60, 150, 0.15), transparent 70%);
             filter: blur(60px);
-            animation: glowPulse 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes glowPulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.5); opacity: 0.8; }
         }
 
         /* --- КОНТЕЙНЕР --- */
         .container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 40px;
+            padding: 40px 20px 80px;
             position: relative;
             z-index: 1;
         }
@@ -126,316 +104,310 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 40px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 140px;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 100px;
         }
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.0rem;
+            font-size: 1.8rem;
             color: #ffffff;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(100, 100, 255, 0.2);
+            letter-spacing: 1px;
         }
 
         nav a {
-            color: #999;
+            color: #888;
             text-decoration: none;
-            margin-left: 35px;
+            margin-left: 30px;
             transition: 0.3s;
             font-weight: 500;
-            font-size: 1.0rem;
+            font-size: 0.95rem;
         }
-        nav a:hover { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        nav a:hover { color: #ddd; }
 
         .hero {
             text-align: center;
-            padding: 80px 0 120px;
+            padding: 60px 0 100px;
         }
 
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.8rem;
+            font-size: 3.2rem;
             color: #ffffff;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(80, 80, 255, 0.2);
         }
 
         .hero .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.0rem;
             color: #aaa;
             letter-spacing: 3px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: 600;
         }
 
         .hero .desc {
-            max-width: 750px;
-            margin: 0 auto 50px;
-            color: #bbb;
-            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #999;
+            font-size: 1.0rem;
         }
 
         .stats {
             display: flex;
             justify-content: center;
-            gap: 80px;
-            margin-bottom: 70px;
+            gap: 60px;
+            margin-bottom: 50px;
         }
 
         .stat-item {
             text-align: center;
             transition: 0.3s;
         }
-        .stat-item:hover { transform: scale(1.06); }
+        .stat-item:hover { transform: scale(1.05); }
 
         .stat-number {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             color: #fff;
             font-weight: 600;
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         .stat-label { 
-            color: #888; 
-            font-size: 0.9rem; 
-            margin-top: 5px;
+            color: #777; 
+            font-size: 0.85rem; 
+            margin-top: 4px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ffffff, #e0e0e0);
-            color: #0a0a0a;
-            padding: 16px 50px;
-            border-radius: 50px;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 14px 45px;
+            border-radius: 40px;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
             display: inline-block;
             transition: 0.3s;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 30px rgba(255,255,255,0.15);
+            font-size: 1.0rem;
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .btn-primary:hover { 
+            background: #2a2a4e;
             transform: scale(1.02);
-            box-shadow: 0 8px 40px rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.15);
         }
 
         .section { 
-            padding: 140px 0; 
-            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 100px 0; 
+            border-top: 1px solid rgba(255,255,255,0.04);
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            margin-bottom: 50px;
+            font-size: 2.0rem;
+            margin-bottom: 40px;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .section-description {
-            color: #999;
-            margin-bottom: 50px;
-            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.0rem;
             max-width: 700px;
         }
 
         /* Компетенции */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
         .skill-card {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(5px);
-            padding: 45px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.04);
             transition: 0.3s;
         }
         .skill-card:hover { 
-            border-color: rgba(255,255,255,0.2); 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.12); 
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.03);
         }
 
         .skill-card h3 { 
-            margin-bottom: 20px; 
+            margin-bottom: 15px; 
             color: #fff; 
-            font-size: 1.3rem; 
+            font-size: 1.2rem; 
             font-weight: 600;
         }
-        .skill-card p { color: #bbb; line-height: 2.2; }
+        .skill-card p { color: #999; line-height: 2.0; }
 
-        /* Портфолио с именем и проектами */
-        .portfolio-highlight {
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-        }
-
-        .profile-block {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 50px;
-            border: 1px solid rgba(255,255,255,0.06);
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .profile-block .name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        .profile-block .alias {
-            font-size: 1.3rem;
-            color: #aaa;
-            margin-bottom: 20px;
-        }
-        .profile-block .about {
-            color: #ccc;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(5px);
+        /* Портфолио (единый блок) */
+        .portfolio-block {
+            background: rgba(255,255,255,0.02);
             border-radius: 16px;
             padding: 40px;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .project-card:hover { 
-            border-color: rgba(255,255,255,0.3); 
-            transform: translateY(-6px);
-            box-shadow: 0 12px 50px rgba(0,0,0,0.5);
-            background: rgba(255,255,255,0.06);
-        }
-        .project-card .title {
-            font-family: 'Orbitron', sans-serif;
-            color: #ffffff;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        .project-card .description {
-            color: #ccc;
-            font-size: 1.0rem;
-        }
-        .project-card .tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.06);
-            padding: 6px 20px;
-            border-radius: 30px;
-            color: #aaa;
-            font-size: 0.85rem;
-            margin-top: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Плагины */
+        .portfolio-block .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        .portfolio-block .info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .portfolio-block .info .name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.0rem;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+        .portfolio-block .info .alias {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        .portfolio-block .info .desc {
+            color: #bbb;
+            font-size: 0.95rem;
+            max-width: 500px;
+        }
+
+        .portfolio-block .projects {
+            flex: 2;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .project-mini {
+            background: rgba(255,255,255,0.02);
+            padding: 20px 25px;
+            border-radius: 10px;
+            border-left: 3px solid #3a3a6a;
+            transition: 0.3s;
+        }
+        .project-mini:hover {
+            background: rgba(255,255,255,0.04);
+            border-left-color: #6a6a9a;
+        }
+        .project-mini .title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .project-mini .desc {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .project-mini .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.04);
+            padding: 2px 12px;
+            border-radius: 20px;
+            color: #888;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
         .plugins-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 30px;
         }
 
         .plugin-item {
             background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(5px);
-            border-radius: 16px;
-            padding: 35px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.04);
             transition: 0.3s;
         }
         .plugin-item:hover { 
-            border-color: rgba(255,255,255,0.2); 
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.12); 
+            transform: translateY(-3px);
         }
 
         .plugin-item .name {
             font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.3rem;
-            margin-bottom: 6px;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
             font-weight: 600;
         }
         .plugin-item .version {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #888;
             background: rgba(255,255,255,0.04);
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 20px;
             display: inline-block;
-            margin-top: 5px;
+            margin-top: 4px;
         }
         .plugin-item .desc {
-            color: #bbb;
-            margin-top: 18px;
-            line-height: 2.0;
-            font-size: 0.95rem;
+            color: #999;
+            margin-top: 15px;
+            line-height: 1.8;
+            font-size: 0.9rem;
         }
 
         .download-section {
             text-align: center;
-            margin-top: 80px;
+            margin-top: 60px;
         }
         .download-btn {
             display: inline-block;
-            background: linear-gradient(135deg, #6c63ff, #3f3d99);
+            background: #1a1a2e;
             color: #fff;
-            padding: 18px 55px;
-            border-radius: 50px;
+            padding: 16px 50px;
+            border-radius: 40px;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1.2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
             transition: 0.3s;
-            box-shadow: 0 4px 30px rgba(108, 99, 255, 0.4);
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .download-btn:hover {
-            transform: scale(1.04);
-            box-shadow: 0 8px 50px rgba(108, 99, 255, 0.6);
+            background: #2a2a4e;
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.15);
         }
 
-        /* Контакты */
         .contacts-section {
             text-align: center;
-            padding: 60px 0 20px;
+            padding: 40px 0 20px;
         }
         .contacts-grid {
             display: flex;
             justify-content: center;
-            gap: 50px;
+            gap: 40px;
             margin-top: 30px;
             flex-wrap: wrap;
         }
         .contact-btn {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(5px);
-            padding: 20px 40px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            padding: 16px 35px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
             text-decoration: none;
             color: inherit;
             transition: 0.3s;
         }
         .contact-btn:hover {
-            border-color: rgba(255,255,255,0.2);
-            transform: scale(1.05);
-            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.12);
+            transform: scale(1.03);
+            background: rgba(255,255,255,0.03);
         }
         .contact-btn .label {
             color: #888;
@@ -443,51 +415,48 @@
         }
         .contact-btn .value {
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.0rem;
             font-weight: 600;
         }
 
-        /* Футер */
         footer {
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding: 60px 0 40px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding: 40px 0 30px;
             text-align: center;
-            color: #777;
-            margin-top: 40px;
+            color: #555;
+            margin-top: 30px;
         }
         footer .copy {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         footer .copy span {
-            color: #aaa;
+            color: #777;
         }
 
         @media (max-width: 1024px) {
             .plugins-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats { gap: 40px; }
-            .hero h1 { font-size: 3.2rem; }
+            .stats { gap: 30px; }
+            .hero h1 { font-size: 2.8rem; }
         }
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.4rem; }
-            .stats { flex-direction: column; gap: 30px; }
-            header { flex-direction: column; gap: 25px; }
-            nav a { margin: 0 15px; }
+            .hero h1 { font-size: 2.2rem; }
+            .stats { flex-direction: column; gap: 20px; }
+            header { flex-direction: column; gap: 20px; }
+            nav a { margin: 0 12px; }
             .plugins-grid { grid-template-columns: 1fr; }
-            .profile-block { padding: 30px; }
-            .profile-block .name { font-size: 2.0rem; }
+            .portfolio-block .row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ФОН С СЕТКОЙ И ВОЛНАМИ -->
     <div class="bg-container">
-        <div class="grid-overlay"></div>
-        <div class="glow-spot"></div>
-        <div class="wave-container">
-            <div class="wave-gradient"></div>
-            <div class="wave-gradient"></div>
+        <div class="ocean">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
         </div>
+        <div class="glow-spot"></div>
     </div>
 
     <div class="container">
@@ -506,7 +475,7 @@
             <h1>Код. Сервера. Архитектура.</h1>
             <p class="desc">
                 Профессиональный технический администратор и разработчик плагинов для Minecraft. 
-                Создаю стабильные, безопасные и высоконагруженные проекты от идеи до полноценного запуска.
+                Создаю стабильные, безопасные и высоконагруженные проекты.
             </p>
 
             <div class="stats">
@@ -529,74 +498,85 @@
 
         <section class="section" id="portfolio">
             <h2 class="section-title">Портфолио</h2>
-            <p class="section-description">Мои навыки, проекты и немного обо мне.</p>
+            <p class="section-description">Мои проекты, навыки и информация обо мне.</p>
             
-            <div class="portfolio-highlight">
-                <!-- Блок с именем и псевдонимом -->
-                <div class="profile-block">
-                    <div class="name">Олександр (Саша)</div>
-                    <div class="alias">Псевдоним: Baraschki</div>
-                    <div class="about">
-                        Занимаюсь настройкой серверов, разработкой плагинов для Minecraft и созданием веб-сайтов. 
-                        Стремлюсь к качеству, стабильности и инновациям в каждом проекте.
+            <div class="portfolio-block">
+                <div class="row">
+                    <div class="info">
+                        <div class="name">Олександр (Саша)</div>
+                        <div class="alias">Псевдоним: Baraschki</div>
+                        <div class="desc">
+                            Настройка серверов, разработка плагинов для Minecraft, создание веб-сайтов. 
+                            Стремлюсь к качеству и стабильности в каждом проекте.
+                        </div>
+                    </div>
+                    <div class="projects">
+                        <div class="project-mini">
+                            <div class="title">BDLauncher</div>
+                            <div class="desc">Собственный лаунчер для Minecraft с автоматическими обновлениями.</div>
+                            <div class="tag">Приложение • 500+ загрузок</div>
+                        </div>
+                        <div class="project-mini">
+                            <div class="title">Техническая поддержка серверов</div>
+                            <div class="desc">Полный цикл настройки, защита от DDoS, мониторинг и оптимизация.</div>
+                            <div class="tag">Администрирование • 6+ серверов</div>
+                        </div>
+                        <div class="project-mini">
+                            <div class="title">Веб-сайты для сообществ</div>
+                            <div class="desc">Адаптивные сайты с админ-панелями и интеграцией игр.</div>
+                            <div class="tag">Веб-разработка • 3+ проекта</div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Пример проекта (лаунчер) -->
-                <a href="#" class="project-card">
-                    <div class="title">BDLauncher</div>
-                    <div class="description">Собственный лаунчер для Minecraft с автоматическими обновлениями, встроенным магазином и поддержкой модов. Разработан для удобства игроков и стабильной работы.</div>
-                    <div class="tag">Приложение • 500+ загрузок</div>
-                </a>
             </div>
         </section>
 
         <section class="section" id="plugins">
             <h2 class="section-title">Плагины</h2>
-            <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры. Вы можете скачать их архив по ссылке ниже.</p>
+            <p class="section-description">Более 10 эксклюзивных плагинов для стабильной игры. Скачайте архив по ссылке ниже.</p>
             <div class="plugins-grid">
                 <div class="plugin-item">
                     <div class="name">BAntirelog</div>
                     <div class="version">v2.0.0</div>
-                    <div class="desc">Предотвращение выхода из игры в бою. Конфигурируемые наказания и таймеры.</div>
+                    <div class="desc">Предотвращение выхода из игры в бою. Наказания и таймеры.</div>
                 </div>
                 <div class="plugin-item">
                     <div class="name">BChat</div>
                     <div class="version">v2.0.0</div>
-                    <div class="desc">Многофункциональный чат-менеджер. Форматирование, приватные каналы, фильтрация.</div>
+                    <div class="desc">Чат-менеджер с форматированием, приватными каналами и фильтрацией.</div>
                 </div>
                 <div class="plugin-item">
                     <div class="name">BKill</div>
                     <div class="version">v2.0.0</div>
-                    <div class="desc">Система PvP-статистики, рейтингов и автоматической выдачи наград за убийства.</div>
+                    <div class="desc">Система PvP-статистики, рейтингов и наград за убийства.</div>
                 </div>
                 <div class="plugin-item">
                     <div class="name">BMine</div>
                     <div class="version">v2.0.0</div>
-                    <div class="desc">Автоматическое восстановление блоков в шахтах. Гибкая настройка ресурсов.</div>
+                    <div class="desc">Автоматическое восстановление блоков в шахтах. Настройка ресурсов.</div>
                 </div>
                 <div class="plugin-item">
                     <div class="name">BReport</div>
                     <div class="version">v2.0.0</div>
-                    <div class="desc">Сервис приема жалоб на игроков. Оповещение модерации, создание тикетов.</div>
+                    <div class="desc">Сервис приема жалоб на игроков. Оповещение модерации.</div>
                 </div>
                 <div class="plugin-item">
                     <div class="name">BStones</div>
                     <div class="version">v1.0.0</div>
-                    <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков.</div>
+                    <div class="desc">Кастомизация выпадения руд и уникальных каменных блоков.</div>
                 </div>
             </div>
 
             <div class="download-section">
                 <a href="https://workupload.com/archive/dk7XXsqPeR" target="_blank" class="download-btn">
-                    ⬇ Скачать архив с плагинами
+                    Скачать архив с плагинами
                 </a>
             </div>
         </section>
 
         <section class="section" id="contacts">
             <h2 class="section-title" style="text-align: center;">Контакты</h2>
-            <p class="section-description" style="text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">Свяжитесь со мной любым удобным способом</p>
+            <p class="section-description" style="text-align: center; max-width: 600px; margin: 0 auto;">Свяжитесь со мной любым удобным способом</p>
             <div class="contacts-grid">
                 <a href="https://t.me/Franzosren" class="contact-btn" target="_blank">
                     <div class="label">Telegram</div>
