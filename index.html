@@ -6,7 +6,7 @@
     <title>BDev | Портфолио</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* Базовые настройки */
+        /* Сброс и база */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body, h1, h2, h3, h4, h5, h6, p, div, section, header, footer, span, article, aside {
@@ -17,35 +17,96 @@
             cursor: pointer;
         }
 
-        /* КРУТОЙ АНИМИРОВАННЫЙ ФОН */
         body {
             font-family: 'Inter', sans-serif;
             line-height: 2.2;
             color: #d1d5db;
             min-height: 100vh;
-            background: linear-gradient(-45deg, #0a0a0a, #1a0f2e, #0d1f3c, #0a0a0a);
-            background-size: 400% 400%;
-            animation: gradientMove 18s ease infinite;
+            background-color: #060612; /* Темная база */
+            overflow-x: hidden;
+            position: relative;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Легкая дымка сверху для глубины */
-        body::before {
-            content: '';
+        /* --- КРУТОЙ ФОН С СЕТКОЙ И ВОЛНАМИ --- */
+        .bg-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.3);
             z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 30%, #1a1a3e, #060612 70%);
         }
 
+        /* Сетка с перспективой */
+        .grid-overlay {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(100, 100, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 100, 255, 0.07) 1px, transparent 1px);
+            background-size: 80px 80px;
+            transform: perspective(800px) rotateX(20deg) rotateZ(-10deg);
+            animation: gridMove 40s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(800px) rotateX(20deg) rotateZ(-10deg) translateY(0px); }
+            100% { transform: perspective(800px) rotateX(20deg) rotateZ(-10deg) translateY(80px); }
+        }
+
+        /* Волны (SVG стиль) */
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: -5%;
+            width: 200%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(80, 60, 200, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: waveFloat 12s ease-in-out infinite alternate;
+        }
+
+        .wave:nth-child(1) { left: -10%; animation-duration: 14s; opacity: 0.3; }
+        .wave:nth-child(2) { left: -20%; animation-duration: 18s; opacity: 0.2; }
+        .wave:nth-child(3) { left: 10%; animation-duration: 16s; opacity: 0.4; }
+
+        @keyframes waveFloat {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-60px) scale(1.1); }
+        }
+
+        /* Блик для глубины */
+        .glow-spot {
+            position: absolute;
+            top: 20%;
+            right: 20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(50, 50, 255, 0.1), transparent 70%);
+            filter: blur(60px);
+            animation: glowPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0.8; }
+        }
+
+        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -54,7 +115,6 @@
             z-index: 1;
         }
 
-        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
@@ -82,7 +142,6 @@
         }
         nav a:hover { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
 
-        /* Герой */
         .hero {
             text-align: center;
             padding: 80px 0 120px;
@@ -156,7 +215,6 @@
             box-shadow: 0 8px 40px rgba(255,255,255,0.25);
         }
 
-        /* Секции */
         .section { 
             padding: 140px 0; 
             border-top: 1px solid rgba(255,255,255,0.05);
@@ -177,7 +235,6 @@
             max-width: 700px;
         }
 
-        /* Навыки */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -207,7 +264,6 @@
         }
         .skill-card p { color: #bbb; line-height: 2.2; }
 
-        /* Портфолио (6 проектов) */
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -253,7 +309,6 @@
             border: 1px solid rgba(255,255,255,0.04);
         }
 
-        /* Плагины */
         .plugins-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -297,7 +352,6 @@
             font-size: 0.95rem;
         }
 
-        /* Кнопка скачивания архива */
         .download-section {
             text-align: center;
             margin-top: 80px;
@@ -319,7 +373,6 @@
             box-shadow: 0 8px 50px rgba(108, 99, 255, 0.6);
         }
 
-        /* Футер */
         footer {
             border-top: 1px solid rgba(255,255,255,0.05);
             padding: 60px 0 40px;
@@ -336,7 +389,6 @@
         }
         footer .socials a:hover { color: #fff; }
 
-        /* Адаптивность */
         @media (max-width: 1024px) {
             .portfolio-grid, .plugins-grid { grid-template-columns: repeat(2, 1fr); }
             .stats { gap: 40px; }
@@ -353,150 +405,159 @@
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <div class="logo">BDEV.CORE</div>
-        <nav>
-            <a href="#">Главная</a>
-            <a href="#portfolio">Портфолио</a>
-            <a href="#plugins">Плагины</a>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div class="subtitle">BDEV – ТЕХНИЧЕСКИЙ АДМИНИСТРАТОР И MINECRAFT РАЗРАБОТЧИК</div>
-        <h1>Код. Сервера. Архитектура.</h1>
-        <p class="desc">
-            Профессиональный технический администратор и разработчик плагинов для Minecraft. 
-            Создаю стабильные, безопасные и высоконагруженные проекты от идеи до полноценного запуска.
-        </p>
-
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number">5+</div>
-                <div class="stat-label">Лет опыта</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">6+</div>
-                <div class="stat-label">Серверов создано</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">3+</div>
-                <div class="stat-label">Сайтов разработано</div>
-            </div>
+    <!-- ФОН С СЕТКОЙ И ВОЛНАМИ -->
+    <div class="bg-container">
+        <div class="grid-overlay"></div>
+        <div class="glow-spot"></div>
+        <div class="waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
         </div>
+    </div>
 
-        <a href="#plugins" class="btn-primary">Смотреть плагины</a>
-    </section>
+    <div class="container">
+        <header>
+            <div class="logo">BDEV.CORE</div>
+            <nav>
+                <a href="#">Главная</a>
+                <a href="#portfolio">Портфолио</a>
+                <a href="#plugins">Плагины</a>
+            </nav>
+        </header>
 
-    <section class="section" id="competencies">
-        <h2 class="section-title">Компетенции</h2>
-        <div class="skills-grid">
-            <div class="skill-card">
-                <h3>Технический администратор</h3>
-                <p>Полный цикл настройки серверов на Linux. Управление защитой от DDoS, мониторинг, резервное копирование и оптимизация производительности.</p>
-            </div>
-            <div class="skill-card">
-                <h3>Разработчик Minecraft</h3>
-                <p>Создание кастомных плагинов на Java. Экономические системы, мини-игры, защита от читеров, интеграция с API и оптимизация кода для высокой нагрузки.</p>
-            </div>
-            <div class="skill-card">
-                <h3>Веб-разработка</h3>
-                <p>Разработка веб-сайтов для серверов и сообществ. Адаптивная верстка, админ-панели, лендинги и интеграция с игровыми движками.</p>
-            </div>
-        </div>
-    </section>
+        <section class="hero">
+            <div class="subtitle">BDEV – ТЕХНИЧЕСКИЙ АДМИНИСТРАТОР И MINECRAFT РАЗРАБОТЧИК</div>
+            <h1>Код. Сервера. Архитектура.</h1>
+            <p class="desc">
+                Профессиональный технический администратор и разработчик плагинов для Minecraft. 
+                Создаю стабильные, безопасные и высоконагруженные проекты от идеи до полноценного запуска.
+            </p>
 
-    <section class="section" id="portfolio">
-        <h2 class="section-title">Мои проекты</h2>
-        <p class="section-description">Создал более 6 серверов и 3 сайта. Посмотрите на некоторые из них.</p>
-        <div class="portfolio-grid">
-            <a href="#" class="project-card">
-                <div class="title">Survival World</div>
-                <div class="description">Выживание с уникальной экономикой и кастомным PvP. Активное комьюнити.</div>
-                <div class="tag">Сервер • 500+ игроков</div>
-            </a>
-            <a href="#" class="project-card">
-                <div class="title">SkyBlock Master</div>
-                <div class="description">Небесный остров с системой миссий и торговли. Продуманный баланс.</div>
-                <div class="tag">Сервер • 300+ игроков</div>
-            </a>
-            <a href="#" class="project-card">
-                <div class="title">BDev Hub</div>
-                <div class="description">Официальный сайт для сообщества. Адаптивный дизайн, умная админ-панель.</div>
-                <div class="tag">Веб-сайт • 2000+ посещений</div>
-            </a>
-            <a href="#" class="project-card">
-                <div class="title">Faction Wars</div>
-                <div class="description">Клановые войны с захватом территорий. Сложная система привилегий.</div>
-                <div class="tag">Сервер • 200+ игроков</div>
-            </a>
-            <a href="#" class="project-card">
-                <div class="title">Prison Reborn</div>
-                <div class="description">Тюремный сервер с рангами и непрерывной системой заработка.</div>
-                <div class="tag">Сервер • 150+ игроков</div>
-            </a>
-            <a href="#" class="project-card">
-                <div class="title">DevLauncher</div>
-                <div class="description">Собственный лаунчер с автоматическими обновлениями и модами.</div>
-                <div class="tag">Приложение • 500+ загрузок</div>
-            </a>
-        </div>
-    </section>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Лет опыта</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Серверов создано</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3+</div>
+                    <div class="stat-label">Сайтов разработано</div>
+                </div>
+            </div>
 
-    <section class="section" id="plugins">
-        <h2 class="section-title">Плагины</h2>
-        <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры. Вы можете скачать их архив по ссылке ниже.</p>
-        <div class="plugins-grid">
-            <div class="plugin-item">
-                <div class="name">BAntirelog</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Предотвращение выхода из игры в бою. Конфигурируемые наказания и таймеры.</div>
-            </div>
-            <div class="plugin-item">
-                <div class="name">BChat</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Многофункциональный чат-менеджер. Форматирование, приватные каналы, фильтрация.</div>
-            </div>
-            <div class="plugin-item">
-                <div class="name">BKill</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Система PvP-статистики, рейтингов и автоматической выдачи наград за убийства.</div>
-            </div>
-            <div class="plugin-item">
-                <div class="name">BMine</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Автоматическое восстановление блоков в шахтах. Гибкая настройка ресурсов.</div>
-            </div>
-            <div class="plugin-item">
-                <div class="name">BReport</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Сервис приема жалоб на игроков. Оповещение модерации, создание тикетов.</div>
-            </div>
-            <div class="plugin-item">
-                <div class="name">BStones</div>
-                <div class="version">v1.0.0</div>
-                <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков.</div>
-            </div>
-        </div>
+            <a href="#plugins" class="btn-primary">Смотреть плагины</a>
+        </section>
 
-        <!-- Ссылка на архив с плагинами -->
-        <div class="download-section">
-            <a href="https://workupload.com/archive/dk7XXsqPeR" target="_blank" class="download-btn">
-                ⬇ Скачать архив с плагинами
-            </a>
-        </div>
-    </section>
+        <section class="section" id="competencies">
+            <h2 class="section-title">Компетенции</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Технический администратор</h3>
+                    <p>Полный цикл настройки серверов на Linux. Управление защитой от DDoS, мониторинг, резервное копирование и оптимизация производительности.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Разработчик Minecraft</h3>
+                    <p>Создание кастомных плагинов на Java. Экономические системы, мини-игры, защита от читеров, интеграция с API и оптимизация кода для высокой нагрузки.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Веб-разработка</h3>
+                    <p>Разработка веб-сайтов для серверов и сообществ. Адаптивная верстка, админ-панели, лендинги и интеграция с игровыми движками.</p>
+                </div>
+            </div>
+        </section>
 
-    <footer>
-        <div class="socials">
-            <a href="#">GitHub</a>
-            <a href="#">Email</a>
-        </div>
-        <p style="margin-top: 25px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
-    </footer>
+        <section class="section" id="portfolio">
+            <h2 class="section-title">Мои проекты</h2>
+            <p class="section-description">Создал более 6 серверов и 3 сайта. Посмотрите на некоторые из них.</p>
+            <div class="portfolio-grid">
+                <a href="#" class="project-card">
+                    <div class="title">Survival World</div>
+                    <div class="description">Выживание с уникальной экономикой и кастомным PvP. Активное комьюнити.</div>
+                    <div class="tag">Сервер • 500+ игроков</div>
+                </a>
+                <a href="#" class="project-card">
+                    <div class="title">SkyBlock Master</div>
+                    <div class="description">Небесный остров с системой миссий и торговли. Продуманный баланс.</div>
+                    <div class="tag">Сервер • 300+ игроков</div>
+                </a>
+                <a href="#" class="project-card">
+                    <div class="title">BDev Hub</div>
+                    <div class="description">Официальный сайт для сообщества. Адаптивный дизайн, умная админ-панель.</div>
+                    <div class="tag">Веб-сайт • 2000+ посещений</div>
+                </a>
+                <a href="#" class="project-card">
+                    <div class="title">Faction Wars</div>
+                    <div class="description">Клановые войны с захватом территорий. Сложная система привилегий.</div>
+                    <div class="tag">Сервер • 200+ игроков</div>
+                </a>
+                <a href="#" class="project-card">
+                    <div class="title">Prison Reborn</div>
+                    <div class="description">Тюремный сервер с рангами и непрерывной системой заработка.</div>
+                    <div class="tag">Сервер • 150+ игроков</div>
+                </a>
+                <a href="#" class="project-card">
+                    <div class="title">DevLauncher</div>
+                    <div class="description">Собственный лаунчер с автоматическими обновлениями и модами.</div>
+                    <div class="tag">Приложение • 500+ загрузок</div>
+                </a>
+            </div>
+        </section>
 
-</div>
+        <section class="section" id="plugins">
+            <h2 class="section-title">Плагины</h2>
+            <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры. Вы можете скачать их архив по ссылке ниже.</p>
+            <div class="plugins-grid">
+                <div class="plugin-item">
+                    <div class="name">BAntirelog</div>
+                    <div class="version">v2.0.0</div>
+                    <div class="desc">Предотвращение выхода из игры в бою. Конфигурируемые наказания и таймеры.</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="name">BChat</div>
+                    <div class="version">v2.0.0</div>
+                    <div class="desc">Многофункциональный чат-менеджер. Форматирование, приватные каналы, фильтрация.</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="name">BKill</div>
+                    <div class="version">v2.0.0</div>
+                    <div class="desc">Система PvP-статистики, рейтингов и автоматической выдачи наград за убийства.</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="name">BMine</div>
+                    <div class="version">v2.0.0</div>
+                    <div class="desc">Автоматическое восстановление блоков в шахтах. Гибкая настройка ресурсов.</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="name">BReport</div>
+                    <div class="version">v2.0.0</div>
+                    <div class="desc">Сервис приема жалоб на игроков. Оповещение модерации, создание тикетов.</div>
+                </div>
+                <div class="plugin-item">
+                    <div class="name">BStones</div>
+                    <div class="version">v1.0.0</div>
+                    <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков.</div>
+                </div>
+            </div>
 
+            <div class="download-section">
+                <a href="https://workupload.com/archive/dk7XXsqPeR" target="_blank" class="download-btn">
+                    ⬇ Скачать архив с плагинами
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <div class="socials">
+                <a href="#">GitHub</a>
+                <a href="#">Email</a>
+            </div>
+            <p style="margin-top: 25px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
+        </footer>
+
+    </div>
 </body>
 </html>
