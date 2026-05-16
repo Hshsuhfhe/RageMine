@@ -6,23 +6,32 @@
     <title>BDev | Портфолио</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* Базовые настройки */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Курсор по умолчанию на всех элементах, кроме ссылок и кнопок */
         body, p, h1, h2, h3, h4, h5, h6, span, div, section, article, aside, footer, header, nav {
             cursor: default;
         }
         
-        body {
-            background-color: #0b0b0b;
-            color: #d1d5db;
-            font-family: 'Inter', sans-serif;
-            line-height: 2.0; /* Увеличено для лучшей читаемости */
+        a, button, .btn, .socials a, nav a, .project-card, .plugin-item {
+            cursor: pointer;
         }
         
-        a, button, .btn, .socials a, nav a {
-            cursor: pointer;
+        body {
+            background-color: #0a0a0a;
+            color: #d1d5db;
+            font-family: 'Inter', sans-serif;
+            line-height: 2.0;
+        }
+        
+        /* Красивый фон с эффектом туманного свечения */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(60, 60, 80, 0.15), #0a0a0a 70%);
+            z-index: -1;
         }
         
         .container {
@@ -31,19 +40,18 @@
             padding: 60px 40px;
         }
 
-        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 40px 0;
             border-bottom: 1px solid #222;
-            margin-bottom: 80px;
+            margin-bottom: 100px;
         }
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            font-size: 2.0rem;
             color: #ffffff;
             letter-spacing: 1px;
         }
@@ -57,7 +65,6 @@
         }
         nav a:hover { color: #ffffff; }
 
-        /* Герой */
         .hero {
             text-align: center;
             padding: 80px 0 100px;
@@ -65,10 +72,10 @@
 
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.6rem;
+            font-size: 3.8rem;
             color: #ffffff;
             margin-bottom: 30px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .hero .subtitle {
@@ -110,9 +117,9 @@
             margin-top: 5px;
         }
 
-        .btn {
+        .btn-primary {
             background-color: #ffffff;
-            color: #0b0b0b;
+            color: #0a0a0a;
             padding: 16px 50px;
             border-radius: 30px;
             text-decoration: none;
@@ -121,17 +128,16 @@
             transition: 0.3s;
             font-size: 1.1rem;
         }
-        .btn:hover { background-color: #e0e0e0; }
+        .btn-primary:hover { background-color: #e0e0e0; }
 
-        /* Секции */
         .section { 
-            padding: 100px 0; 
+            padding: 120px 0; 
             border-top: 1px solid #1a1a1a;
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.0rem;
+            font-size: 2.2rem;
             margin-bottom: 50px;
             color: #fff;
             letter-spacing: 1px;
@@ -143,7 +149,6 @@
             font-size: 1.1rem;
         }
 
-        /* Навыки */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -153,11 +158,11 @@
         .skill-card {
             background: #141414;
             padding: 40px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid #222;
             transition: 0.3s;
         }
-        .skill-card:hover { border-color: #555; }
+        .skill-card:hover { border-color: #555; transform: translateY(-2px); }
 
         .skill-card h3 { 
             margin-bottom: 20px; 
@@ -166,6 +171,48 @@
             font-weight: 600;
         }
         .skill-card p { color: #999; line-height: 2.0; }
+
+        /* Портфолио проектов */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .project-card {
+            background: #141414;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #222;
+            transition: 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .project-card:hover { 
+            border-color: #888; 
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        .project-card .title {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .project-card .description {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        .project-card .tag {
+            display: inline-block;
+            background: #222;
+            padding: 4px 14px;
+            border-radius: 20px;
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
 
         /* Плагины */
         .plugins-grid {
@@ -176,12 +223,15 @@
 
         .plugin-item {
             background: #141414;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 30px 35px;
             border: 1px solid #222;
             transition: 0.3s;
         }
-        .plugin-item:hover { border-color: #888; }
+        .plugin-item:hover { 
+            border-color: #888; 
+            transform: translateY(-2px);
+        }
 
         .plugin-item .name {
             font-family: 'Orbitron', sans-serif;
@@ -206,7 +256,48 @@
             font-size: 0.95rem;
         }
 
-        /* Футер */
+        /* Контакты */
+        .contacts-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 0;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .contacts-grid {
+            display: flex;
+            gap: 60px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .contact-item {
+            background: #141414;
+            padding: 30px 50px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            text-align: center;
+            transition: 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .contact-item:hover {
+            border-color: #888;
+            transform: scale(1.02);
+        }
+        .contact-item .label {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .contact-item .value {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         footer {
             border-top: 1px solid #1a1a1a;
             padding: 60px 0 40px;
@@ -224,7 +315,7 @@
         footer .socials a:hover { color: #fff; }
 
         @media (max-width: 1024px) {
-            .plugins-grid { grid-template-columns: repeat(2, 1fr); }
+            .projects-grid, .plugins-grid { grid-template-columns: repeat(2, 1fr); }
             .stats { gap: 40px; }
         }
         @media (max-width: 768px) {
@@ -232,11 +323,15 @@
             .stats { flex-direction: column; gap: 30px; }
             header { flex-direction: column; gap: 20px; }
             nav a { margin: 0 15px; }
-            .plugins-grid { grid-template-columns: 1fr; }
+            .projects-grid, .plugins-grid { grid-template-columns: 1fr; }
+            .contacts-grid { flex-direction: column; align-items: center; }
+            .contact-item { width: 100%; max-width: 300px; }
         }
     </style>
 </head>
 <body>
+
+<div class="bg-glow"></div>
 
 <div class="container">
     <header>
@@ -271,10 +366,13 @@
             </div>
         </div>
 
-        <a href="#" class="btn">Связь со мной</a>
+        <a href="#contacts" class="btn-primary">Связь со мной</a>
     </section>
 
-    <section class="section">
+    <!-- Большое расстояние -->
+    <div style="height: 120px;"></div>
+
+    <section class="section" id="competencies">
         <h2 class="section-title">Профессиональные компетенции</h2>
         <div class="skills-grid">
             <div class="skill-card">
@@ -292,80 +390,86 @@
         </div>
     </section>
 
-    <section class="section">
-        <h2 class="section-title">Плагины</h2>
+    <section class="section" id="portfolio">
+        <h2 class="section-title">Мои проекты</h2>
+        <p class="section-description">Создал более 6 серверов и 3 сайта. Ниже представлены некоторые из них.</p>
+        <div class="projects-grid">
+            <a href="#" class="project-card">
+                <div class="title">Survival World</div>
+                <div class="description">Выживание с уникальной экономикой и кастомным PvP.</div>
+                <div class="tag">Сервер • 500+ игроков</div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="title">SkyBlock Master</div>
+                <div class="description">Небесный остров с системой миссий и торговли.</div>
+                <div class="tag">Сервер • 300+ игроков</div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="title">BDev Hub</div>
+                <div class="description">Официальный сайт для сообщества. Умная админ-панель.</div>
+                <div class="tag">Веб-сайт • 2 000+ посещений</div>
+            </a>
+        </div>
+    </section>
+
+    <section class="section" id="plugins">
+        <h2 class="section-title">Мои плагины</h2>
         <p class="section-description">Более 10 эксклюзивных плагинов для стабильной и интересной игры.</p>
         <div class="plugins-grid">
-            
             <div class="plugin-item">
                 <div class="name">BAntirelog</div>
                 <div class="version">v2.0.0</div>
                 <div class="desc">Система предотвращения выхода из игры во время боевых действий. Конфигурация времени блокировки и наказаний.</div>
             </div>
-
             <div class="plugin-item">
                 <div class="name">BChat</div>
                 <div class="version">v2.0.0</div>
                 <div class="desc">Многофункциональный чат-менеджер с поддержкой форматирования, приватных каналов и фильтрации сообщений.</div>
             </div>
-
             <div class="plugin-item">
                 <div class="name">BKill</div>
                 <div class="version">v2.0.0</div>
                 <div class="desc">Система отслеживания PvP-статистики, рейтингов игроков и автоматической выдачи наград за убийства.</div>
             </div>
-
             <div class="plugin-item">
                 <div class="name">BMine</div>
                 <div class="version">v2.0.0</div>
                 <div class="desc">Автоматическое восстановление блоков в шахтах с динамической настройкой скорости восстановления и состава руд.</div>
             </div>
-
             <div class="plugin-item">
                 <div class="name">BReport</div>
                 <div class="version">v2.0.0</div>
                 <div class="desc">Удобная система приёма и обработки жалоб на игроков с оповещением модерации и автоматическим созданием тикетов.</div>
             </div>
-
             <div class="plugin-item">
                 <div class="name">BStones</div>
                 <div class="version">v1.0.0</div>
                 <div class="desc">Кастомизация выпадения руд и добавление уникальных каменных блоков в генерацию мира с гибкой настройкой.</div>
             </div>
+        </div>
+    </section>
 
-            <div class="plugin-item">
-                <div class="name">BCombat</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Добавление сложных механик боя: комбо-атаки, критические удары, откаты способностей и системы защиты.</div>
-            </div>
-
-            <div class="plugin-item">
-                <div class="name">BEconomy</div>
-                <div class="version">v1.5.0</div>
-                <div class="desc">Стабильная экономическая система с поддержкой валют, транзакций, налогов, аукционов и централизованного хранения.</div>
-            </div>
-
-            <div class="plugin-item">
-                <div class="name">BShop</div>
-                <div class="version">v1.2.0</div>
-                <div class="desc">Создание торговых точек, GUI-магазинов, системы спроса и предложения для игроков с автоматической балансировкой цен.</div>
-            </div>
-
-            <div class="plugin-item">
-                <div class="name">BEvents</div>
-                <div class="version">v2.0.0</div>
-                <div class="desc">Проведение кастомных игровых ивентов: битвы, паркур, квесты с призами, авто-старт и гибкая система наград.</div>
-            </div>
-
+    <section class="contacts-section" id="contacts">
+        <h2 class="section-title" style="text-align: center;">Контакты</h2>
+        <p class="section-description" style="text-align: center;">Свяжитесь со мной любым удобным способом</p>
+        <div class="contacts-grid">
+            <a href="https://t.me/Franzosren" class="contact-item" target="_blank">
+                <div class="label">Telegram</div>
+                <div class="value">@Franzosren</div>
+            </a>
+            <a href="https://discordapp.com/users/kot01078" class="contact-item" target="_blank">
+                <div class="label">Discord</div>
+                <div class="value">kot01078</div>
+            </a>
         </div>
     </section>
 
     <footer>
         <div class="socials">
-            <a href="#">Discord</a>
-            <a href="#">VK</a>
+            <a href="https://t.me/Franzosren" target="_blank">Telegram</a>
+            <a href="https://discordapp.com/users/kot01078" target="_blank">Discord</a>
             <a href="#">GitHub</a>
-            <a href="#">Telegram</a>
+            <a href="#">VK</a>
         </div>
         <p style="margin-top: 20px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
     </footer>
