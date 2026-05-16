@@ -6,7 +6,6 @@
     <title>BDev | Портфолио</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        /* Сброс и база */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body, h1, h2, h3, h4, h5, h6, p, div, section, header, footer, span, article, aside {
@@ -22,12 +21,12 @@
             line-height: 2.2;
             color: #d1d5db;
             min-height: 100vh;
-            background-color: #060612; /* Темная база */
+            background-color: #060612;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- КРУТОЙ ФОН С СЕТКОЙ И ВОЛНАМИ --- */
+        /* --- ФОН С ЯРКИМИ ВОЛНАМИ --- */
         .bg-container {
             position: fixed;
             top: 0;
@@ -39,7 +38,6 @@
             background: radial-gradient(circle at 20% 30%, #1a1a3e, #060612 70%);
         }
 
-        /* Сетка с перспективой */
         .grid-overlay {
             position: absolute;
             top: -50%;
@@ -47,8 +45,8 @@
             width: 200%;
             height: 200%;
             background-image: 
-                linear-gradient(rgba(100, 100, 255, 0.07) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(100, 100, 255, 0.07) 1px, transparent 1px);
+                linear-gradient(rgba(100, 100, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 100, 255, 0.08) 1px, transparent 1px);
             background-size: 80px 80px;
             transform: perspective(800px) rotateX(20deg) rotateZ(-10deg);
             animation: gridMove 40s linear infinite;
@@ -59,14 +57,14 @@
             100% { transform: perspective(800px) rotateX(20deg) rotateZ(-10deg) translateY(80px); }
         }
 
-        /* Волны (SVG стиль) */
+        /* ВОЛНЫ – теперь яркие и заметные */
         .waves {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.4;
+            opacity: 0.8;
             pointer-events: none;
         }
 
@@ -75,28 +73,28 @@
             bottom: -5%;
             width: 200%;
             height: 100%;
-            background: radial-gradient(ellipse at center, rgba(80, 60, 200, 0.2) 0%, transparent 70%);
+            background: radial-gradient(ellipse at center, rgba(140, 80, 255, 0.35) 0%, transparent 70%);
             border-radius: 50%;
             animation: waveFloat 12s ease-in-out infinite alternate;
+            filter: blur(20px);
         }
 
-        .wave:nth-child(1) { left: -10%; animation-duration: 14s; opacity: 0.3; }
-        .wave:nth-child(2) { left: -20%; animation-duration: 18s; opacity: 0.2; }
-        .wave:nth-child(3) { left: 10%; animation-duration: 16s; opacity: 0.4; }
+        .wave:nth-child(1) { left: -10%; animation-duration: 14s; opacity: 0.6; }
+        .wave:nth-child(2) { left: -20%; animation-duration: 18s; opacity: 0.5; }
+        .wave:nth-child(3) { left: 10%; animation-duration: 16s; opacity: 0.8; }
 
         @keyframes waveFloat {
             0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(-60px) scale(1.1); }
+            100% { transform: translateY(-80px) scale(1.15); }
         }
 
-        /* Блик для глубины */
         .glow-spot {
             position: absolute;
             top: 20%;
             right: 20%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(50, 50, 255, 0.1), transparent 70%);
+            background: radial-gradient(circle, rgba(50, 50, 255, 0.15), transparent 70%);
             filter: blur(60px);
             animation: glowPulse 8s ease-in-out infinite alternate;
         }
@@ -106,7 +104,7 @@
             100% { transform: scale(1.5); opacity: 0.8; }
         }
 
-        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+        /* --- КОНТЕЙНЕР --- */
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -264,49 +262,53 @@
         }
         .skill-card p { color: #bbb; line-height: 2.2; }
 
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+        /* ПОРТФОЛИО – только BDLauncher */
+        .portfolio-single {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .project-card {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(5px);
-            border-radius: 16px;
-            padding: 35px;
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 60px 50px;
+            border: 1px solid rgba(255,255,255,0.1);
             transition: 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
-            height: 100%;
+            max-width: 700px;
+            text-align: center;
+            width: 100%;
         }
         .project-card:hover { 
             border-color: rgba(255,255,255,0.3); 
-            transform: translateY(-6px);
-            box-shadow: 0 12px 50px rgba(0,0,0,0.5);
-            background: rgba(255,255,255,0.06);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            background: rgba(255,255,255,0.07);
         }
         .project-card .title {
             font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(100, 100, 255, 0.3);
         }
         .project-card .description {
             color: #ccc;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
         }
         .project-card .tag {
             display: inline-block;
             background: rgba(255,255,255,0.06);
-            padding: 5px 18px;
+            padding: 8px 25px;
             border-radius: 30px;
             color: #aaa;
-            font-size: 0.8rem;
-            margin-top: 20px;
-            border: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .plugins-grid {
@@ -373,12 +375,49 @@
             box-shadow: 0 8px 50px rgba(108, 99, 255, 0.6);
         }
 
+        /* КОНТАКТЫ */
+        .contacts-section {
+            text-align: center;
+            padding: 60px 0 20px;
+        }
+        .contacts-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .contact-item {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(5px);
+            padding: 20px 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+        .contact-item:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.06);
+        }
+        .contact-item .label {
+            color: #888;
+            font-size: 0.8rem;
+        }
+        .contact-item .value {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         footer {
             border-top: 1px solid rgba(255,255,255,0.05);
             padding: 60px 0 40px;
             text-align: center;
             color: #555;
-            margin-top: 60px;
+            margin-top: 40px;
         }
         footer .socials a { 
             color: #888; 
@@ -390,7 +429,7 @@
         footer .socials a:hover { color: #fff; }
 
         @media (max-width: 1024px) {
-            .portfolio-grid, .plugins-grid { grid-template-columns: repeat(2, 1fr); }
+            .plugins-grid { grid-template-columns: repeat(2, 1fr); }
             .stats { gap: 40px; }
             .hero h1 { font-size: 3.2rem; }
         }
@@ -399,13 +438,14 @@
             .stats { flex-direction: column; gap: 30px; }
             header { flex-direction: column; gap: 25px; }
             nav a { margin: 0 15px; }
-            .portfolio-grid, .plugins-grid { grid-template-columns: 1fr; }
+            .plugins-grid { grid-template-columns: 1fr; }
+            .project-card { padding: 40px 25px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ФОН С СЕТКОЙ И ВОЛНАМИ -->
+    <!-- ФОН -->
     <div class="bg-container">
         <div class="grid-overlay"></div>
         <div class="glow-spot"></div>
@@ -423,6 +463,7 @@
                 <a href="#">Главная</a>
                 <a href="#portfolio">Портфолио</a>
                 <a href="#plugins">Плагины</a>
+                <a href="#contacts">Контакты</a>
             </nav>
         </header>
 
@@ -472,36 +513,11 @@
 
         <section class="section" id="portfolio">
             <h2 class="section-title">Мои проекты</h2>
-            <p class="section-description">Создал более 6 серверов и 3 сайта. Посмотрите на некоторые из них.</p>
-            <div class="portfolio-grid">
+            <p class="section-description">Ключевой проект — лаунчер для Minecraft с автоматическими обновлениями.</p>
+            <div class="portfolio-single">
                 <a href="#" class="project-card">
-                    <div class="title">Survival World</div>
-                    <div class="description">Выживание с уникальной экономикой и кастомным PvP. Активное комьюнити.</div>
-                    <div class="tag">Сервер • 500+ игроков</div>
-                </a>
-                <a href="#" class="project-card">
-                    <div class="title">SkyBlock Master</div>
-                    <div class="description">Небесный остров с системой миссий и торговли. Продуманный баланс.</div>
-                    <div class="tag">Сервер • 300+ игроков</div>
-                </a>
-                <a href="#" class="project-card">
-                    <div class="title">BDev Hub</div>
-                    <div class="description">Официальный сайт для сообщества. Адаптивный дизайн, умная админ-панель.</div>
-                    <div class="tag">Веб-сайт • 2000+ посещений</div>
-                </a>
-                <a href="#" class="project-card">
-                    <div class="title">Faction Wars</div>
-                    <div class="description">Клановые войны с захватом территорий. Сложная система привилегий.</div>
-                    <div class="tag">Сервер • 200+ игроков</div>
-                </a>
-                <a href="#" class="project-card">
-                    <div class="title">Prison Reborn</div>
-                    <div class="description">Тюремный сервер с рангами и непрерывной системой заработка.</div>
-                    <div class="tag">Сервер • 150+ игроков</div>
-                </a>
-                <a href="#" class="project-card">
-                    <div class="title">DevLauncher</div>
-                    <div class="description">Собственный лаунчер с автоматическими обновлениями и модами.</div>
+                    <div class="title">BDLauncher</div>
+                    <div class="description">Собственный лаунчер для Minecraft с автоматическими обновлениями, встроенным магазином и поддержкой модов. Разработан для удобства игроков и стабильной работы.</div>
                     <div class="tag">Приложение • 500+ загрузок</div>
                 </a>
             </div>
@@ -550,12 +566,23 @@
             </div>
         </section>
 
-        <footer>
-            <div class="socials">
-                <a href="#">GitHub</a>
-                <a href="#">Email</a>
+        <section class="section" id="contacts">
+            <h2 class="section-title" style="text-align: center;">Контакты</h2>
+            <p class="section-description" style="text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">Свяжитесь со мной любым удобным способом</p>
+            <div class="contacts-grid">
+                <a href="#" class="contact-item">
+                    <div class="label">GitHub</div>
+                    <div class="value">BDev</div>
+                </a>
+                <a href="#" class="contact-item">
+                    <div class="label">Email</div>
+                    <div class="value">bdev@example.com</div>
+                </a>
             </div>
-            <p style="margin-top: 25px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
+        </section>
+
+        <footer>
+            <p style="margin-top: 20px;">BDev. 2026. Технический администратор, разработчик Minecraft и веб-сайтов.</p>
         </footer>
 
     </div>
