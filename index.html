@@ -12,21 +12,21 @@
             cursor: default;
         }
         
-        a, button, .btn, .project-card, .plugin-item, .stat-item, .download-btn, .contact-btn {
+        a, button, .btn, .project-mini, .plugin-item, .stat-item, .download-btn, .contact-btn {
             cursor: pointer;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             line-height: 2.0;
-            color: #c8c8d0;
+            color: #e0e0e0;
             min-height: 100vh;
-            background-color: #05050b;
+            background-color: #000000;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- 3D СЕТКА С ВОЛНАМИ --- */
+        /* --- АБСОЛЮТНО ЧЕРНЫЙ ФОН С 3D СЕТКОЙ --- */
         .bg-container {
             position: fixed;
             top: 0;
@@ -35,10 +35,10 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            background: #05050b;
+            background: #000000;
         }
 
-        /* 3D-сетка с перспективой */
+        /* 3D-сетка с волновой анимацией */
         .grid-3d {
             position: absolute;
             top: -50%;
@@ -49,61 +49,25 @@
             perspective: 1000px;
             transform: rotateX(70deg) rotateZ(-15deg);
             background-image: 
-                linear-gradient(rgba(100, 120, 255, 0.2) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(100, 120, 255, 0.2) 1px, transparent 1px);
-            background-size: 60px 60px;
+                linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 80px 80px;
             animation: gridWave 6s ease-in-out infinite alternate;
         }
 
-        /* Волновая деформация сетки */
         @keyframes gridWave {
             0% {
                 transform: rotateX(70deg) rotateZ(-15deg) scaleY(1) translateY(0px);
-                background-size: 60px 60px;
+                background-size: 80px 80px;
             }
             50% {
                 transform: rotateX(70deg) rotateZ(-15deg) scaleY(1.03) translateY(-20px);
-                background-size: 65px 55px;
+                background-size: 85px 75px;
             }
             100% {
                 transform: rotateX(70deg) rotateZ(-15deg) scaleY(0.97) translateY(20px);
-                background-size: 55px 65px;
+                background-size: 75px 85px;
             }
-        }
-
-        /* Волновые блики, движущиеся по сетке */
-        .wave-glow {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 50%, rgba(80, 60, 200, 0.25) 0%, transparent 50%);
-            filter: blur(30px);
-            animation: waveSlide 10s ease-in-out infinite alternate;
-            pointer-events: none;
-        }
-
-        .wave-glow:nth-child(2) {
-            background: radial-gradient(ellipse at 70% 80%, rgba(40, 80, 200, 0.2) 0%, transparent 50%);
-            animation-duration: 14s;
-            animation-delay: 3s;
-        }
-
-        @keyframes waveSlide {
-            0% { transform: translate(0px, 0px); }
-            100% { transform: translate(100px, 80px); }
-        }
-
-        /* Свечение для глубины */
-        .glow-deep {
-            position: absolute;
-            top: 20%;
-            right: 15%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(50, 50, 150, 0.15), transparent 70%);
-            filter: blur(60px);
         }
 
         /* --- КОНТЕЙНЕР --- */
@@ -139,7 +103,7 @@
             font-weight: 500;
             font-size: 0.95rem;
         }
-        nav a:hover { color: #ddd; }
+        nav a:hover { color: #ffffff; }
 
         .hero {
             text-align: center;
@@ -156,7 +120,7 @@
 
         .hero .subtitle {
             font-size: 1.0rem;
-            color: #aaa;
+            color: #aaaaaa;
             letter-spacing: 3px;
             margin-bottom: 15px;
             font-weight: 600;
@@ -165,7 +129,7 @@
         .hero .desc {
             max-width: 700px;
             margin: 0 auto 40px;
-            color: #999;
+            color: #999999;
             font-size: 1.0rem;
         }
 
@@ -185,19 +149,19 @@
         .stat-number {
             font-family: 'Orbitron', sans-serif;
             font-size: 2.4rem;
-            color: #fff;
+            color: #ffffff;
             font-weight: 600;
         }
 
         .stat-label { 
-            color: #777; 
+            color: #777777; 
             font-size: 0.85rem; 
             margin-top: 4px;
         }
 
         .btn-primary {
-            background: #1a1a2e;
-            color: #ffffff;
+            background: #ffffff;
+            color: #000000;
             padding: 14px 45px;
             border-radius: 40px;
             text-decoration: none;
@@ -205,12 +169,10 @@
             display: inline-block;
             transition: 0.3s;
             font-size: 1.0rem;
-            border: 1px solid rgba(255,255,255,0.06);
         }
         .btn-primary:hover { 
-            background: #2a2a4e;
+            background: #cccccc;
             transform: scale(1.02);
-            border-color: rgba(255,255,255,0.15);
         }
 
         .section { 
@@ -222,12 +184,12 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 2.0rem;
             margin-bottom: 40px;
-            color: #fff;
+            color: #ffffff;
             letter-spacing: 1px;
         }
 
         .section-description {
-            color: #888;
+            color: #888888;
             margin-bottom: 40px;
             font-size: 1.0rem;
             max-width: 700px;
@@ -249,16 +211,15 @@
         .skill-card:hover { 
             border-color: rgba(255,255,255,0.12); 
             transform: translateY(-3px);
-            background: rgba(255,255,255,0.03);
         }
 
         .skill-card h3 { 
             margin-bottom: 15px; 
-            color: #fff; 
+            color: #ffffff; 
             font-size: 1.2rem; 
             font-weight: 600;
         }
-        .skill-card p { color: #999; line-height: 2.0; }
+        .skill-card p { color: #999999; line-height: 2.0; }
 
         .portfolio-block {
             background: rgba(255,255,255,0.02);
@@ -287,11 +248,11 @@
         }
         .portfolio-block .info .alias {
             font-size: 1.1rem;
-            color: #aaa;
+            color: #aaaaaa;
             margin-bottom: 15px;
         }
         .portfolio-block .info .desc {
-            color: #bbb;
+            color: #bbbbbb;
             font-size: 0.95rem;
             max-width: 500px;
         }
@@ -308,20 +269,20 @@
             background: rgba(255,255,255,0.02);
             padding: 20px 25px;
             border-radius: 10px;
-            border-left: 3px solid #3a3a6a;
+            border-left: 3px solid #333333;
             transition: 0.3s;
         }
         .project-mini:hover {
             background: rgba(255,255,255,0.04);
-            border-left-color: #6a6a9a;
+            border-left-color: #666666;
         }
         .project-mini .title {
-            color: #fff;
+            color: #ffffff;
             font-weight: 600;
             font-size: 1.1rem;
         }
         .project-mini .desc {
-            color: #888;
+            color: #888888;
             font-size: 0.9rem;
         }
         .project-mini .tag {
@@ -329,7 +290,7 @@
             background: rgba(255,255,255,0.04);
             padding: 2px 12px;
             border-radius: 20px;
-            color: #888;
+            color: #888888;
             font-size: 0.75rem;
             margin-top: 8px;
         }
@@ -361,7 +322,7 @@
         }
         .plugin-item .version {
             font-size: 0.75rem;
-            color: #888;
+            color: #888888;
             background: rgba(255,255,255,0.04);
             padding: 2px 12px;
             border-radius: 20px;
@@ -369,7 +330,7 @@
             margin-top: 4px;
         }
         .plugin-item .desc {
-            color: #999;
+            color: #999999;
             margin-top: 15px;
             line-height: 1.8;
             font-size: 0.9rem;
@@ -381,20 +342,18 @@
         }
         .download-btn {
             display: inline-block;
-            background: #1a1a2e;
-            color: #fff;
+            background: #ffffff;
+            color: #000000;
             padding: 16px 50px;
             border-radius: 40px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
             transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.06);
         }
         .download-btn:hover {
-            background: #2a2a4e;
+            background: #cccccc;
             transform: scale(1.02);
-            border-color: rgba(255,255,255,0.15);
         }
 
         .contacts-section {
@@ -423,11 +382,11 @@
             background: rgba(255,255,255,0.03);
         }
         .contact-btn .label {
-            color: #888;
+            color: #888888;
             font-size: 0.8rem;
         }
         .contact-btn .value {
-            color: #fff;
+            color: #ffffff;
             font-size: 1.0rem;
             font-weight: 600;
         }
@@ -436,14 +395,14 @@
             border-top: 1px solid rgba(255,255,255,0.04);
             padding: 40px 0 30px;
             text-align: center;
-            color: #555;
+            color: #555555;
             margin-top: 30px;
         }
         footer .copy {
             font-size: 0.85rem;
         }
         footer .copy span {
-            color: #777;
+            color: #777777;
         }
 
         @media (max-width: 1024px) {
@@ -465,9 +424,6 @@
 
     <div class="bg-container">
         <div class="grid-3d"></div>
-        <div class="wave-glow"></div>
-        <div class="wave-glow"></div>
-        <div class="glow-deep"></div>
     </div>
 
     <div class="container">
