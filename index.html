@@ -21,12 +21,12 @@
             line-height: 2.0;
             color: #c8c8d0;
             min-height: 100vh;
-            background-color: #07070d; 
+            background-color: #05050b;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- ТЕМНЫЙ ФОН С ВОЛНАМИ (ПРИЛИВ) --- */
+        /* --- 3D СЕТКА С ВОЛНАМИ --- */
         .bg-container {
             position: fixed;
             top: 0;
@@ -35,59 +35,74 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            background: #07070d;
+            background: #05050b;
         }
 
-        .ocean {
+        /* 3D-сетка с перспективой */
+        .grid-3d {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transform: rotateX(70deg) rotateZ(-15deg);
+            background-image: 
+                linear-gradient(rgba(100, 120, 255, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 120, 255, 0.2) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridWave 6s ease-in-out infinite alternate;
+        }
+
+        /* Волновая деформация сетки */
+        @keyframes gridWave {
+            0% {
+                transform: rotateX(70deg) rotateZ(-15deg) scaleY(1) translateY(0px);
+                background-size: 60px 60px;
+            }
+            50% {
+                transform: rotateX(70deg) rotateZ(-15deg) scaleY(1.03) translateY(-20px);
+                background-size: 65px 55px;
+            }
+            100% {
+                transform: rotateX(70deg) rotateZ(-15deg) scaleY(0.97) translateY(20px);
+                background-size: 55px 65px;
+            }
+        }
+
+        /* Волновые блики, движущиеся по сетке */
+        .wave-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(80, 60, 200, 0.25) 0%, transparent 50%);
+            filter: blur(30px);
+            animation: waveSlide 10s ease-in-out infinite alternate;
             pointer-events: none;
         }
 
-        /* Волны, набегающие снизу (эффект прилива) */
-        .wave {
+        .wave-glow:nth-child(2) {
+            background: radial-gradient(ellipse at 70% 80%, rgba(40, 80, 200, 0.2) 0%, transparent 50%);
+            animation-duration: 14s;
+            animation-delay: 3s;
+        }
+
+        @keyframes waveSlide {
+            0% { transform: translate(0px, 0px); }
+            100% { transform: translate(100px, 80px); }
+        }
+
+        /* Свечение для глубины */
+        .glow-deep {
             position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 200%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2311112a' fill-opacity='0.3' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,218.7C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
-            background-size: 1440px 200px;
-            animation: waveMove 8s linear infinite;
-            opacity: 0.5;
-        }
-
-        .wave:nth-child(2) {
-            bottom: -20px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23151540' fill-opacity='0.5' d='M0,160L48,170.7C96,181,192,203,288,186.7C384,171,480,117,576,117.3C672,117,768,171,864,170.7C960,171,1056,117,1152,112C1248,107,1344,149,1392,170.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
-            background-size: 1440px 250px;
-            animation: waveMove 10s linear infinite alternate;
-            opacity: 0.6;
-        }
-
-        .wave:nth-child(3) {
-            bottom: -30px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23202060' fill-opacity='0.8' d='M0,160L60,170.7C120,181,240,203,360,186.7C480,171,600,117,720,117.3C840,117,960,171,1080,170.7C1200,171,1320,117,1380,96L1440,74.7L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z'/%3E%3C/svg%3E") repeat-x bottom;
-            background-size: 1440px 300px;
-            animation: waveMove 12s linear infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes waveMove {
-            0% { transform: translateX(0px); }
-            100% { transform: translateX(-720px); }
-        }
-
-        .glow-spot {
-            position: absolute;
-            top: 10%;
+            top: 20%;
             right: 15%;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(60, 60, 150, 0.15), transparent 70%);
+            background: radial-gradient(circle, rgba(50, 50, 150, 0.15), transparent 70%);
             filter: blur(60px);
         }
 
@@ -218,7 +233,6 @@
             max-width: 700px;
         }
 
-        /* Компетенции */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -246,7 +260,6 @@
         }
         .skill-card p { color: #999; line-height: 2.0; }
 
-        /* Портфолио (единый блок) */
         .portfolio-block {
             background: rgba(255,255,255,0.02);
             border-radius: 16px;
@@ -451,12 +464,10 @@
 <body>
 
     <div class="bg-container">
-        <div class="ocean">
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-        </div>
-        <div class="glow-spot"></div>
+        <div class="grid-3d"></div>
+        <div class="wave-glow"></div>
+        <div class="wave-glow"></div>
+        <div class="glow-deep"></div>
     </div>
 
     <div class="container">
