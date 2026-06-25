@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Логи с улицей (GPS)</title>
+    <title>Логи с улицей (все попытки)</title>
     <style>
         * { box-sizing: border-box; margin:0; padding:0; }
         body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
@@ -18,11 +18,11 @@
         .header h1 { font-size:22px; }
         .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; }
         .table-wrapper { overflow-x:auto; border-radius:14px; border:1px solid #e9ecf0; }
-        table { width:100%; min-width:800px; border-collapse:collapse; font-size:13px; }
+        table { width:100%; min-width:850px; border-collapse:collapse; font-size:13px; }
         th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e9ecf0; white-space:nowrap; }
         th { background:#f8f9fc; }
         .empty-msg { text-align:center; color:#94a3b8; padding:30px 0; }
-        @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:650px; } }
+        @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:700px; } }
         .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
         @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
         .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
@@ -57,12 +57,13 @@
                 <th>Город</th>
                 <th>Улица (с точностью)</th>
                 <th>Провайдер</th>
+                <th>Результат</th>
             </tr></thead>
             <tbody id="logBody"></tbody>
         </table>
     </div>
     <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
-    <div class="note">* Улица определяется по GPS. Если точность > 100 м – используется IP (приблизительно). Для лучшей точности выйдите на улицу.</div>
+    <div class="note">* Сохраняются все попытки входа (включая неудачные).</div>
 </div>
 
 <script>
@@ -240,7 +241,7 @@
         });
     }
 
-    // ========== ГЛАВНАЯ ФУНКЦИЯ ==========
+    // ========== ГЛАВНАЯ ФУНКЦИЯ СБОРА ДАННЫХ ==========
     async function getFullData() {
         let result = {
             ip: 'неизвестно',
@@ -278,7 +279,6 @@
                 result.street = `— (GPS: ${Math.round(gps.accuracy)} м, адрес не найден)`;
             }
         } else if (gps && gps.accuracy > 100) {
-            // GPS неточен – используем IP-координаты
             if (ipGeo.lat && ipGeo.lon) {
                 street = await fetchStreet(ipGeo.lat, ipGeo.lon);
                 if (street) {
@@ -290,7 +290,6 @@
                 result.street = `— (GPS: ${Math.round(gps.accuracy)} м)`;
             }
         } else {
-            // Нет GPS – IP-координаты
             if (ipGeo.lat && ipGeo.lon) {
                 street = await fetchStreet(ipGeo.lat, ipGeo.lon);
                 if (street) {
@@ -305,8 +304,8 @@
         return result;
     }
 
-    // ========== ДОБАВЛЕНИЕ ЗАПИСИ ==========
-    async function addLogEntry() {
+    // ========== ДОБАВЛЕНИЕ ЗАПИСИ (с указанием результата) ==========
+    async function addLogEntry(status) {
         const statusDiv = document.getElementById('statusMessage');
         statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
         const data = await getFullData();
@@ -326,7 +325,8 @@
             region: data.region,
             city: data.city,
             street: data.street,
-            isp: data.isp
+            isp: data.isp,
+            result: status // 'успешно' или 'неудачно'
         });
         saveLogs(logs);
         return logs;
@@ -345,6 +345,7 @@
         empty.style.display = 'none';
         [...logs].reverse().forEach(entry => {
             const street = entry.street || '—';
+            const result = entry.result || '—';
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${entry.datetime}</td>
@@ -354,6 +355,7 @@
                 <td>${entry.city}</td>
                 <td>${street}</td>
                 <td>${entry.isp}</td>
+                <td>${result}</td>
             `;
             tbody.appendChild(tr);
         });
@@ -365,8 +367,6 @@
     async function login(username, password) {
         if (username === VALID_USER && password === VALID_PASS) {
             sessionStorage.setItem('loggedIn', 'true');
-            await addLogEntry();
-            showMain();
             return true;
         }
         return false;
@@ -398,11 +398,28 @@
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
             const err = document.getElementById('loginError');
-            err.textContent = '⏳ Проверка...';
+
+            // Сначала записываем визит (с пометкой "попытка")
+            await addLogEntry('попытка');
+
+            // Теперь проверяем данные
             const ok = await login(user, pass);
-            if (!ok) err.textContent = 'Неверные данные!';
-            else err.textContent = '';
+            if (ok) {
+                // Успешный вход – обновляем последнюю запись (меняем результат на "успешно")
+                let logs = getLogs();
+                if (logs.length > 0) {
+                    // Изменяем результат последней записи (которая только что добавилась)
+                    logs[logs.length - 1].result = 'успешно';
+                    saveLogs(logs);
+                }
+                err.textContent = '';
+                showMain();
+            } else {
+                err.textContent = 'Неверные данные!';
+                // Неудачная попытка – результат уже "попытка" – оставляем как есть
+            }
         });
+
         document.getElementById('logoutBtn').addEventListener('click', logout);
         if (isLoggedIn()) showMain(); else showModal();
     });
