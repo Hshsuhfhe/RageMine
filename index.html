@@ -2,56 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Логи посещений</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Логи (JSONP + улица)</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 16px; }
-
-        /* Модальное окно */
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index:1000; padding:20px; }
         .modal.hidden { display: none; }
-        .modal-content { background: #fff; padding: 30px 24px; border-radius: 24px; max-width: 380px; width:100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .modal-content h2 { font-size: 24px; font-weight: 700; margin-bottom: 20px; color: #1a1a2e; }
-        .modal-content input { width:100%; padding: 14px 16px; margin: 8px 0; border: 1px solid #d0d7de; border-radius: 14px; font-size: 16px; background: #f8f9fc; }
-        .modal-content input:focus { border-color: #4a6cf7; outline: none; background: #fff; }
-        .modal-content button { width:100%; padding: 14px; background: #4a6cf7; color: #fff; border: none; border-radius: 14px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 16px; transition: background 0.2s; }
-        .modal-content button:hover { background: #3b5de7; }
-        .error { color: #e74c3c; margin-top: 12px; font-size: 14px; }
-
-        /* Основной контейнер */
-        .container { width:100%; max-width: 1200px; background: #fff; border-radius: 24px; padding: 20px 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); margin-top: 10px; }
-        .header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-bottom: 1px solid #e9ecf0; padding-bottom: 14px; margin-bottom: 18px; }
-        .header h1 { font-size: 22px; font-weight: 600; color: #1a1a2e; margin:0; }
-        .logout-btn { background: #ef4444; color: #fff; padding: 8px 20px; border: none; border-radius: 30px; font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap; }
-        .logout-btn:hover { background: #dc2626; }
-
-        /* Таблица */
-        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; border: 1px solid #e9ecf0; }
-        table { width:100%; min-width: 800px; border-collapse: collapse; font-size: 13px; }
-        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e9ecf0; white-space: nowrap; }
-        th { background: #f8f9fc; font-weight: 600; color: #2d3748; position: sticky; top:0; z-index:2; }
-        tr:last-child td { border-bottom: none; }
-        .empty-msg { text-align: center; color: #94a3b8; padding: 30px 0; font-size: 16px; }
-
-        /* Статус загрузки */
-        .status { font-size: 14px; color: #4a6cf7; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-        .loader { display: inline-block; width: 18px; height: 18px; border: 3px solid #f3f3f3; border-top: 3px solid #4a6cf7; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Адаптив */
-        @media (max-width: 600px) {
-            .container { padding: 14px 10px; }
-            .header h1 { font-size: 18px; }
-            .logout-btn { font-size: 13px; padding: 6px 14px; }
-            th, td { padding: 8px 8px; font-size: 11px; }
-            table { min-width: 650px; }
-        }
+        .modal-content { background:#fff; padding:30px 24px; border-radius:24px; max-width:380px; width:100%; text-align:center; }
+        .modal-content input { width:100%; padding:14px; margin:8px 0; border:1px solid #ccc; border-radius:14px; font-size:16px; }
+        .modal-content button { width:100%; padding:14px; background:#4a6cf7; color:#fff; border:none; border-radius:14px; font-size:18px; font-weight:600; cursor:pointer; margin-top:16px; }
+        .error { color:#e74c3c; margin-top:12px; }
+        .container { width:100%; max-width:1200px; background:#fff; border-radius:24px; padding:20px; }
+        .header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #e9ecf0; padding-bottom:14px; margin-bottom:18px; }
+        .header h1 { font-size:22px; }
+        .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; }
+        .table-wrapper { overflow-x:auto; border-radius:14px; border:1px solid #e9ecf0; }
+        table { width:100%; min-width:800px; border-collapse:collapse; font-size:13px; }
+        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e9ecf0; white-space:nowrap; }
+        th { background:#f8f9fc; }
+        .empty-msg { text-align:center; color:#94a3b8; padding:30px 0; }
+        @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:650px; } }
+        .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
+        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
     </style>
 </head>
 <body>
-
-<!-- ===== Модальное окно входа ===== -->
 <div class="modal" id="loginModal">
     <div class="modal-content">
         <h2>🔐 Вход</h2>
@@ -63,27 +40,23 @@
         </form>
     </div>
 </div>
-
-<!-- ===== Основной контент ===== -->
-<div class="container" id="mainContent" style="display: none;">
+<div class="container" id="mainContent" style="display:none;">
     <div class="header">
-        <h1>📋 История посещений</h1>
+        <h1>📋 История</h1>
         <button class="logout-btn" id="logoutBtn">Выйти</button>
     </div>
     <div id="statusMessage" class="status"></div>
     <div class="table-wrapper">
         <table>
-            <thead>
-                <tr>
-                    <th>Дата и время</th>
-                    <th>IP</th>
-                    <th>Страна</th>
-                    <th>Регион</th>
-                    <th>Город</th>
-                    <th>Улица</th>
-                    <th>Провайдер</th>
-                </tr>
-            </thead>
+            <thead><tr>
+                <th>Дата и время</th>
+                <th>IP</th>
+                <th>Страна</th>
+                <th>Регион</th>
+                <th>Город</th>
+                <th>Улица</th>
+                <th>Провайдер</th>
+            </tr></thead>
             <tbody id="logBody"></tbody>
         </table>
     </div>
@@ -105,9 +78,9 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     }
 
-    // ==================== JSONP-ЗАПРОСЫ ====================
+    // ==================== JSONP-ЗАПРОСЫ (ОБЩИЙ МЕТОД) ====================
     function jsonpRequest(url, callbackName) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const script = document.createElement('script');
             const callback = callbackName || 'jsonp_' + Date.now();
             window[callback] = function(data) {
@@ -119,22 +92,38 @@
             script.onerror = function() {
                 delete window[callback];
                 document.body.removeChild(script);
-                reject(new Error('JSONP request failed'));
+                resolve(null);
             };
             document.body.appendChild(script);
-            // Таймаут
             setTimeout(() => {
                 if (window[callback]) {
                     delete window[callback];
                     document.body.removeChild(script);
-                    reject(new Error('Timeout'));
+                    resolve(null);
                 }
-            }, 8000);
+            }, 5000);
         });
     }
 
-    // ==================== ПОЛУЧЕНИЕ ГЕОДАННЫХ И УЛИЦЫ ====================
-    async function getFullGeoData() {
+    // ==================== ПОЛУЧЕНИЕ ОСНОВНЫХ ДАННЫХ (ip-api.com) ====================
+    function fetchGeoViaJSONP() {
+        return jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
+    }
+
+    // ==================== ПОЛУЧЕНИЕ УЛИЦЫ (geocode.xyz) ====================
+    function fetchStreet(lat, lon) {
+        if (!lat || !lon) return Promise.resolve(null);
+        return jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
+    }
+
+    // ==================== ПОЛУЧЕНИЕ ТОЛЬКО IP (запасной вариант) ====================
+    function fetchIPOnly() {
+        return jsonpRequest('https://api.ipify.org?format=jsonp');
+    }
+
+    // ==================== ОСНОВНАЯ ФУНКЦИЯ СБОРА ДАННЫХ ====================
+    async function getLocationData() {
+        let geo = await fetchGeoViaJSONP();
         let result = {
             ip: 'неизвестно',
             country: '—',
@@ -144,65 +133,50 @@
             isp: '—'
         };
 
-        // Шаг 1: IP и координаты через ip-api.com
-        try {
-            const geo = await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
-            if (geo && geo.status === 'success') {
-                result.ip = geo.query || 'неизвестно';
-                result.country = geo.country || '—';
-                result.region = geo.regionName || '—';
-                result.city = geo.city || '—';
-                result.isp = geo.isp || '—';
-                const lat = geo.lat;
-                const lon = geo.lon;
-                if (lat && lon) {
-                    // Шаг 2: получаем улицу через geocode.xyz (JSONP)
-                    try {
-                        const addrData = await jsonpRequest(
-                            `https://geocode.xyz/${lat},${lon}?geoit=json&jsoncallback=`
-                        );
-                        if (addrData && addrData.street) {
-                            const street = addrData.street || '';
-                            const housenumber = addrData.housenumber || '';
-                            const parts = [street, housenumber].filter(Boolean);
-                            result.street = parts.join(', ') || '—';
-                        } else if (addrData && addrData.display_name) {
-                            // запасной вариант — берём из display_name первую часть
-                            const parts = addrData.display_name.split(',');
-                            result.street = parts[0] || '—';
-                        } else {
-                            result.street = '—';
-                        }
-                    } catch (e) {
-                        console.warn('Не удалось получить улицу:', e);
-                        result.street = '— (ошибка геокодера)';
+        if (geo && geo.status === 'success') {
+            result.ip = geo.query || 'неизвестно';
+            result.country = geo.country || '—';
+            result.region = geo.regionName || '—';
+            result.city = geo.city || '—';
+            result.isp = geo.isp || '—';
+            const lat = geo.lat;
+            const lon = geo.lon;
+            if (lat && lon) {
+                // Пытаемся получить улицу
+                const streetData = await fetchStreet(lat, lon);
+                if (streetData && (streetData.street || streetData.display_name)) {
+                    if (streetData.street) {
+                        const house = streetData.housenumber || '';
+                        result.street = [streetData.street, house].filter(Boolean).join(', ') || '—';
+                    } else if (streetData.display_name) {
+                        // берём первую часть из display_name
+                        const parts = streetData.display_name.split(',');
+                        result.street = parts[0] || '—';
                     }
+                } else {
+                    result.street = '— (не найдена)';
                 }
-            } else {
-                // если ip-api вернул ошибку
-                result.country = '— (ошибка IP)';
             }
-        } catch (e) {
-            console.warn('Ошибка получения геоданных:', e);
-            result.country = '— (ошибка)';
+        } else {
+            // Если ip-api не сработал, пробуем получить только IP
+            const ipData = await fetchIPOnly();
+            if (ipData && ipData.ip) {
+                result.ip = ipData.ip;
+                result.country = '— (только IP)';
+            } else {
+                result.ip = 'не удалось';
+                result.country = 'ошибка';
+            }
         }
-
         return result;
     }
 
     // ==================== ДОБАВЛЕНИЕ ЗАПИСИ ====================
     async function addLogEntry() {
         const statusDiv = document.getElementById('statusMessage');
-        statusDiv.innerHTML = '<span class="loader"></span> Определяем местоположение...';
-
-        let geo;
-        try {
-            geo = await getFullGeoData();
-        } catch (e) {
-            console.error('Критическая ошибка:', e);
-            geo = { ip: 'ошибка', country: '—', region: '—', city: '—', street: '—', isp: '—' };
-        }
-        statusDiv.innerHTML = '✅ Данные получены';
+        statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
+        const geo = await getLocationData();
+        statusDiv.innerHTML = '';
 
         const now = new Date();
         const datetime = now.toLocaleString('ru-RU', {
@@ -212,7 +186,7 @@
 
         const logs = getLogs();
         logs.push({
-            datetime,
+            datetime: datetime,
             ip: geo.ip || 'неизвестно',
             country: geo.country || '—',
             region: geo.region || '—',
@@ -236,6 +210,8 @@
         }
         empty.style.display = 'none';
         [...logs].reverse().forEach(entry => {
+            // Для старых записей, где нет street, ставим прочерк
+            const street = entry.street || '—';
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${entry.datetime}</td>
@@ -243,7 +219,7 @@
                 <td>${entry.country}</td>
                 <td>${entry.region}</td>
                 <td>${entry.city}</td>
-                <td>${entry.street}</td>
+                <td>${street}</td>
                 <td>${entry.isp}</td>
             `;
             tbody.appendChild(tr);
@@ -280,7 +256,6 @@
         document.getElementById('loginModal').classList.add('hidden');
         document.getElementById('mainContent').style.display = 'block';
         renderTable();
-        document.getElementById('statusMessage').innerHTML = '';
     }
 
     // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -295,9 +270,7 @@
             if (!ok) err.textContent = 'Неверные данные!';
             else err.textContent = '';
         });
-
         document.getElementById('logoutBtn').addEventListener('click', logout);
-
         if (isLoggedIn()) showMain(); else showModal();
     });
 </script>
