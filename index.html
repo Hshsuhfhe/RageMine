@@ -1,9 +1,146 @@
+<?php
+session_start();
+
+$valid_user = 'АлисаАЙПИ';
+$valid_pass = 'IpAlica';
+$log_file = 'visits.json';
+
+// Функция безопасного HTTP-запроса (file_get_contents + cURL)
+function httpGet($url, $timeout = 5) {
+    if (ini_get('allow_url_fopen')) {
+        $ctx = stream_context_create(['http' => ['timeout' => $timeout, 'header' => "User-Agent: VisitLogger/1.0\r\n"]]);
+        $response = @file_get_contents($url, false, $ctx);
+        if ($response !== false) return $response;
+    }
+    if (function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'VisitLogger/1.0');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        if ($response !== false) return $response;
+    }
+    return false;
+}
+
+// Определение улицы по координатам (через Nominatim с кешированием)
+function getStreet($lat, $lon) {
+    if (!$lat || !$lon) return '—';
+    $cache_key = md5("$lat,$lon");
+    $cache_file = "cache_{$cache_key}.txt";
+    if (file_exists($cache_file) && (time() - filemtime($cache_file) < 604800)) {
+        return file_get_contents($cache_file);
+    }
+    $url = "https://nominatim.openstreetmap.org/reverse?lat={$lat}&lon={$lon}&format=json&zoom=18&addressdetails=1";
+    $json = httpGet($url);
+    if ($json === false) return '—';
+    $data = json_decode($json, true);
+    if (!isset($data['address'])) return '—';
+    $addr = $data['address'];
+    $street = $addr['road'] ?? $addr['pedestrian'] ?? $addr['footway'] ?? '';
+    $house = $addr['house_number'] ?? '';
+    $suburb = $addr['suburb'] ?? $addr['neighbourhood'] ?? '';
+    $parts = array_filter([$street, $house, $suburb]);
+    $result = implode(', ', $parts) ?: '—';
+    file_put_contents($cache_file, $result);
+    return $result;
+}
+
+// Обработка входа администратора
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['password'])) {
+    if ($_POST['login'] === $valid_user && $_POST['password'] === $valid_pass) {
+        $_SESSION['logged'] = true;
+        // Запись текущего посещения (для администратора тоже)
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $geo_json = httpGet("http://ip-api.com/json/{$ip}?fields=status,country,regionName,city,lat,lon,isp");
+        if ($geo_json !== false) {
+            $geo = json_decode($geo_json, true);
+            if ($geo && isset($geo['status']) && $geo['status'] === 'success') {
+                $country = $geo['country'] ?? '—';
+                $region = $geo['regionName'] ?? '—';
+                $city = $geo['city'] ?? '—';
+                $isp = $geo['isp'] ?? '—';
+                $lat = $geo['lat'] ?? null;
+                $lon = $geo['lon'] ?? null;
+                $street = ($lat && $lon) ? getStreet($lat, $lon) : '—';
+            } else {
+                $country = $region = $city = $isp = $street = '—';
+            }
+        } else {
+            $country = $region = $city = $isp = $street = '—';
+        }
+        $time = date('Y-m-d H:i:s');
+        $entry = [
+            'datetime' => $time,
+            'ip' => $ip,
+            'country' => $country,
+            'region' => $region,
+            'city' => $city,
+            'street' => $street,
+            'isp' => $isp
+        ];
+        $logs = file_exists($log_file) ? json_decode(file_get_contents($log_file), true) : [];
+        if (!is_array($logs)) $logs = [];
+        $logs[] = $entry;
+        file_put_contents($log_file, json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    } else {
+        $error = 'Неверные данные!';
+    }
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+$is_logged = isset($_SESSION['logged']) && $_SESSION['logged'] === true;
+
+// ---- Для всех остальных посетителей (не авторизованных) тоже записываем визит ----
+if (!$is_logged && !isset($_POST['login'])) {
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $geo_json = httpGet("http://ip-api.com/json/{$ip}?fields=status,country,regionName,city,lat,lon,isp");
+    if ($geo_json !== false) {
+        $geo = json_decode($geo_json, true);
+        if ($geo && isset($geo['status']) && $geo['status'] === 'success') {
+            $country = $geo['country'] ?? '—';
+            $region = $geo['regionName'] ?? '—';
+            $city = $geo['city'] ?? '—';
+            $isp = $geo['isp'] ?? '—';
+            $lat = $geo['lat'] ?? null;
+            $lon = $geo['lon'] ?? null;
+            $street = ($lat && $lon) ? getStreet($lat, $lon) : '—';
+        } else {
+            $country = $region = $city = $isp = $street = '—';
+        }
+    } else {
+        $country = $region = $city = $isp = $street = '—';
+    }
+    $time = date('Y-m-d H:i:s');
+    $entry = [
+        'datetime' => $time,
+        'ip' => $ip,
+        'country' => $country,
+        'region' => $region,
+        'city' => $city,
+        'street' => $street,
+        'isp' => $isp
+    ];
+    $logs = file_exists($log_file) ? json_decode(file_get_contents($log_file), true) : [];
+    if (!is_array($logs)) $logs = [];
+    $logs[] = $entry;
+    file_put_contents($log_file, json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Логи с точной улицей</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Логи посещений</title>
     <style>
         * { box-sizing: border-box; margin:0; padding:0; }
         body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
@@ -16,424 +153,80 @@
         .container { width:100%; max-width:1200px; background:#fff; border-radius:24px; padding:20px; }
         .header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #e9ecf0; padding-bottom:14px; margin-bottom:18px; }
         .header h1 { font-size:22px; }
-        .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; }
+        .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; text-decoration:none; font-size:15px; }
         .table-wrapper { overflow-x:auto; border-radius:14px; border:1px solid #e9ecf0; }
         table { width:100%; min-width:800px; border-collapse:collapse; font-size:13px; }
         th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e9ecf0; white-space:nowrap; }
         th { background:#f8f9fc; }
         .empty-msg { text-align:center; color:#94a3b8; padding:30px 0; }
         @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:650px; } }
-        .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
-        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-        .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
-        .geo-note { font-size:12px; color:#888; margin-top:8px; }
+        .note { font-size:12px; color:#888; margin-top:10px; }
     </style>
 </head>
 <body>
-<div class="modal" id="loginModal">
+
+<!-- Модальное окно входа (только для администратора) -->
+<div class="modal <?= $is_logged ? 'hidden' : '' ?>" id="loginModal">
     <div class="modal-content">
-        <h2>🔐 Вход</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Имя пользователя" required>
-            <input type="password" id="password" placeholder="Пароль" required>
+        <h2>🔐 Вход администратора</h2>
+        <form method="POST">
+            <input type="text" name="login" placeholder="Имя пользователя" required>
+            <input type="password" name="password" placeholder="Пароль" required>
             <button type="submit">Войти</button>
-            <div id="loginError" class="error"></div>
+            <?php if (isset($error)) echo '<div class="error">'.$error.'</div>'; ?>
         </form>
     </div>
 </div>
-<div class="container" id="mainContent" style="display:none;">
+
+<!-- Основная таблица (видна только администратору) -->
+<?php if ($is_logged): ?>
+<div class="container">
     <div class="header">
-        <h1>📋 История</h1>
-        <button class="logout-btn" id="logoutBtn">Выйти</button>
+        <h1>📋 Все посещения</h1>
+        <a href="?logout=1" class="logout-btn">Выйти</a>
     </div>
-    <div id="statusMessage" class="status"></div>
     <div class="table-wrapper">
         <table>
-            <thead><tr>
-                <th>Дата и время</th>
-                <th>IP</th>
-                <th>Страна</th>
-                <th>Регион</th>
-                <th>Город</th>
-                <th>Улица</th>
-                <th>Провайдер</th>
-            </tr></thead>
-            <tbody id="logBody"></tbody>
-        </table>
-    </div>
-    <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
-    <div class="geo-note">* Улица определяется по GPS. Если точность > 100 м – будет пометка "приблизительно".</div>
-</div>
-
-<script>
-    // ========== НАСТРОЙКИ ==========
-    const VALID_USER = 'АлисаАЙПИ';
-    const VALID_PASS = 'IpAlica';
-    const STORAGE_KEY = 'visitLogs';
-
-    // ========== РАБОТА С ЛОГАМИ ==========
-    function getLogs() {
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-        catch { return []; }
-    }
-    function saveLogs(logs) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-    }
-
-    // ========== УНИВЕРСАЛЬНЫЙ JSONP ==========
-    function jsonpRequest(url, callbackName) {
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            const callback = callbackName || 'jsonp_' + Date.now();
-            window[callback] = function(data) {
-                delete window[callback];
-                document.body.removeChild(script);
-                resolve(data);
-            };
-            script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callback;
-            script.onerror = function() {
-                delete window[callback];
-                document.body.removeChild(script);
-                resolve(null);
-            };
-            document.body.appendChild(script);
-            setTimeout(() => {
-                if (window[callback]) {
-                    delete window[callback];
-                    document.body.removeChild(script);
-                    resolve(null);
-                }
-            }, 5000);
-        });
-    }
-
-    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ ПО IP ==========
-    async function getGeoByIP() {
-        let data = await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
-        if (data && data.status === 'success') {
-            return {
-                ip: data.query,
-                country: data.country,
-                region: data.regionName,
-                city: data.city,
-                isp: data.isp,
-                lat: data.lat,
-                lon: data.lon,
-                source: 'ip-api'
-            };
-        }
-        data = await jsonpRequest('https://ipapi.co/json/');
-        if (data && data.ip) {
-            return {
-                ip: data.ip,
-                country: data.country_name || '—',
-                region: data.region || '—',
-                city: data.city || '—',
-                isp: data.org || '—',
-                lat: data.latitude || null,
-                lon: data.longitude || null,
-                source: 'ipapi.co'
-            };
-        }
-        data = await jsonpRequest('https://ipinfo.io/json');
-        if (data && data.ip) {
-            let locParts = (data.loc || '').split(',');
-            let lat = locParts[0] ? parseFloat(locParts[0]) : null;
-            let lon = locParts[1] ? parseFloat(locParts[1]) : null;
-            return {
-                ip: data.ip,
-                country: data.country || '—',
-                region: data.region || '—',
-                city: data.city || '—',
-                isp: data.org || '—',
-                lat: lat,
-                lon: lon,
-                source: 'ipinfo'
-            };
-        }
-        return null;
-    }
-
-    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (несколько геокодеров) ==========
-    async function fetchStreet(lat, lon) {
-        if (!lat || !lon) return null;
-        // 1) geocode.xyz
-        try {
-            const data = await jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
-            if (data && (data.street || data.display_name)) {
-                if (data.street) {
-                    const house = data.housenumber || '';
-                    return [data.street, house].filter(Boolean).join(', ') || null;
-                } else if (data.display_name) {
-                    const parts = data.display_name.split(',');
-                    return parts[0] || null;
-                }
-            }
-        } catch (e) {}
-
-        // 2) Nominatim через corsproxy.io (fetch)
-        try {
-            const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon+'&zoom=18&addressdetails=1')}`;
-            const response = await fetch(proxyUrl);
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.address) {
-                    const addr = data.address;
-                    const street = addr.road || addr.pedestrian || addr.footway || '';
-                    const house = addr.house_number || '';
-                    const suburb = addr.suburb || addr.neighbourhood || '';
-                    const parts = [street, house, suburb].filter(Boolean);
-                    return parts.join(', ') || null;
-                }
-            }
-        } catch (e) {}
-
-        // 3) Прямой запрос к Nominatim без прокси (может не работать из-за CORS, но пробуем)
-        try {
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
-            const response = await fetch(url, { mode: 'cors' });
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.address) {
-                    const addr = data.address;
-                    const street = addr.road || addr.pedestrian || addr.footway || '';
-                    const house = addr.house_number || '';
-                    const suburb = addr.suburb || addr.neighbourhood || '';
-                    const parts = [street, house, suburb].filter(Boolean);
-                    return parts.join(', ') || null;
-                }
-            }
-        } catch (e) {}
-
-        return null;
-    }
-
-    // ========== ПОЛУЧЕНИЕ ТОЧНЫХ КООРДИНАТ ЧЕРЕЗ GPS С ПРОВЕРКОЙ ТОЧНОСТИ ==========
-    function getGPSPosition() {
-        return new Promise((resolve) => {
-            if (!navigator.geolocation) {
-                resolve(null);
-                return;
-            }
-            let attempts = 0;
-            const maxAttempts = 3;
-            let bestPos = null;
-            let bestAccuracy = Infinity;
-
-            function tryGPS() {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        const acc = pos.coords.accuracy;
-                        if (acc < bestAccuracy) {
-                            bestPos = pos;
-                            bestAccuracy = acc;
-                        }
-                        // Если точность <= 100 метров – считаем достаточной
-                        if (acc <= 100) {
-                            resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: acc });
-                            return;
-                        }
-                        attempts++;
-                        if (attempts < maxAttempts) {
-                            // Ждём 3 секунды и пробуем снова
-                            setTimeout(tryGPS, 3000);
-                        } else {
-                            // Возвращаем лучший результат, даже если точность > 100 м
-                            if (bestPos) {
-                                resolve({ lat: bestPos.coords.latitude, lon: bestPos.coords.longitude, accuracy: bestAccuracy });
-                            } else {
-                                resolve(null);
-                            }
-                        }
-                    },
-                    (err) => {
-                        attempts++;
-                        if (attempts < maxAttempts) {
-                            setTimeout(tryGPS, 3000);
-                        } else {
-                            resolve(null);
-                        }
-                    },
-                    { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
-                );
-            }
-            tryGPS();
-        });
-    }
-
-    // ========== ГЛАВНАЯ ФУНКЦИЯ СБОРА ВСЕХ ДАННЫХ ==========
-    async function getFullData() {
-        let result = {
-            ip: 'неизвестно',
-            country: '—',
-            region: '—',
-            city: '—',
-            street: '—',
-            isp: '—'
-        };
-
-        // Получаем данные по IP
-        let ipGeo = await getGeoByIP();
-        if (ipGeo) {
-            result.ip = ipGeo.ip || 'неизвестно';
-            result.country = ipGeo.country || '—';
-            result.region = ipGeo.region || '—';
-            result.city = ipGeo.city || '—';
-            result.isp = ipGeo.isp || '—';
-        } else {
-            const ipData = await jsonpRequest('https://api.ipify.org?format=jsonp');
-            if (ipData && ipData.ip) {
-                result.ip = ipData.ip;
-                result.country = '— (только IP)';
-            }
-            return result;
-        }
-
-        // Пытаемся получить GPS
-        let gps = await getGPSPosition();
-        let street = null;
-        let accuracyText = '';
-
-        if (gps) {
-            const acc = gps.accuracy;
-            if (acc <= 100) {
-                // Точность хорошая
-                street = await fetchStreet(gps.lat, gps.lon);
-                if (street) {
-                    result.street = street + ` (точность ${Math.round(acc)} м)`;
-                } else {
-                    result.street = `— (GPS: координаты ${Math.round(acc)} м, но адрес не найден)`;
-                }
-            } else {
-                // Точность низкая, используем IP-координаты вместо GPS
-                if (ipGeo.lat && ipGeo.lon) {
-                    street = await fetchStreet(ipGeo.lat, ipGeo.lon);
-                    if (street) {
-                        result.street = street + ' (по IP, GPS неточен)';
-                    } else {
-                        result.street = '— (по IP не найдена)';
+            <thead>
+                <tr>
+                    <th>Дата и время</th>
+                    <th>IP</th>
+                    <th>Страна</th>
+                    <th>Регион</th>
+                    <th>Город</th>
+                    <th>Улица (по IP)</th>
+                    <th>Провайдер</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            if (file_exists($log_file)) {
+                $logs = json_decode(file_get_contents($log_file), true);
+                if (is_array($logs) && count($logs) > 0) {
+                    foreach (array_reverse($logs) as $entry) {
+                        echo "<tr>
+                                <td>{$entry['datetime']}</td>
+                                <td>{$entry['ip']}</td>
+                                <td>{$entry['country']}</td>
+                                <td>{$entry['region']}</td>
+                                <td>{$entry['city']}</td>
+                                <td>{$entry['street']}</td>
+                                <td>{$entry['isp']}</td>
+                              </tr>";
                     }
                 } else {
-                    result.street = `— (GPS: ${Math.round(acc)} м, нет IP-координат)`;
-                }
-            }
-        } else {
-            // GPS не удалось, используем IP-координаты
-            if (ipGeo.lat && ipGeo.lon) {
-                street = await fetchStreet(ipGeo.lat, ipGeo.lon);
-                if (street) {
-                    result.street = street + ' (по IP)';
-                } else {
-                    result.street = '— (по IP не найдена)';
+                    echo '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:30px;">Логов пока нет</td></tr>';
                 }
             } else {
-                result.street = '— (нет координат)';
+                echo '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:30px;">Логов пока нет</td></tr>';
             }
-        }
-        return result;
-    }
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="note">* Улица определяется по IP-геолокации – приблизительно (центр города или района). Для точного адреса на мобильных устройствах используйте GPS, но тогда данные будут только у вас.</div>
+</div>
+<?php endif; ?>
 
-    // ========== ДОБАВЛЕНИЕ ЗАПИСИ ==========
-    async function addLogEntry() {
-        const statusDiv = document.getElementById('statusMessage');
-        statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
-        const data = await getFullData();
-        statusDiv.innerHTML = '';
-
-        const now = new Date();
-        const datetime = now.toLocaleString('ru-RU', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-
-        const logs = getLogs();
-        logs.push({
-            datetime: datetime,
-            ip: data.ip,
-            country: data.country,
-            region: data.region,
-            city: data.city,
-            street: data.street,
-            isp: data.isp
-        });
-        saveLogs(logs);
-        return logs;
-    }
-
-    // ========== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ==========
-    function renderTable() {
-        const logs = getLogs();
-        const tbody = document.getElementById('logBody');
-        const empty = document.getElementById('emptyLog');
-        tbody.innerHTML = '';
-        if (logs.length === 0) {
-            empty.style.display = 'block';
-            return;
-        }
-        empty.style.display = 'none';
-        [...logs].reverse().forEach(entry => {
-            const street = entry.street || '—';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${entry.datetime}</td>
-                <td>${entry.ip}</td>
-                <td>${entry.country}</td>
-                <td>${entry.region}</td>
-                <td>${entry.city}</td>
-                <td>${street}</td>
-                <td>${entry.isp}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // ========== АВТОРИЗАЦИЯ ==========
-    function isLoggedIn() { return sessionStorage.getItem('loggedIn') === 'true'; }
-
-    async function login(username, password) {
-        if (username === VALID_USER && password === VALID_PASS) {
-            sessionStorage.setItem('loggedIn', 'true');
-            await addLogEntry();
-            showMain();
-            return true;
-        }
-        return false;
-    }
-
-    function logout() {
-        sessionStorage.removeItem('loggedIn');
-        showModal();
-    }
-
-    function showModal() {
-        document.getElementById('loginModal').classList.remove('hidden');
-        document.getElementById('mainContent').style.display = 'none';
-        document.getElementById('loginError').textContent = '';
-        document.getElementById('loginForm').reset();
-        document.getElementById('statusMessage').innerHTML = '';
-    }
-
-    function showMain() {
-        document.getElementById('loginModal').classList.add('hidden');
-        document.getElementById('mainContent').style.display = 'block';
-        renderTable();
-    }
-
-    // ========== ИНИЦИАЛИЗАЦИЯ ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            const err = document.getElementById('loginError');
-            err.textContent = '⏳ Проверка...';
-            const ok = await login(user, pass);
-            if (!ok) err.textContent = 'Неверные данные!';
-            else err.textContent = '';
-        });
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-        if (isLoggedIn()) showMain(); else showModal();
-    });
-</script>
 </body>
 </html>
