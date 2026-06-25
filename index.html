@@ -62,7 +62,7 @@
         </table>
     </div>
     <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
-    <div class="geo-note">* Улица определяется по GPS, если доступно. Если нет – по IP (может быть неточно).</div>
+    <div class="geo-note">* Улица определяется по GPS. Если точность > 100 м – будет пометка "приблизительно".</div>
 </div>
 
 <script>
@@ -107,9 +107,8 @@
         });
     }
 
-    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ ПО IP (несколько сервисов) ==========
+    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ ПО IP ==========
     async function getGeoByIP() {
-        // Пробуем ip-api.com
         let data = await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
         if (data && data.status === 'success') {
             return {
@@ -123,7 +122,6 @@
                 source: 'ip-api'
             };
         }
-        // Пробуем ipapi.co
         data = await jsonpRequest('https://ipapi.co/json/');
         if (data && data.ip) {
             return {
@@ -137,7 +135,6 @@
                 source: 'ipapi.co'
             };
         }
-        // Пробуем ipinfo.io
         data = await jsonpRequest('https://ipinfo.io/json');
         if (data && data.ip) {
             let locParts = (data.loc || '').split(',');
@@ -157,10 +154,10 @@
         return null;
     }
 
-    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (через geocode.xyz + резерв Nominatim) ==========
+    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (несколько геокодеров) ==========
     async function fetchStreet(lat, lon) {
         if (!lat || !lon) return null;
-        // Сначала пробуем geocode.xyz (JSONP)
+        // 1) geocode.xyz
         try {
             const data = await jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
             if (data && (data.street || data.display_name)) {
@@ -174,7 +171,7 @@
             }
         } catch (e) {}
 
-        // Резерв: Nominatim через прокси corsproxy.io
+        // 2) Nominatim через corsproxy.io (fetch)
         try {
             const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon+'&zoom=18&addressdetails=1')}`;
             const response = await fetch(proxyUrl);
@@ -190,25 +187,77 @@
                 }
             }
         } catch (e) {}
+
+        // 3) Прямой запрос к Nominatim без прокси (может не работать из-за CORS, но пробуем)
+        try {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+            const response = await fetch(url, { mode: 'cors' });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.address) {
+                    const addr = data.address;
+                    const street = addr.road || addr.pedestrian || addr.footway || '';
+                    const house = addr.house_number || '';
+                    const suburb = addr.suburb || addr.neighbourhood || '';
+                    const parts = [street, house, suburb].filter(Boolean);
+                    return parts.join(', ') || null;
+                }
+            }
+        } catch (e) {}
+
         return null;
     }
 
-    // ========== ПОЛУЧЕНИЕ ТОЧНЫХ КООРДИНАТ ЧЕРЕЗ GPS (браузер) ==========
+    // ========== ПОЛУЧЕНИЕ ТОЧНЫХ КООРДИНАТ ЧЕРЕЗ GPS С ПРОВЕРКОЙ ТОЧНОСТИ ==========
     function getGPSPosition() {
         return new Promise((resolve) => {
             if (!navigator.geolocation) {
                 resolve(null);
                 return;
             }
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-                },
-                () => {
-                    resolve(null); // пользователь отказал или ошибка
-                },
-                { timeout: 8000, enableHighAccuracy: true }
-            );
+            let attempts = 0;
+            const maxAttempts = 3;
+            let bestPos = null;
+            let bestAccuracy = Infinity;
+
+            function tryGPS() {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const acc = pos.coords.accuracy;
+                        if (acc < bestAccuracy) {
+                            bestPos = pos;
+                            bestAccuracy = acc;
+                        }
+                        // Если точность <= 100 метров – считаем достаточной
+                        if (acc <= 100) {
+                            resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: acc });
+                            return;
+                        }
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            // Ждём 3 секунды и пробуем снова
+                            setTimeout(tryGPS, 3000);
+                        } else {
+                            // Возвращаем лучший результат, даже если точность > 100 м
+                            if (bestPos) {
+                                resolve({ lat: bestPos.coords.latitude, lon: bestPos.coords.longitude, accuracy: bestAccuracy });
+                            } else {
+                                resolve(null);
+                            }
+                        }
+                    },
+                    (err) => {
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(tryGPS, 3000);
+                        } else {
+                            resolve(null);
+                        }
+                    },
+                    { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
+                );
+            }
+            tryGPS();
         });
     }
 
@@ -223,7 +272,7 @@
             isp: '—'
         };
 
-        // Сначала получаем данные по IP (всегда)
+        // Получаем данные по IP
         let ipGeo = await getGeoByIP();
         if (ipGeo) {
             result.ip = ipGeo.ip || 'неизвестно';
@@ -232,29 +281,44 @@
             result.city = ipGeo.city || '—';
             result.isp = ipGeo.isp || '—';
         } else {
-            // Если по IP не удалось, пробуем хотя бы IP через ipify
             const ipData = await jsonpRequest('https://api.ipify.org?format=jsonp');
             if (ipData && ipData.ip) {
                 result.ip = ipData.ip;
                 result.country = '— (только IP)';
             }
-            // Возвращаем результат без улицы
             return result;
         }
 
-        // Теперь пытаемся получить точные координаты через GPS
+        // Пытаемся получить GPS
         let gps = await getGPSPosition();
         let street = null;
+        let accuracyText = '';
+
         if (gps) {
-            // Если GPS есть – используем его координаты для улицы
-            street = await fetchStreet(gps.lat, gps.lon);
-            if (street) {
-                result.street = street + ' (GPS)';
+            const acc = gps.accuracy;
+            if (acc <= 100) {
+                // Точность хорошая
+                street = await fetchStreet(gps.lat, gps.lon);
+                if (street) {
+                    result.street = street + ` (точность ${Math.round(acc)} м)`;
+                } else {
+                    result.street = `— (GPS: координаты ${Math.round(acc)} м, но адрес не найден)`;
+                }
             } else {
-                result.street = '— (GPS не определил)';
+                // Точность низкая, используем IP-координаты вместо GPS
+                if (ipGeo.lat && ipGeo.lon) {
+                    street = await fetchStreet(ipGeo.lat, ipGeo.lon);
+                    if (street) {
+                        result.street = street + ' (по IP, GPS неточен)';
+                    } else {
+                        result.street = '— (по IP не найдена)';
+                    }
+                } else {
+                    result.street = `— (GPS: ${Math.round(acc)} м, нет IP-координат)`;
+                }
             }
         } else {
-            // Если GPS нет – пробуем координаты из IP (если есть)
+            // GPS не удалось, используем IP-координаты
             if (ipGeo.lat && ipGeo.lon) {
                 street = await fetchStreet(ipGeo.lat, ipGeo.lon);
                 if (street) {
