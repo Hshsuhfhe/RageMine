@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Логи (JSONP + улица)</title>
+    <title>Логи (с улицей)</title>
     <style>
         * { box-sizing: border-box; margin:0; padding:0; }
         body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
@@ -64,12 +64,12 @@
 </div>
 
 <script>
-    // ==================== НАСТРОЙКИ ====================
+    // ========== НАСТРОЙКИ ==========
     const VALID_USER = 'АлисаАЙПИ';
     const VALID_PASS = 'IpAlica';
     const STORAGE_KEY = 'visitLogs';
 
-    // ==================== РАБОТА С ЛОГАМИ ====================
+    // ========== РАБОТА С ЛОГАМИ ==========
     function getLogs() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
         catch { return []; }
@@ -78,52 +78,69 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     }
 
-    // ==================== JSONP-ЗАПРОСЫ (ОБЩИЙ МЕТОД) ====================
-    function jsonpRequest(url, callbackName) {
+    // ========== УНИВЕРСАЛЬНЫЙ JSONP ЗАПРОС ==========
+    function jsonpRequest(url) {
         return new Promise((resolve) => {
             const script = document.createElement('script');
-            const callback = callbackName || 'jsonp_' + Date.now();
-            window[callback] = function(data) {
-                delete window[callback];
+            const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
+            window[callbackName] = function(data) {
+                delete window[callbackName];
                 document.body.removeChild(script);
                 resolve(data);
             };
-            script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callback;
+            const separator = url.includes('?') ? '&' : '?';
+            script.src = url + separator + 'callback=' + callbackName;
             script.onerror = function() {
-                delete window[callback];
+                delete window[callbackName];
                 document.body.removeChild(script);
                 resolve(null);
             };
             document.body.appendChild(script);
+            // Таймаут 7 секунд
             setTimeout(() => {
-                if (window[callback]) {
-                    delete window[callback];
+                if (window[callbackName]) {
+                    delete window[callbackName];
                     document.body.removeChild(script);
                     resolve(null);
                 }
-            }, 5000);
+            }, 7000);
         });
     }
 
-    // ==================== ПОЛУЧЕНИЕ ОСНОВНЫХ ДАННЫХ (ip-api.com) ====================
-    function fetchGeoViaJSONP() {
-        return jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
+    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ (IP, СТРАНА, ГОРОД, КООРДИНАТЫ) ==========
+    async function fetchGeo() {
+        return await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
     }
 
-    // ==================== ПОЛУЧЕНИЕ УЛИЦЫ (geocode.xyz) ====================
-    function fetchStreet(lat, lon) {
-        if (!lat || !lon) return Promise.resolve(null);
-        return jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
+    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (через Nominatim + прокси) ==========
+    async function fetchStreet(lat, lon) {
+        if (!lat || !lon) return null;
+        // Используем прокси для обхода CORS (прокси делает обычный GET и возвращает JSONP)
+        // Если прокси не сработает, просто вернём null
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon+'&zoom=18&addressdetails=1')}`;
+        // Пробуем через fetch (corsproxy.io поддерживает JSON)
+        try {
+            const response = await fetch(proxyUrl);
+            if (!response.ok) return null;
+            const data = await response.json();
+            if (data && data.address) {
+                const addr = data.address;
+                const street = addr.road || addr.pedestrian || addr.footway || '';
+                const house = addr.house_number || '';
+                const suburb = addr.suburb || addr.neighbourhood || '';
+                const parts = [street, house, suburb].filter(Boolean);
+                return parts.join(', ') || null;
+            }
+            return null;
+        } catch (e) {
+            return null;
+        }
     }
 
-    // ==================== ПОЛУЧЕНИЕ ТОЛЬКО IP (запасной вариант) ====================
-    function fetchIPOnly() {
-        return jsonpRequest('https://api.ipify.org?format=jsonp');
-    }
-
-    // ==================== ОСНОВНАЯ ФУНКЦИЯ СБОРА ДАННЫХ ====================
-    async function getLocationData() {
-        let geo = await fetchGeoViaJSONP();
+    // ========== ОСНОВНАЯ ФУНКЦИЯ СБОРА ВСЕХ ДАННЫХ ==========
+    async function getFullData() {
+        // Сначала получаем базовые данные
+        const geo = await fetchGeo();
         let result = {
             ip: 'неизвестно',
             country: '—',
@@ -141,41 +158,31 @@
             result.isp = geo.isp || '—';
             const lat = geo.lat;
             const lon = geo.lon;
+            // Пытаемся получить улицу (если есть координаты) – НЕ БЛОКИРУЕМ основной поток
             if (lat && lon) {
-                // Пытаемся получить улицу
-                const streetData = await fetchStreet(lat, lon);
-                if (streetData && (streetData.street || streetData.display_name)) {
-                    if (streetData.street) {
-                        const house = streetData.housenumber || '';
-                        result.street = [streetData.street, house].filter(Boolean).join(', ') || '—';
-                    } else if (streetData.display_name) {
-                        // берём первую часть из display_name
-                        const parts = streetData.display_name.split(',');
-                        result.street = parts[0] || '—';
-                    }
-                } else {
-                    result.street = '— (не найдена)';
+                try {
+                    const street = await fetchStreet(lat, lon);
+                    if (street) result.street = street;
+                } catch (e) {
+                    // игнорируем
                 }
             }
         } else {
-            // Если ip-api не сработал, пробуем получить только IP
-            const ipData = await fetchIPOnly();
+            // Резерв: только IP
+            const ipData = await jsonpRequest('https://api.ipify.org?format=jsonp');
             if (ipData && ipData.ip) {
                 result.ip = ipData.ip;
                 result.country = '— (только IP)';
-            } else {
-                result.ip = 'не удалось';
-                result.country = 'ошибка';
             }
         }
         return result;
     }
 
-    // ==================== ДОБАВЛЕНИЕ ЗАПИСИ ====================
+    // ========== ДОБАВЛЕНИЕ ЗАПИСИ ==========
     async function addLogEntry() {
         const statusDiv = document.getElementById('statusMessage');
         statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
-        const geo = await getLocationData();
+        const data = await getFullData();
         statusDiv.innerHTML = '';
 
         const now = new Date();
@@ -187,18 +194,18 @@
         const logs = getLogs();
         logs.push({
             datetime: datetime,
-            ip: geo.ip || 'неизвестно',
-            country: geo.country || '—',
-            region: geo.region || '—',
-            city: geo.city || '—',
-            street: geo.street || '—',
-            isp: geo.isp || '—'
+            ip: data.ip,
+            country: data.country,
+            region: data.region,
+            city: data.city,
+            street: data.street,
+            isp: data.isp
         });
         saveLogs(logs);
         return logs;
     }
 
-    // ==================== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ====================
+    // ========== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ==========
     function renderTable() {
         const logs = getLogs();
         const tbody = document.getElementById('logBody');
@@ -210,7 +217,6 @@
         }
         empty.style.display = 'none';
         [...logs].reverse().forEach(entry => {
-            // Для старых записей, где нет street, ставим прочерк
             const street = entry.street || '—';
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -226,7 +232,7 @@
         });
     }
 
-    // ==================== АВТОРИЗАЦИЯ ====================
+    // ========== АВТОРИЗАЦИЯ ==========
     function isLoggedIn() { return sessionStorage.getItem('loggedIn') === 'true'; }
 
     async function login(username, password) {
@@ -258,7 +264,7 @@
         renderTable();
     }
 
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
