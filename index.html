@@ -2,203 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Логи посещений</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Логи (JSONP)</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 16px;
-        }
-
-        /* Модальное окно */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .modal.hidden {
-            display: none;
-        }
-        .modal-content {
-            background: #fff;
-            padding: 30px 24px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        .modal-content h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 20px;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 14px 16px;
-            margin: 8px 0;
-            border: 1px solid #d0d7de;
-            border-radius: 14px;
-            font-size: 16px;
-            background: #f8f9fc;
-        }
-        .modal-content input:focus {
-            border-color: #4a6cf7;
-            outline: none;
-            background: #fff;
-        }
-        .modal-content button {
-            width: 100%;
-            padding: 14px;
-            background: #4a6cf7;
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-        }
-        .modal-content button:hover {
-            background: #3b5de7;
-        }
-        .error {
-            color: #e74c3c;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-
-        /* Основной контейнер */
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            background: #fff;
-            border-radius: 24px;
-            padding: 20px 18px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            margin-top: 10px;
-        }
-        .header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e9ecf0;
-            padding-bottom: 14px;
-            margin-bottom: 18px;
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #1a1a2e;
-            margin: 0;
-        }
-        .logout-btn {
-            background: #ef4444;
-            color: #fff;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .logout-btn:hover {
-            background: #dc2626;
-        }
-
-        /* Таблица */
-        .table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 6px 0 10px;
-            border-radius: 14px;
-            border: 1px solid #e9ecf0;
-        }
-        table {
-            width: 100%;
-            min-width: 700px;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        th, td {
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecf0;
-            white-space: nowrap;
-        }
-        th {
-            background: #f8f9fc;
-            font-weight: 600;
-            color: #2d3748;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        .empty-msg {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px 0;
-            font-size: 16px;
-        }
-
-        /* Индикатор загрузки */
-        .loader {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4a6cf7;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .status-msg {
-            font-size: 14px;
-            color: #4a6cf7;
-            margin: 8px 0;
-        }
-
-        @media (max-width: 600px) {
-            .container { padding: 14px 10px; }
-            .header h1 { font-size: 18px; }
-            .logout-btn { font-size: 13px; padding: 6px 14px; }
-            th, td { padding: 8px 8px; font-size: 11px; }
-            table { min-width: 550px; }
-        }
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index:1000; padding:20px; }
+        .modal.hidden { display: none; }
+        .modal-content { background:#fff; padding:30px 24px; border-radius:24px; max-width:380px; width:100%; text-align:center; }
+        .modal-content input { width:100%; padding:14px; margin:8px 0; border:1px solid #ccc; border-radius:14px; font-size:16px; }
+        .modal-content button { width:100%; padding:14px; background:#4a6cf7; color:#fff; border:none; border-radius:14px; font-size:18px; font-weight:600; cursor:pointer; margin-top:16px; }
+        .error { color:#e74c3c; margin-top:12px; }
+        .container { width:100%; max-width:1100px; background:#fff; border-radius:24px; padding:20px; }
+        .header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #e9ecf0; padding-bottom:14px; margin-bottom:18px; }
+        .header h1 { font-size:22px; }
+        .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; }
+        .table-wrapper { overflow-x:auto; border-radius:14px; border:1px solid #e9ecf0; }
+        table { width:100%; min-width:700px; border-collapse:collapse; font-size:13px; }
+        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e9ecf0; white-space:nowrap; }
+        th { background:#f8f9fc; }
+        .empty-msg { text-align:center; color:#94a3b8; padding:30px 0; }
+        @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:550px; } }
+        .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
+        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
     </style>
 </head>
 <body>
-
-<!-- Модальное окно -->
 <div class="modal" id="loginModal">
     <div class="modal-content">
         <h2>🔐 Вход</h2>
@@ -210,284 +40,171 @@
         </form>
     </div>
 </div>
-
-<!-- Основной контент -->
-<div class="container" id="mainContent" style="display: none;">
+<div class="container" id="mainContent" style="display:none;">
     <div class="header">
-        <h1>📋 История посещений</h1>
+        <h1>📋 История</h1>
         <button class="logout-btn" id="logoutBtn">Выйти</button>
     </div>
-    <div id="statusMessage" class="status-msg"></div>
+    <div id="statusMessage" class="status"></div>
     <div class="table-wrapper">
         <table>
-            <thead>
-                <tr>
-                    <th>Дата и время</th>
-                    <th>IP-адрес</th>
-                    <th>Страна</th>
-                    <th>Регион</th>
-                    <th>Город</th>
-                    <th>Провайдер</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Дата и время</th><th>IP</th><th>Страна</th><th>Регион</th><th>Город</th><th>Провайдер</th></tr></thead>
             <tbody id="logBody"></tbody>
         </table>
     </div>
     <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
 </div>
-
 <script>
-    // ==================== НАСТРОЙКИ ====================
     const VALID_USER = 'АлисаАЙПИ';
     const VALID_PASS = 'IpAlica';
     const STORAGE_KEY = 'visitLogs';
 
-    // ==================== РАБОТА С ЛОГАМИ ====================
-    function getLogs() {
-        try {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
-        } catch {
-            return [];
-        }
-    }
+    function getLogs() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
+    function saveLogs(logs) { localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
 
-    function saveLogs(logs) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-    }
-
-    // ==================== ПОЛУЧЕНИЕ ГЕОДАННЫХ (С ЗАПАСНЫМИ ВАРИАНТАМИ) ====================
-    async function fetchWithTimeout(url, timeout = 5000) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-        try {
-            const response = await fetch(url, { signal: controller.signal });
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            return await response.json();
-        } catch (err) {
-            clearTimeout(timeoutId);
-            throw err;
-        }
-    }
-
-    async function fetchGeoData() {
-        // Пробуем несколько API по очереди
-        const apis = [
-            {
-                url: 'https://ipapi.co/json/',
-                parser: (data) => ({
-                    ip: data.ip || 'неизвестно',
-                    country: data.country_name || '—',
-                    region: data.region || '—',
-                    city: data.city || '—',
-                    isp: data.org || '—'
-                })
-            },
-            {
-                url: 'https://ipinfo.io/json',
-                parser: (data) => ({
-                    ip: data.ip || 'неизвестно',
-                    country: data.country || '—',
-                    region: data.region || '—',
-                    city: data.city || '—',
-                    isp: data.org || '—'
-                })
-            },
-            {
-                url: 'http://ip-api.com/json/',
-                parser: (data) => {
-                    if (data.status === 'success') {
-                        return {
-                            ip: data.query || 'неизвестно',
-                            country: data.country || '—',
-                            region: data.regionName || '—',
-                            city: data.city || '—',
-                            isp: data.isp || '—'
-                        };
-                    } else {
-                        throw new Error('API вернул статус fail');
-                    }
+    // Получение геоданных через JSONP (ip-api.com)
+    function fetchGeoViaJSONP() {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            const callbackName = 'jsonp_' + Date.now();
+            window[callbackName] = function(data) {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                if (data && data.status === 'success') {
+                    resolve({
+                        ip: data.query || 'неизвестно',
+                        country: data.country || '—',
+                        region: data.regionName || '—',
+                        city: data.city || '—',
+                        isp: data.isp || '—'
+                    });
+                } else {
+                    resolve(null);
                 }
-            }
-        ];
-
-        // Сохраняем последнюю ошибку
-        let lastError = null;
-
-        for (let api of apis) {
-            try {
-                const data = await fetchWithTimeout(api.url, 4000);
-                const result = api.parser(data);
-                // Проверяем, что IP получен
-                if (result.ip && result.ip !== 'неизвестно') {
-                    return result;
+            };
+            script.src = `https://ip-api.com/json/?callback=${callbackName}&fields=status,country,regionName,city,isp,query`;
+            script.onerror = function() {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                resolve(null);
+            };
+            document.body.appendChild(script);
+            // Таймаут на случай, если скрипт не загрузится
+            setTimeout(() => {
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(null);
                 }
-            } catch (err) {
-                lastError = err;
-                console.warn('API не сработал:', api.url, err.message);
-                // Продолжаем со следующим API
-            }
-        }
-
-        // Если все API не дали результат, пробуем получить хотя бы IP через другой сервис
-        try {
-            const ipResponse = await fetchWithTimeout('https://api.ipify.org?format=json', 3000);
-            const ipData = await ipResponse.json();
-            if (ipData.ip) {
-                return {
-                    ip: ipData.ip,
-                    country: '— (не определено)',
-                    region: '—',
-                    city: '—',
-                    isp: '—'
-                };
-            }
-        } catch (e) {
-            console.warn('Не удалось получить даже IP:', e);
-        }
-
-        // Самый последний вариант – вернуть локальный IP, если всё упало
-        return {
-            ip: 'не удалось определить',
-            country: 'ошибка',
-            region: '—',
-            city: '—',
-            isp: '—'
-        };
+            }, 5000);
+        });
     }
 
-    // ==================== ДОБАВЛЕНИЕ ЗАПИСИ ====================
+    // Резервный вариант – получить только IP через другой JSONP
+    function fetchIPOnly() {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            const callbackName = 'ipify_' + Date.now();
+            window[callbackName] = function(data) {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                if (data && data.ip) {
+                    resolve({ ip: data.ip, country: '— (только IP)', region: '—', city: '—', isp: '—' });
+                } else {
+                    resolve(null);
+                }
+            };
+            script.src = `https://api.ipify.org?format=jsonp&callback=${callbackName}`;
+            script.onerror = function() {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                resolve(null);
+            };
+            document.body.appendChild(script);
+            setTimeout(() => {
+                if (window[callbackName]) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(null);
+                }
+            }, 5000);
+        });
+    }
+
+    async function getLocationData() {
+        let data = await fetchGeoViaJSONP();
+        if (data) return data;
+        // Если не удалось, пробуем только IP
+        data = await fetchIPOnly();
+        if (data) return data;
+        // Если совсем ничего – возвращаем заглушку
+        return { ip: 'не удалось', country: 'ошибка', region: '—', city: '—', isp: '—' };
+    }
+
     async function addLogEntry() {
         const statusDiv = document.getElementById('statusMessage');
-        statusDiv.innerHTML = '⏳ Определяем ваше местоположение... <span class="loader"></span>';
-
-        let geo;
-        try {
-            geo = await fetchGeoData();
-        } catch (err) {
-            console.error('Ошибка при получении геоданных:', err);
-            geo = {
-                ip: 'ошибка',
-                country: 'ошибка',
-                region: '—',
-                city: '—',
-                isp: '—'
-            };
-        } finally {
-            statusDiv.innerHTML = ''; // убираем сообщение
-        }
-
+        statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
+        const geo = await getLocationData();
+        statusDiv.innerHTML = '';
         const now = new Date();
-        const datetime = now.toLocaleString('ru-RU', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-
+        const datetime = now.toLocaleString('ru-RU', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' });
         const logs = getLogs();
-        logs.push({
-            datetime,
-            ip: geo.ip || 'неизвестно',
-            country: geo.country || '—',
-            region: geo.region || '—',
-            city: geo.city || '—',
-            isp: geo.isp || '—'
-        });
+        logs.push({ datetime, ip: geo.ip, country: geo.country, region: geo.region, city: geo.city, isp: geo.isp });
         saveLogs(logs);
         return logs;
     }
 
-    // ==================== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ====================
     function renderTable() {
         const logs = getLogs();
         const tbody = document.getElementById('logBody');
-        const emptyMsg = document.getElementById('emptyLog');
-
+        const empty = document.getElementById('emptyLog');
         tbody.innerHTML = '';
-        if (logs.length === 0) {
-            emptyMsg.style.display = 'block';
-            return;
-        }
-        emptyMsg.style.display = 'none';
-
-        // Свежие сверху
-        const reversed = [...logs].reverse();
-        reversed.forEach(entry => {
+        if (logs.length === 0) { empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+        [...logs].reverse().forEach(entry => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${entry.datetime}</td>
-                <td>${entry.ip}</td>
-                <td>${entry.country}</td>
-                <td>${entry.region}</td>
-                <td>${entry.city}</td>
-                <td>${entry.isp}</td>
-            `;
+            tr.innerHTML = `<td>${entry.datetime}</td><td>${entry.ip}</td><td>${entry.country}</td><td>${entry.region}</td><td>${entry.city}</td><td>${entry.isp}</td>`;
             tbody.appendChild(tr);
         });
     }
 
-    // ==================== АВТОРИЗАЦИЯ ====================
-    function isLoggedIn() {
-        return sessionStorage.getItem('loggedIn') === 'true';
-    }
-
+    function isLoggedIn() { return sessionStorage.getItem('loggedIn') === 'true'; }
     async function login(username, password) {
         if (username === VALID_USER && password === VALID_PASS) {
             sessionStorage.setItem('loggedIn', 'true');
             await addLogEntry();
-            showMainContent();
+            showMain();
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
-
-    function logout() {
-        sessionStorage.removeItem('loggedIn');
-        showLoginModal();
-    }
-
-    function showLoginModal() {
+    function logout() { sessionStorage.removeItem('loggedIn'); showModal(); }
+    function showModal() {
         document.getElementById('loginModal').classList.remove('hidden');
         document.getElementById('mainContent').style.display = 'none';
         document.getElementById('loginError').textContent = '';
         document.getElementById('loginForm').reset();
         document.getElementById('statusMessage').innerHTML = '';
     }
-
-    function showMainContent() {
+    function showMain() {
         document.getElementById('loginModal').classList.add('hidden');
         document.getElementById('mainContent').style.display = 'block';
         renderTable();
     }
 
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorDiv = document.getElementById('loginError');
-
-            // Показываем загрузку
-            errorDiv.textContent = '⏳ Проверка...';
-            const success = await login(username, password);
-            if (!success) {
-                errorDiv.textContent = 'Неверное имя пользователя или пароль!';
-            } else {
-                errorDiv.textContent = '';
-            }
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const err = document.getElementById('loginError');
+            err.textContent = '⏳ Проверка...';
+            const ok = await login(user, pass);
+            if (!ok) err.textContent = 'Неверные данные!';
+            else err.textContent = '';
         });
-
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            logout();
-        });
-
-        if (isLoggedIn()) {
-            showMainContent();
-        } else {
-            showLoginModal();
-        }
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        if (isLoggedIn()) showMain(); else showModal();
     });
 </script>
 </body>
