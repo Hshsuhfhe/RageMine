@@ -2,18 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Система логирования (демо)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Система логирования посещений</title>
     <style>
-        * { box-sizing: border-box; }
-        body {
+        /* === Общие стили === */
+        * {
+            box-sizing: border-box;
             margin: 0;
-            font-family: Arial, sans-serif;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: #f0f2f5;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            align-items: flex-start;
+            padding: 16px;
         }
 
         /* Модальное окно */
@@ -23,185 +28,303 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
         .modal.hidden {
             display: none;
         }
         .modal-content {
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            width: 340px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #ffffff;
+            padding: 30px 24px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
         .modal-content h2 {
-            margin-top: 0;
-            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
         }
         .modal-content input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            border: 1px solid #d0d7de;
+            border-radius: 14px;
             font-size: 16px;
+            background: #f8f9fc;
+            transition: border 0.2s;
+        }
+        .modal-content input:focus {
+            border-color: #4a6cf7;
+            outline: none;
+            background: #fff;
         }
         .modal-content button {
             width: 100%;
-            padding: 12px;
-            background: #4CAF50;
+            padding: 14px;
+            background: #4a6cf7;
             color: #fff;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 16px;
+            transition: background 0.2s;
         }
         .modal-content button:hover {
-            background: #45a049;
+            background: #3b5de7;
+        }
+        .modal-content button:active {
+            background: #2b4ed4;
         }
         .error {
-            color: #d32f2f;
-            margin: 10px 0 0;
+            color: #e74c3c;
+            margin-top: 12px;
             font-size: 14px;
         }
 
-        /* Основной блок */
+        /* Основной контейнер */
         .container {
-            width: 90%;
-            max-width: 800px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1100px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 10px;
         }
         .header {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecf0;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
         }
         .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a2e;
             margin: 0;
-            font-size: 24px;
         }
         .logout-btn {
-            background: #f44336;
+            background: #ef4444;
             color: #fff;
-            padding: 8px 18px;
-            text-decoration: none;
-            border-radius: 6px;
+            padding: 8px 20px;
             border: none;
-            font-size: 14px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
         }
         .logout-btn:hover {
-            background: #d32f2f;
+            background: #dc2626;
+        }
+        .logout-btn:active {
+            background: #b91c1c;
+        }
+
+        /* Таблица с прокруткой */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 6px 0 10px;
+            border-radius: 14px;
+            border: 1px solid #e9ecf0;
         }
         table {
             width: 100%;
+            min-width: 700px; /* чтобы все колонки помещались */
             border-collapse: collapse;
-            margin-top: 20px;
+            font-size: 13px;
         }
         th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 10px 12px;
             text-align: left;
+            border-bottom: 1px solid #e9ecf0;
+            white-space: nowrap;
         }
         th {
-            background: #f4f4f4;
+            background: #f8f9fc;
+            font-weight: 600;
+            color: #2d3748;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        tr:last-child td {
+            border-bottom: none;
         }
         .empty-msg {
             text-align: center;
-            color: #888;
-            margin: 30px 0;
+            color: #94a3b8;
+            padding: 30px 0;
+            font-size: 16px;
+        }
+
+        /* Адаптив для телефонов */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .modal-content {
+                padding: 24px 16px;
+            }
+            .modal-content h2 {
+                font-size: 20px;
+            }
+            .container {
+                padding: 14px 10px;
+            }
+            .header h1 {
+                font-size: 18px;
+            }
+            .logout-btn {
+                font-size: 13px;
+                padding: 6px 14px;
+            }
+            th, td {
+                padding: 8px 8px;
+                font-size: 11px;
+            }
+            table {
+                min-width: 550px;
+            }
+        }
+        @media (max-width: 400px) {
+            th, td {
+                padding: 6px 6px;
+                font-size: 10px;
+            }
+            table {
+                min-width: 480px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Модальное окно входа -->
+<!-- ===== Модальное окно входа ===== -->
 <div class="modal" id="loginModal">
     <div class="modal-content">
-        <h2>Вход на сайт</h2>
+        <h2>🔐 Вход</h2>
         <form id="loginForm">
-            <input type="text" id="username" placeholder="Имя пользователя" required>
-            <input type="password" id="password" placeholder="Пароль" required>
+            <input type="text" id="username" placeholder="Имя пользователя" required autocomplete="username">
+            <input type="password" id="password" placeholder="Пароль" required autocomplete="current-password">
             <button type="submit">Войти</button>
             <div id="loginError" class="error"></div>
         </form>
     </div>
 </div>
 
-<!-- Основной контент (виден после входа) -->
+<!-- ===== Основной контент ===== -->
 <div class="container" id="mainContent" style="display: none;">
     <div class="header">
         <h1>📋 История посещений</h1>
         <button class="logout-btn" id="logoutBtn">Выйти</button>
     </div>
-    <div id="logTableContainer">
+    <div class="table-wrapper">
         <table>
             <thead>
-                <tr><th>Дата и время</th><th>IP-адрес (демо)</th></tr>
+                <tr>
+                    <th>Дата и время</th>
+                    <th>IP-адрес</th>
+                    <th>Страна</th>
+                    <th>Регион</th>
+                    <th>Город</th>
+                    <th>Провайдер</th>
+                </tr>
             </thead>
             <tbody id="logBody"></tbody>
         </table>
-        <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
     </div>
+    <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
 </div>
 
 <script>
-    // -------------------- НАСТРОЙКИ --------------------
+    // ==================== НАСТРОЙКИ ====================
     const VALID_USER = 'АлисаАЙПИ';
-    const VALID_PASS = 'Айпи';
+    const VALID_PASS = 'IpAlica';
     const STORAGE_KEY = 'visitLogs';
 
-    // Получить текущий IP (имитация или реальный через API)
-    function getCurrentIP() {
-        // Для демонстрации возвращаем локальный IP.
-        // Если хотите настоящий – раскомментируйте блок с fetch ниже.
-        return '127.0.0.1 (локальный)';
-
-        /* === РЕАЛЬНЫЙ IP через бесплатный сервис (работает асинхронно) ===
-        return fetch('https://api.ipify.org?format=json')
-            .then(res => res.json())
-            .then(data => data.ip)
-            .catch(() => 'не удалось определить');
-        */
-    }
-
-    // Получить все логи из localStorage
+    // ==================== ФУНКЦИИ РАБОТЫ С ЛОГАМИ ====================
     function getLogs() {
         const data = localStorage.getItem(STORAGE_KEY);
         return data ? JSON.parse(data) : [];
     }
 
-    // Сохранить логи в localStorage
     function saveLogs(logs) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     }
 
-    // Добавить новую запись (вход)
-    function addLogEntry(ip) {
+    // ==================== ПОЛУЧЕНИЕ ГЕОДАННЫХ ====================
+    async function fetchGeoData() {
+        try {
+            // Используем бесплатный API ip-api.com (без ключа, JSON)
+            const response = await fetch('http://ip-api.com/json/?fields=status,country,regionName,city,zip,isp,query');
+            if (!response.ok) throw new Error('Ошибка сети');
+            const data = await response.json();
+            if (data.status === 'success') {
+                return {
+                    ip: data.query || 'неизвестно',
+                    country: data.country || '—',
+                    region: data.regionName || '—',
+                    city: data.city || '—',
+                    zip: data.zip || '—',
+                    isp: data.isp || '—'
+                };
+            } else {
+                throw new Error('Не удалось определить геолокацию');
+            }
+        } catch (error) {
+            console.warn('Ошибка геолокации:', error);
+            // Возвращаем базовые данные с пометкой
+            return {
+                ip: 'неизвестно',
+                country: 'ошибка',
+                region: '—',
+                city: '—',
+                zip: '—',
+                isp: '—'
+            };
+        }
+    }
+
+    // ==================== ДОБАВЛЕНИЕ ЗАПИСИ ====================
+    async function addLogEntry() {
+        const geo = await fetchGeoData();
         const now = new Date();
         const datetime = now.toLocaleString('ru-RU', {
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit', second: '2-digit'
         });
         const logs = getLogs();
-        logs.push({ datetime, ip });
+        logs.push({
+            datetime,
+            ip: geo.ip,
+            country: geo.country,
+            region: geo.region,
+            city: geo.city,
+            isp: geo.isp
+        });
         saveLogs(logs);
         return logs;
     }
 
-    // Отобразить таблицу
+    // ==================== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ====================
     function renderTable() {
         const logs = getLogs();
         const tbody = document.getElementById('logBody');
@@ -218,23 +341,28 @@
         const reversed = [...logs].reverse();
         reversed.forEach(entry => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${entry.datetime}</td><td>${entry.ip}</td>`;
+            tr.innerHTML = `
+                <td>${entry.datetime}</td>
+                <td>${entry.ip}</td>
+                <td>${entry.country || '—'}</td>
+                <td>${entry.region || '—'}</td>
+                <td>${entry.city || '—'}</td>
+                <td>${entry.isp || '—'}</td>
+            `;
             tbody.appendChild(tr);
         });
     }
 
-    // Проверка авторизации
+    // ==================== АВТОРИЗАЦИЯ ====================
     function isLoggedIn() {
         return sessionStorage.getItem('loggedIn') === 'true';
     }
 
-    // Вход
-    function login(username, password) {
+    async function login(username, password) {
         if (username === VALID_USER && password === VALID_PASS) {
             sessionStorage.setItem('loggedIn', 'true');
-            // Записываем визит (IP получим синхронно для простоты)
-            const ip = getCurrentIP();
-            addLogEntry(ip);
+            // Записываем визит с геоданными (асинхронно)
+            await addLogEntry();
             showMainContent();
             return true;
         } else {
@@ -242,13 +370,11 @@
         }
     }
 
-    // Выход
     function logout() {
         sessionStorage.removeItem('loggedIn');
         showLoginModal();
     }
 
-    // Показать модалку и скрыть контент
     function showLoginModal() {
         document.getElementById('loginModal').classList.remove('hidden');
         document.getElementById('mainContent').style.display = 'none';
@@ -256,25 +382,23 @@
         document.getElementById('loginForm').reset();
     }
 
-    // Показать основной контент и скрыть модалку
     function showMainContent() {
         document.getElementById('loginModal').classList.add('hidden');
         document.getElementById('mainContent').style.display = 'block';
         renderTable();
     }
 
-    // Инициализация при загрузке страницы
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
     document.addEventListener('DOMContentLoaded', function() {
         // Обработка формы входа
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const errorDiv = document.getElementById('loginError');
 
-            if (login(username, password)) {
-                // успешно
-            } else {
+            const success = await login(username, password);
+            if (!success) {
                 errorDiv.textContent = 'Неверное имя пользователя или пароль!';
             }
         });
@@ -284,7 +408,7 @@
             logout();
         });
 
-        // Проверяем, залогинен ли пользователь
+        // Проверяем сессию
         if (isLoggedIn()) {
             showMainContent();
         } else {
@@ -293,208 +417,5 @@
     });
 </script>
 
-</body>
-</html>ex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        .contact-btn {
-            background: rgba(255,255,255,0.02);
-            padding: 16px 35px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.04);
-            text-decoration: none;
-            color: inherit;
-            transition: 0.3s;
-        }
-        .contact-btn:hover {
-            border-color: rgba(255,255,255,0.12);
-            transform: scale(1.03);
-            background: rgba(255,255,255,0.03);
-        }
-        .contact-btn .label {
-            color: #888888;
-            font-size: 0.8rem;
-        }
-        .contact-btn .value {
-            color: #ffffff;
-            font-size: 1.0rem;
-            font-weight: 600;
-        }
-
-        footer {
-            border-top: 1px solid rgba(255,255,255,0.04);
-            padding: 40px 0 30px;
-            text-align: center;
-            color: #555555;
-            margin-top: 30px;
-        }
-        footer .copy {
-            font-size: 0.85rem;
-        }
-        footer .copy span {
-            color: #777777;
-        }
-
-        @media (max-width: 1024px) {
-            .plugins-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats { gap: 30px; }
-            .hero h1 { font-size: 2.8rem; }
-        }
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .stats { flex-direction: column; gap: 20px; }
-            header { flex-direction: column; gap: 20px; }
-            nav a { margin: 0 12px; }
-            .plugins-grid { grid-template-columns: 1fr; }
-            .portfolio-block .row { flex-direction: column; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="bg-container">
-        <div class="grid-3d"></div>
-    </div>
-
-    <div class="container">
-        <header>
-            <div class="logo">BDEV.CORE</div>
-            <nav>
-                <a href="#">Главная</a>
-                <a href="#portfolio">Портфолио</a>
-                <a href="#plugins">Плагины</a>
-                <a href="#contacts">Контакты</a>
-            </nav>
-        </header>
-
-        <section class="hero">
-            <div class="subtitle">BDEV – ТЕХНИЧЕСКИЙ АДМИНИСТРАТОР И MINECRAFT РАЗРАБОТЧИК</div>
-            <h1>Код. Сервера. Архитектура.</h1>
-            <p class="desc">
-                Профессиональный технический администратор и разработчик плагинов для Minecraft. 
-                Создаю стабильные, безопасные и высоконагруженные проекты.
-            </p>
-
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-number">5+</div>
-                    <div class="stat-label">Лет опыта</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">6+</div>
-                    <div class="stat-label">Серверов создано</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3+</div>
-                    <div class="stat-label">Сайтов разработано</div>
-                </div>
-            </div>
-
-            <a href="#plugins" class="btn-primary">Смотреть плагины</a>
-        </section>
-
-        <section class="section" id="portfolio">
-            <h2 class="section-title">Портфолио</h2>
-            <p class="section-description">Мои проекты, навыки и информация обо мне.</p>
-            
-            <div class="portfolio-block">
-                <div class="row">
-                    <div class="info">
-                        <div class="name">Олександр (Саша)</div>
-                        <div class="alias">Псевдоним: Baraschki</div>
-                        <div class="desc">
-                            Настройка серверов, разработка плагинов для Minecraft, создание веб-сайтов. 
-                            Стремлюсь к качеству и стабильности в каждом проекте.
-                        </div>
-                    </div>
-                    <div class="projects">
-                        <div class="project-mini">
-                            <div class="title">BDLauncher</div>
-                            <div class="desc">Собственный лаунчер для Minecraft с автоматическими обновлениями.</div>
-                            <div class="tag">Приложение • 500+ загрузок</div>
-                        </div>
-                        <div class="project-mini">
-                            <div class="title">Техническая поддержка серверов</div>
-                            <div class="desc">Полный цикл настройки, защита от DDoS, мониторинг и оптимизация.</div>
-                            <div class="tag">Администрирование • 6+ серверов</div>
-                        </div>
-                        <div class="project-mini">
-                            <div class="title">Веб-сайты для сообществ</div>
-                            <div class="desc">Адаптивные сайты с админ-панелями и интеграцией игр.</div>
-                            <div class="tag">Веб-разработка • 3+ проекта</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="plugins">
-            <h2 class="section-title">Плагины</h2>
-            <p class="section-description">Более 10 эксклюзивных плагинов для стабильной игры. Скачайте архив по ссылке ниже.</p>
-            <div class="plugins-grid">
-                <div class="plugin-item">
-                    <div class="name">BAntirelog</div>
-                    <div class="version">v2.0.0</div>
-                    <div class="desc">Предотвращение выхода из игры в бою. Наказания и таймеры.</div>
-                </div>
-                <div class="plugin-item">
-                    <div class="name">BChat</div>
-                    <div class="version">v2.0.0</div>
-                    <div class="desc">Чат-менеджер с форматированием, приватными каналами и фильтрацией.</div>
-                </div>
-                <div class="plugin-item">
-                    <div class="name">BKill</div>
-                    <div class="version">v2.0.0</div>
-                    <div class="desc">Система PvP-статистики, рейтингов и наград за убийства.</div>
-                </div>
-                <div class="plugin-item">
-                    <div class="name">BMine</div>
-                    <div class="version">v2.0.0</div>
-                    <div class="desc">Автоматическое восстановление блоков в шахтах. Настройка ресурсов.</div>
-                </div>
-                <div class="plugin-item">
-                    <div class="name">BReport</div>
-                    <div class="version">v2.0.0</div>
-                    <div class="desc">Сервис приема жалоб на игроков. Оповещение модерации.</div>
-                </div>
-                <div class="plugin-item">
-                    <div class="name">BStones</div>
-                    <div class="version">v1.0.0</div>
-                    <div class="desc">Кастомизация выпадения руд и уникальных каменных блоков.</div>
-                </div>
-            </div>
-
-            <div class="download-section">
-                <a href="https://workupload.com/archive/dk7XXsqPeR" target="_blank" class="download-btn">
-                    Скачать архив с плагинами
-                </a>
-            </div>
-        </section>
-
-        <section class="section" id="contacts">
-            <h2 class="section-title" style="text-align: center;">Контакты</h2>
-            <p class="section-description" style="text-align: center; max-width: 600px; margin: 0 auto;">Свяжитесь со мной любым удобным способом</p>
-            <div class="contacts-grid">
-                <a href="https://t.me/Franzosren" class="contact-btn" target="_blank">
-                    <div class="label">Telegram</div>
-                    <div class="value">@Franzosren</div>
-                </a>
-                <a href="https://discordapp.com/users/kot01078" class="contact-btn" target="_blank">
-                    <div class="label">Discord</div>
-                    <div class="value">kot01078</div>
-                </a>
-            </div>
-        </section>
-
-        <footer>
-            <div class="copy">
-                <span>© BDev. 2026.</span> Технический администратор, разработчик Minecraft и веб-сайтов.
-            </div>
-        </footer>
-
-    </div>
 </body>
 </html>
