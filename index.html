@@ -3,365 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDev | Портфолио</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+    <title>Система логирования (демо)</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body, h1, h2, h3, h4, h5, h6, p, div, section, header, footer, span, article, aside {
-            cursor: default;
-        }
-        
-        a, button, .btn, .project-mini, .plugin-item, .stat-item, .download-btn, .contact-btn {
-            cursor: pointer;
-        }
-
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 2.0;
-            color: #e0e0e0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            background-color: #000000;
-            overflow-x: hidden;
-            position: relative;
         }
 
-        /* --- АБСОЛЮТНО ЧЕРНЫЙ ФОН С 3D СЕТКОЙ --- */
-        .bg-container {
+        /* Модальное окно */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            background: #000000;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            width: 340px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .modal-content button:hover {
+            background: #45a049;
+        }
+        .error {
+            color: #d32f2f;
+            margin: 10px 0 0;
+            font-size: 14px;
         }
 
-        /* 3D-сетка с волновой анимацией */
-        .grid-3d {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transform: rotateX(70deg) rotateZ(-15deg);
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-            background-size: 80px 80px;
-            animation: gridWave 6s ease-in-out infinite alternate;
-        }
-
-        @keyframes gridWave {
-            0% {
-                transform: rotateX(70deg) rotateZ(-15deg) scaleY(1) translateY(0px);
-                background-size: 80px 80px;
-            }
-            50% {
-                transform: rotateX(70deg) rotateZ(-15deg) scaleY(1.03) translateY(-20px);
-                background-size: 85px 75px;
-            }
-            100% {
-                transform: rotateX(70deg) rotateZ(-15deg) scaleY(0.97) translateY(20px);
-                background-size: 75px 85px;
-            }
-        }
-
-        /* --- КОНТЕЙНЕР --- */
+        /* Основной блок */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
-            position: relative;
-            z-index: 1;
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
-
-        header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            margin-bottom: 100px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
         }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            color: #ffffff;
-            letter-spacing: 1px;
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
         }
-
-        nav a {
+        .logout-btn {
+            background: #f44336;
+            color: #fff;
+            padding: 8px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #d32f2f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        .empty-msg {
+            text-align: center;
             color: #888;
-            text-decoration: none;
-            margin-left: 30px;
-            transition: 0.3s;
-            font-weight: 500;
-            font-size: 0.95rem;
+            margin: 30px 0;
         }
-        nav a:hover { color: #ffffff; }
+    </style>
+</head>
+<body>
 
-        .hero {
-            text-align: center;
-            padding: 60px 0 100px;
-        }
+<!-- Модальное окно входа -->
+<div class="modal" id="loginModal">
+    <div class="modal-content">
+        <h2>Вход на сайт</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Имя пользователя" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+            <div id="loginError" class="error"></div>
+        </form>
+    </div>
+</div>
 
-        .hero h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.2rem;
-            color: #ffffff;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
-        }
+<!-- Основной контент (виден после входа) -->
+<div class="container" id="mainContent" style="display: none;">
+    <div class="header">
+        <h1>📋 История посещений</h1>
+        <button class="logout-btn" id="logoutBtn">Выйти</button>
+    </div>
+    <div id="logTableContainer">
+        <table>
+            <thead>
+                <tr><th>Дата и время</th><th>IP-адрес (демо)</th></tr>
+            </thead>
+            <tbody id="logBody"></tbody>
+        </table>
+        <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
+    </div>
+</div>
 
-        .hero .subtitle {
-            font-size: 1.0rem;
-            color: #aaaaaa;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+<script>
+    // -------------------- НАСТРОЙКИ --------------------
+    const VALID_USER = 'АлисаАЙПИ';
+    const VALID_PASS = 'Айпи';
+    const STORAGE_KEY = 'visitLogs';
 
-        .hero .desc {
-            max-width: 700px;
-            margin: 0 auto 40px;
-            color: #999999;
-            font-size: 1.0rem;
-        }
+    // Получить текущий IP (имитация или реальный через API)
+    function getCurrentIP() {
+        // Для демонстрации возвращаем локальный IP.
+        // Если хотите настоящий – раскомментируйте блок с fetch ниже.
+        return '127.0.0.1 (локальный)';
 
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-bottom: 50px;
-        }
+        /* === РЕАЛЬНЫЙ IP через бесплатный сервис (работает асинхронно) ===
+        return fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => data.ip)
+            .catch(() => 'не удалось определить');
+        */
+    }
 
-        .stat-item {
-            text-align: center;
-            transition: 0.3s;
-        }
-        .stat-item:hover { transform: scale(1.05); }
+    // Получить все логи из localStorage
+    function getLogs() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+    }
 
-        .stat-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.4rem;
-            color: #ffffff;
-            font-weight: 600;
-        }
+    // Сохранить логи в localStorage
+    function saveLogs(logs) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
 
-        .stat-label { 
-            color: #777777; 
-            font-size: 0.85rem; 
-            margin-top: 4px;
-        }
+    // Добавить новую запись (вход)
+    function addLogEntry(ip) {
+        const now = new Date();
+        const datetime = now.toLocaleString('ru-RU', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+        const logs = getLogs();
+        logs.push({ datetime, ip });
+        saveLogs(logs);
+        return logs;
+    }
 
-        .btn-primary {
-            background: #ffffff;
-            color: #000000;
-            padding: 14px 45px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: 0.3s;
-            font-size: 1.0rem;
-        }
-        .btn-primary:hover { 
-            background: #cccccc;
-            transform: scale(1.02);
-        }
+    // Отобразить таблицу
+    function renderTable() {
+        const logs = getLogs();
+        const tbody = document.getElementById('logBody');
+        const emptyMsg = document.getElementById('emptyLog');
 
-        .section { 
-            padding: 100px 0; 
-            border-top: 1px solid rgba(255,255,255,0.04);
+        tbody.innerHTML = '';
+        if (logs.length === 0) {
+            emptyMsg.style.display = 'block';
+            return;
         }
+        emptyMsg.style.display = 'none';
 
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.0rem;
-            margin-bottom: 40px;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
+        // Показываем в обратном порядке (свежие сверху)
+        const reversed = [...logs].reverse();
+        reversed.forEach(entry => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${entry.datetime}</td><td>${entry.ip}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
 
-        .section-description {
-            color: #888888;
-            margin-bottom: 40px;
-            font-size: 1.0rem;
-            max-width: 700px;
-        }
+    // Проверка авторизации
+    function isLoggedIn() {
+        return sessionStorage.getItem('loggedIn') === 'true';
+    }
 
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+    // Вход
+    function login(username, password) {
+        if (username === VALID_USER && password === VALID_PASS) {
+            sessionStorage.setItem('loggedIn', 'true');
+            // Записываем визит (IP получим синхронно для простоты)
+            const ip = getCurrentIP();
+            addLogEntry(ip);
+            showMainContent();
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        .skill-card {
-            background: rgba(255,255,255,0.02);
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: 0.3s;
-        }
-        .skill-card:hover { 
-            border-color: rgba(255,255,255,0.12); 
-            transform: translateY(-3px);
-        }
+    // Выход
+    function logout() {
+        sessionStorage.removeItem('loggedIn');
+        showLoginModal();
+    }
 
-        .skill-card h3 { 
-            margin-bottom: 15px; 
-            color: #ffffff; 
-            font-size: 1.2rem; 
-            font-weight: 600;
-        }
-        .skill-card p { color: #999999; line-height: 2.0; }
+    // Показать модалку и скрыть контент
+    function showLoginModal() {
+        document.getElementById('loginModal').classList.remove('hidden');
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('loginError').textContent = '';
+        document.getElementById('loginForm').reset();
+    }
 
-        .portfolio-block {
-            background: rgba(255,255,255,0.02);
-            border-radius: 16px;
-            padding: 40px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+    // Показать основной контент и скрыть модалку
+    function showMainContent() {
+        document.getElementById('loginModal').classList.add('hidden');
+        document.getElementById('mainContent').style.display = 'block';
+        renderTable();
+    }
 
-        .portfolio-block .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: space-between;
-        }
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('loginError');
 
-        .portfolio-block .info {
-            flex: 1;
-            min-width: 250px;
-        }
+            if (login(username, password)) {
+                // успешно
+            } else {
+                errorDiv.textContent = 'Неверное имя пользователя или пароль!';
+            }
+        });
 
-        .portfolio-block .info .name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.0rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-        .portfolio-block .info .alias {
-            font-size: 1.1rem;
-            color: #aaaaaa;
-            margin-bottom: 15px;
-        }
-        .portfolio-block .info .desc {
-            color: #bbbbbb;
-            font-size: 0.95rem;
-            max-width: 500px;
-        }
+        // Кнопка выхода
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            logout();
+        });
 
-        .portfolio-block .projects {
-            flex: 2;
-            min-width: 250px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        // Проверяем, залогинен ли пользователь
+        if (isLoggedIn()) {
+            showMainContent();
+        } else {
+            showLoginModal();
         }
+    });
+</script>
 
-        .project-mini {
-            background: rgba(255,255,255,0.02);
-            padding: 20px 25px;
-            border-radius: 10px;
-            border-left: 3px solid #333333;
-            transition: 0.3s;
-        }
-        .project-mini:hover {
-            background: rgba(255,255,255,0.04);
-            border-left-color: #666666;
-        }
-        .project-mini .title {
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        .project-mini .desc {
-            color: #888888;
-            font-size: 0.9rem;
-        }
-        .project-mini .tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.04);
-            padding: 2px 12px;
-            border-radius: 20px;
-            color: #888888;
-            font-size: 0.75rem;
-            margin-top: 8px;
-        }
-
-        .plugins-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .plugin-item {
-            background: rgba(255,255,255,0.02);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: 0.3s;
-        }
-        .plugin-item:hover { 
-            border-color: rgba(255,255,255,0.12); 
-            transform: translateY(-3px);
-        }
-
-        .plugin-item .name {
-            font-family: 'Orbitron', sans-serif;
-            color: #ffffff;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        .plugin-item .version {
-            font-size: 0.75rem;
-            color: #888888;
-            background: rgba(255,255,255,0.04);
-            padding: 2px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 4px;
-        }
-        .plugin-item .desc {
-            color: #999999;
-            margin-top: 15px;
-            line-height: 1.8;
-            font-size: 0.9rem;
-        }
-
-        .download-section {
-            text-align: center;
-            margin-top: 60px;
-        }
-        .download-btn {
-            display: inline-block;
-            background: #ffffff;
-            color: #000000;
-            padding: 16px 50px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: 0.3s;
-        }
-        .download-btn:hover {
-            background: #cccccc;
-            transform: scale(1.02);
-        }
-
-        .contacts-section {
-            text-align: center;
-            padding: 40px 0 20px;
-        }
-        .contacts-grid {
-            display: flex;
+</body>
+</html>ex;
             justify-content: center;
             gap: 40px;
             margin-top: 30px;
