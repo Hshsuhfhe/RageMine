@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Логи с улицей (надёжно)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Логи с точной улицей</title>
     <style>
         * { box-sizing: border-box; margin:0; padding:0; }
         body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
@@ -26,6 +26,7 @@
         .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
         @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
         .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
+        .geo-note { font-size:12px; color:#888; margin-top:8px; }
     </style>
 </head>
 <body>
@@ -61,6 +62,7 @@
         </table>
     </div>
     <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
+    <div class="geo-note">* Улица определяется по GPS, если доступно. Если нет – по IP (может быть неточно).</div>
 </div>
 
 <script>
@@ -78,7 +80,7 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     }
 
-    // ========== УНИВЕРСАЛЬНЫЙ JSONP (для сервисов, которые поддерживают) ==========
+    // ========== УНИВЕРСАЛЬНЫЙ JSONP ==========
     function jsonpRequest(url, callbackName) {
         return new Promise((resolve) => {
             const script = document.createElement('script');
@@ -105,9 +107,9 @@
         });
     }
 
-    // ========== ПОПЫТКИ ПОЛУЧИТЬ ГЕОДАННЫЕ (последовательно) ==========
-    async function tryServices() {
-        // 1) ip-api.com (JSONP)
+    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ ПО IP (несколько сервисов) ==========
+    async function getGeoByIP() {
+        // Пробуем ip-api.com
         let data = await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
         if (data && data.status === 'success') {
             return {
@@ -121,8 +123,7 @@
                 source: 'ip-api'
             };
         }
-
-        // 2) ipapi.co (поддерживает JSONP через callback)
+        // Пробуем ipapi.co
         data = await jsonpRequest('https://ipapi.co/json/');
         if (data && data.ip) {
             return {
@@ -136,11 +137,9 @@
                 source: 'ipapi.co'
             };
         }
-
-        // 3) ipinfo.io (поддерживает JSONP)
+        // Пробуем ipinfo.io
         data = await jsonpRequest('https://ipinfo.io/json');
         if (data && data.ip) {
-            // ipinfo возвращает city, region, country, loc (lat,lon)
             let locParts = (data.loc || '').split(',');
             let lat = locParts[0] ? parseFloat(locParts[0]) : null;
             let lon = locParts[1] ? parseFloat(locParts[1]) : null;
@@ -155,36 +154,66 @@
                 source: 'ipinfo'
             };
         }
-
-        // Если всё не удалось – возвращаем null
         return null;
     }
 
-    // ========== ПОЛУЧЕНИЕ УЛИЦЫ (через corsproxy.io -> Nominatim) ==========
+    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (через geocode.xyz + резерв Nominatim) ==========
     async function fetchStreet(lat, lon) {
         if (!lat || !lon) return null;
+        // Сначала пробуем geocode.xyz (JSONP)
+        try {
+            const data = await jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
+            if (data && (data.street || data.display_name)) {
+                if (data.street) {
+                    const house = data.housenumber || '';
+                    return [data.street, house].filter(Boolean).join(', ') || null;
+                } else if (data.display_name) {
+                    const parts = data.display_name.split(',');
+                    return parts[0] || null;
+                }
+            }
+        } catch (e) {}
+
+        // Резерв: Nominatim через прокси corsproxy.io
         try {
             const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon+'&zoom=18&addressdetails=1')}`;
             const response = await fetch(proxyUrl);
-            if (!response.ok) return null;
-            const data = await response.json();
-            if (data && data.address) {
-                const addr = data.address;
-                const street = addr.road || addr.pedestrian || addr.footway || '';
-                const house = addr.house_number || '';
-                const suburb = addr.suburb || addr.neighbourhood || '';
-                const parts = [street, house, suburb].filter(Boolean);
-                return parts.join(', ') || null;
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.address) {
+                    const addr = data.address;
+                    const street = addr.road || addr.pedestrian || addr.footway || '';
+                    const house = addr.house_number || '';
+                    const suburb = addr.suburb || addr.neighbourhood || '';
+                    const parts = [street, house, suburb].filter(Boolean);
+                    return parts.join(', ') || null;
+                }
             }
-        } catch (e) {
-            // игнорируем
-        }
+        } catch (e) {}
         return null;
+    }
+
+    // ========== ПОЛУЧЕНИЕ ТОЧНЫХ КООРДИНАТ ЧЕРЕЗ GPS (браузер) ==========
+    function getGPSPosition() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                resolve(null);
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+                },
+                () => {
+                    resolve(null); // пользователь отказал или ошибка
+                },
+                { timeout: 8000, enableHighAccuracy: true }
+            );
+        });
     }
 
     // ========== ГЛАВНАЯ ФУНКЦИЯ СБОРА ВСЕХ ДАННЫХ ==========
     async function getFullData() {
-        let geo = await tryServices();
         let result = {
             ip: 'неизвестно',
             country: '—',
@@ -194,25 +223,47 @@
             isp: '—'
         };
 
-        if (geo) {
-            result.ip = geo.ip || 'неизвестно';
-            result.country = geo.country || '—';
-            result.region = geo.region || '—';
-            result.city = geo.city || '—';
-            result.isp = geo.isp || '—';
-            if (geo.lat && geo.lon) {
-                const street = await fetchStreet(geo.lat, geo.lon);
-                if (street) result.street = street;
-            }
+        // Сначала получаем данные по IP (всегда)
+        let ipGeo = await getGeoByIP();
+        if (ipGeo) {
+            result.ip = ipGeo.ip || 'неизвестно';
+            result.country = ipGeo.country || '—';
+            result.region = ipGeo.region || '—';
+            result.city = ipGeo.city || '—';
+            result.isp = ipGeo.isp || '—';
         } else {
-            // Если ни один сервис не дал гео, пробуем только IP через ipify (запасной)
+            // Если по IP не удалось, пробуем хотя бы IP через ipify
             const ipData = await jsonpRequest('https://api.ipify.org?format=jsonp');
             if (ipData && ipData.ip) {
                 result.ip = ipData.ip;
                 result.country = '— (только IP)';
+            }
+            // Возвращаем результат без улицы
+            return result;
+        }
+
+        // Теперь пытаемся получить точные координаты через GPS
+        let gps = await getGPSPosition();
+        let street = null;
+        if (gps) {
+            // Если GPS есть – используем его координаты для улицы
+            street = await fetchStreet(gps.lat, gps.lon);
+            if (street) {
+                result.street = street + ' (GPS)';
             } else {
-                result.ip = 'не удалось';
-                result.country = 'ошибка';
+                result.street = '— (GPS не определил)';
+            }
+        } else {
+            // Если GPS нет – пробуем координаты из IP (если есть)
+            if (ipGeo.lat && ipGeo.lon) {
+                street = await fetchStreet(ipGeo.lat, ipGeo.lon);
+                if (street) {
+                    result.street = street + ' (по IP)';
+                } else {
+                    result.street = '— (по IP не найдена)';
+                }
+            } else {
+                result.street = '— (нет координат)';
             }
         }
         return result;
