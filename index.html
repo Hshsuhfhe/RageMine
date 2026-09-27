@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Пристань РП — Ролевая игра в Roblox</title>
+<title>Пристань РП - Ролевая игра в Roblox</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
 
@@ -14,7 +14,6 @@
     line-height: 1.5;
   }
 
-  /* ===== ХЕДЕР ===== */
   header {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -71,7 +70,6 @@
     color: #ffffff;
   }
 
-  /* ===== ГЛАВНЫЙ ЭКРАН ===== */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -136,7 +134,6 @@
     justify-content: center;
   }
 
-  /* ===== КНОПКИ ===== */
   .play-btn {
     display: inline-flex;
     align-items: center;
@@ -195,7 +192,13 @@
     fill: currentColor;
   }
 
-  /* ===== СЕКЦИИ ===== */
+  .play-note {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #4d5563;
+    letter-spacing: 1px;
+  }
+
   section { padding: 110px 60px; position: relative; }
 
   .section-title {
@@ -224,7 +227,6 @@
     font-size: 15px;
   }
 
-  /* ===== ГАЛЕРЕЯ ===== */
   .gallery {
     max-width: 1240px;
     margin: 0 auto;
@@ -253,10 +255,27 @@
     background: #0d1017;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 4px;
-    transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4d5563;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     overflow: hidden;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  }
+  .gallery-photo-inner::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed rgba(91, 124, 255, 0.25);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 2;
   }
   .gallery-photo-inner::after {
     content: '';
@@ -280,8 +299,32 @@
     transform: perspective(1200px) rotateY(0deg) rotateX(0deg) rotate(0deg) scale(1.02);
   }
 
+  .photo-label {
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    background: #08090d;
+    padding: 5px 14px;
+    border: 1px solid rgba(91, 124, 255, 0.4);
+    color: #5b7cff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    z-index: 3;
+    border-radius: 2px;
+  }
+
   .gallery-text {
     padding: 0 10px;
+  }
+  .gallery-text .num {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #5b7cff;
+    display: block;
+    margin-bottom: 20px;
   }
   .gallery-text h3 {
     font-size: clamp(22px, 2.4vw, 32px);
@@ -290,7 +333,7 @@
     letter-spacing: 2px;
     color: #ffffff;
     line-height: 1.2;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .gallery-text p {
     color: #8b93a1;
@@ -301,10 +344,47 @@
     width: 40px;
     height: 2px;
     background: #5b7cff;
-    margin: 0 0 24px;
+    margin: 24px 0;
   }
 
-  /* ===== ОСОБЕННОСТИ ===== */
+  .preview-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 1240px;
+    margin: 0 auto 90px;
+  }
+
+  .photo-placeholder {
+    aspect-ratio: 16 / 10;
+    background: #0d1017;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4d5563;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    position: relative;
+  }
+  .photo-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed rgba(91, 124, 255, 0.2);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .photo-placeholder:hover {
+    border-color: rgba(91, 124, 255, 0.6);
+    color: #5b7cff;
+    background: #10141f;
+  }
+
   .features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -332,6 +412,14 @@
   .feature-card:hover::before { width: 100%; }
   .feature-card:hover { background: #0d1017; }
 
+  .feature-card .num {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #5b7cff;
+    margin-bottom: 22px;
+    display: block;
+  }
   .feature-card h3 {
     font-size: 17px;
     margin-bottom: 14px;
@@ -346,7 +434,6 @@
     font-size: 14px;
   }
 
-  /* ===== СПИСОК ИГР ===== */
   .games-list {
     display: flex;
     flex-wrap: wrap;
@@ -373,7 +460,6 @@
     background: rgba(91, 124, 255, 0.06);
   }
 
-  /* ===== CTA ===== */
   .cta {
     text-align: center;
     padding: 130px 24px;
@@ -403,7 +489,6 @@
     flex-wrap: wrap;
   }
 
-  /* ===== ФУТЕР ===== */
   footer {
     text-align: center;
     padding: 44px 24px;
@@ -424,7 +509,6 @@
   }
   footer .footer-discord:hover { color: #5b7cff; }
 
-  /* ===== АДАПТИВ ===== */
   @media (max-width: 900px) {
     .gallery-row,
     .gallery-row.reverse {
@@ -449,7 +533,6 @@
     .gallery { gap: 60px; }
   }
 
-  /* ===== ПОЯВЛЕНИЕ ===== */
   .fade-in {
     opacity: 0;
     transform: translateY(30px);
@@ -479,13 +562,12 @@
   </div>
 </header>
 
-<!-- ГЛАВНЫЙ ЭКРАН -->
 <section class="hero">
   <div class="badge">Ролевая игра в Roblox</div>
   <h1>Пристань <span>РП</span></h1>
   <p class="subtitle">
     Проект, объединивший механики лучших РП игр Roblox в единую вселенную.
-    Бобруйск РП, Зареченск РП, Кемерово РП — теперь в одном месте.
+    Бобруйск РП, Зареченск РП, Кемерово РП - теперь в одном месте.
     Работа, бизнес, недвижимость, фракции и настоящая городская жизнь.
   </p>
   <div class="hero-buttons">
@@ -495,101 +577,109 @@
       Discord
     </a>
   </div>
+  <p class="play-note">Кнопка "Играть" ведёт на страницу игры в Roblox</p>
 </section>
 
-<!-- О ПРОЕКТЕ -->
 <section id="about" class="fade-in">
   <h2 class="section-title">О проекте</h2>
   <p class="section-sub">
-    «Пристань РП» — новый уровень ролевых игр в Roblox. Мы собрали лучшее
+    "Пристань РП" - новый уровень ролевых игр в Roblox. Мы собрали лучшее
     из легендарных РП проектов и объединили в одну большую вселенную.
   </p>
   <div class="games-list">
     <div class="game-tag">Бобруйск РП</div>
     <div class="game-tag">Зареченск РП</div>
     <div class="game-tag">Кемерово РП</div>
-    <div class="game-tag">ГИБДД РП</div>
-    <div class="game-tag">Бизнес РП</div>
-    <div class="game-tag">Семья РП</div>
-    <div class="game-tag">Городская жизнь</div>
-    <div class="game-tag">Работа и карьера</div>
   </div>
 </section>
 
-<!-- ГЕЙМПЛЕЙ -->
 <section id="gallery" class="fade-in">
   <h2 class="section-title">Геймплей</h2>
   <p class="section-sub">
-    Как это выглядит в игре — взгляд изнутри на «Пристань РП»
+    Как это выглядит в игре - взгляд изнутри на "Пристань РП"
   </p>
 
   <div class="gallery">
 
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка превью</div>
+        <div class="gallery-photo-inner">Фотка превью</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">01 / Превью</span>
         <h3>Добро пожаловать в Пристань</h3>
+        <div class="divider"></div>
         <p>
-          Общий вид города с высоты. Жилые кварталы, деловые районы, трассы
-          и портовая зона. Именно здесь начинается ваша история.
+          Главный экран проекта - общий вид города с высоты. Уже с первых секунд
+          видно масштаб: жилые кварталы, деловые районы, трассы и портовая зона.
+          Именно здесь начинается ваша история.
         </p>
       </div>
     </div>
 
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка 1</div>
+        <div class="gallery-photo-inner">Фотка 1</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">02 / Город</span>
         <h3>Жизнь на улицах</h3>
+        <div class="divider"></div>
         <p>
-          Центральная улица города — здесь кипит жизнь. Игроки ездят на машинах,
-          общаются, работают и строят свой социальный круг.
+          Центральная улица города - здесь кипит жизнь. Игроки ездят на машинах,
+          общаются, работают и строят свой социальный круг. Живая атмосфера
+          настоящего мегаполиса внутри Roblox.
         </p>
       </div>
     </div>
 
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка 2</div>
+        <div class="gallery-photo-inner">Фотка 2</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">03 / Карьера</span>
         <h3>Работа и служба</h3>
+        <div class="divider"></div>
         <p>
           Вступайте в полицию, СТО, больницу или откройте собственный бизнес.
-          Прокачивайте навыки, получайте повышения и зарабатывайте репутацию.
+          Прокачивайте навыки, получайте повышения и зарабатывайте
+          репутацию среди игроков.
         </p>
       </div>
     </div>
 
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка 3</div>
+        <div class="gallery-photo-inner">Фотка 3</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">04 / Транспорт</span>
         <h3>Машины и тюнинг</h3>
+        <div class="divider"></div>
         <p>
-          Десятки моделей транспорта — от бюджетных авто до спортивных
-          и служебных машин. Покупайте, тюнингуйте и катайтесь по городу.
+          Десятки моделей транспорта - от бюджетных авто до спортивных
+          и служебных машин. Покупайте, тюнингуйте, участвуйте в гонках
+          и просто катайтесь по городу с друзьями.
         </p>
       </div>
     </div>
 
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка 4</div>
+        <div class="gallery-photo-inner">Фотка 4</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">05 / Недвижимость</span>
         <h3>Своё жильё</h3>
+        <div class="divider"></div>
         <p>
-          Купить квартиру в центре, дом у воды или пентхаус с видом на порт —
+          Купить квартиру в центре, дом у воды или пентхаус с видом на порт -
           выбирайте под свой стиль. Обустраивайте интерьер и приглашайте гостей.
         </p>
       </div>
@@ -597,14 +687,17 @@
 
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="gallery-photo-inner"></div>
+        <div class="photo-label">Фотка 5</div>
+        <div class="gallery-photo-inner">Фотка 5</div>
       </div>
       <div class="gallery-text">
-        <div class="divider"></div>
+        <span class="num">06 / Сообщество</span>
         <h3>Друзья и фракции</h3>
+        <div class="divider"></div>
         <p>
           Объединяйтесь в семьи, создавайте фракции, устраивайте встречи
-          и события вместе с другими игроками.
+          и события. "Пристань РП" - это в первую очередь люди, с которыми
+          вы проживёте свою историю.
         </p>
       </div>
     </div>
@@ -612,42 +705,46 @@
   </div>
 </section>
 
-<!-- ВОЗМОЖНОСТИ -->
 <section id="features" class="fade-in">
   <h2 class="section-title">Возможности</h2>
-  <p class="section-sub">Что ждёт вас в «Пристань РП»</p>
+  <p class="section-sub">Что ждёт вас в "Пристань РП"</p>
   <div class="features">
     <div class="feature-card">
+      <span class="num">01</span>
       <h3>Транспорт</h3>
-      <p>Десятки видов транспорта — от обычных легковых машин до спортивных авто и служебных единиц.</p>
+      <p>Десятки видов транспорта - от обычных легковых машин до спортивных авто и служебных единиц.</p>
     </div>
     <div class="feature-card">
+      <span class="num">02</span>
       <h3>Работа и карьера</h3>
-      <p>Служба в полиции, СТО, кафе, больнице — или открытие собственного бизнеса и развитие с нуля.</p>
+      <p>Служба в полиции, СТО, кафе, больнице - или открытие собственного бизнеса и развитие с нуля.</p>
     </div>
     <div class="feature-card">
+      <span class="num">03</span>
       <h3>Недвижимость</h3>
       <p>Покупка домов и квартир, обустройство интерьера и приглашение друзей в гости.</p>
     </div>
     <div class="feature-card">
+      <span class="num">04</span>
       <h3>Сообщество</h3>
       <p>Общение, друзья, семьи и вступление во фракции с собственной иерархией.</p>
     </div>
     <div class="feature-card">
+      <span class="num">05</span>
       <h3>Механики</h3>
       <p>Система уровней, кастомные эмоции, инвентарь и продуманная экономика проекта.</p>
     </div>
     <div class="feature-card">
+      <span class="num">06</span>
       <h3>Открытый мир</h3>
       <p>Большая карта города с районами, трассами и множеством интерактивных локаций.</p>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <section id="play" class="cta fade-in">
   <h2>Начните свою историю</h2>
-  <p>Присоединяйтесь к «Пристань РП» прямо сейчас и станьте частью сообщества.</p>
+  <p>Присоединяйтесь к "Пристань РП" прямо сейчас и станьте частью сообщества.</p>
   <div class="cta-buttons">
     <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть</a>
     <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="discord-btn">
@@ -658,7 +755,7 @@
 </section>
 
 <footer>
-  © 2025 <span>Пристань РП</span> — Ролевой проект в Roblox
+  © 2025 <span>Пристань РП</span> - Ролевой проект в Roblox
   <br>
   <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="footer-discord">discord.gg/9kRv3NVUAD</a>
 </footer>
