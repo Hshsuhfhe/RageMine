@@ -19,7 +19,6 @@
     position: fixed;
     top: -15px;
     color: #ffffff;
-    font-size: 14px;
     pointer-events: none;
     z-index: 99;
     user-select: none;
@@ -33,26 +32,14 @@
     100% { transform: translateY(105vh) translateX(-30px) rotate(360deg); }
   }
 
-  .trail-dot {
+  #cursorCanvas {
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     pointer-events: none;
-    border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 0 10px #ffffff, 0 0 20px #5b7cff;
-    transform: translate(-50%, -50%);
-    animation: fadeTrail 0.8s forwards linear;
     z-index: 1000;
-  }
-
-  @keyframes fadeTrail {
-    0% {
-      opacity: 0.9;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.1);
-    }
   }
 
   header {
@@ -439,9 +426,9 @@
 
   .games-list {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     max-width: 900px;
     margin: 0 auto;
   }
@@ -461,6 +448,15 @@
     border-color: #5b7cff;
     color: #ffffff;
     background: rgba(91, 124, 255, 0.06);
+  }
+  .game-mix-info {
+    color: #5b7cff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 10px;
   }
 
   .cta {
@@ -549,6 +545,8 @@
 </head>
 <body>
 
+<canvas id="cursorCanvas"></canvas>
+
 <header>
   <div class="logo">Пристань<span>.</span>РП</div>
   <div class="header-right">
@@ -593,6 +591,7 @@
     <div class="game-tag">Бобруйск РП</div>
     <div class="game-tag">Зареченск РП</div>
     <div class="game-tag">Кемерово РП</div>
+    <div class="game-mix-info">игра микс из них всех</div>
   </div>
 </section>
 
@@ -682,7 +681,6 @@
   for (let i = 0; i < snowflakesCount; i++) {
     const snowflake = document.createElement('div');
     snowflake.classList.add('snowflake');
-    
     snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
     
     const size = Math.random() * 10 + 10 + 'px';
@@ -695,31 +693,68 @@
     document.body.appendChild(snowflake);
   }
 
-  let lastX = 0;
-  let lastY = 0;
+  const canvas = document.getElementById('cursorCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  let points = [];
+  let isMouseDown = false;
+
+  window.addEventListener('mousedown', () => { isMouseDown = true; });
+  window.addEventListener('mouseup', () => { isMouseDown = false; });
 
   window.addEventListener('mousemove', (e) => {
-    const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-    if (distance > 12) {
-      lastX = e.clientX;
-      lastY = e.clientY;
-      
-      const trail = document.createElement('div');
-      trail.classList.add('trail-dot');
-      trail.style.left = e.clientX + 'px';
-      trail.style.top = e.clientY + 'px';
-      
-      const size = Math.random() * 6 + 6 + 'px';
-      trail.style.width = size;
-      trail.style.height = size;
-      
-      document.body.appendChild(trail);
-      
-      setTimeout(() => {
-        trail.remove();
-      }, 800);
-    }
+    const now = Date.now();
+    points.push({
+      x: e.clientX,
+      y: e.clientY,
+      time: now,
+      pressure: isMouseDown ? 2.5 : 1.0
+    });
   });
+
+  function animateTrail() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const now = Date.now();
+    points = points.filter(p => now - p.time < 600);
+
+    if (points.length > 1) {
+      for (let i = 1; i < points.length; i++) {
+        const p1 = points[i - 1];
+        const p2 = points[i];
+
+        const age = now - p2.time;
+        const life = 1 - age / 600;
+
+        const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+        const speed = Math.min(distance, 30);
+        
+        const baseWidth = (35 / (speed + 2) + 1.2) * p2.pressure;
+
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${life * 0.85})`;
+        ctx.shadowColor = '#5b7cff';
+        ctx.shadowBlur = 8 * life;
+        ctx.lineWidth = Math.max(baseWidth * life, 0.5);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
+    }
+
+    requestAnimationFrame(animateTrail);
+  }
+
+  animateTrail();
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
