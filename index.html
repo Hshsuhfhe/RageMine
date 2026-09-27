@@ -1,428 +1,475 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Логи с улицей (все попытки)</title>
-    <style>
-        * { box-sizing: border-box; margin:0; padding:0; }
-        body { font-family: system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index:1000; padding:20px; }
-        .modal.hidden { display: none; }
-        .modal-content { background:#fff; padding:30px 24px; border-radius:24px; max-width:380px; width:100%; text-align:center; }
-        .modal-content input { width:100%; padding:14px; margin:8px 0; border:1px solid #ccc; border-radius:14px; font-size:16px; }
-        .modal-content button { width:100%; padding:14px; background:#4a6cf7; color:#fff; border:none; border-radius:14px; font-size:18px; font-weight:600; cursor:pointer; margin-top:16px; }
-        .error { color:#e74c3c; margin-top:12px; }
-        .container { width:100%; max-width:1200px; background:#fff; border-radius:24px; padding:20px; }
-        .header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #e9ecf0; padding-bottom:14px; margin-bottom:18px; }
-        .header h1 { font-size:22px; }
-        .logout-btn { background:#ef4444; color:#fff; padding:8px 20px; border:none; border-radius:30px; cursor:pointer; }
-        .table-wrapper { overflow-x:auto; border-radius:14px; border:1px solid #e9ecf0; }
-        table { width:100%; min-width:850px; border-collapse:collapse; font-size:13px; }
-        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e9ecf0; white-space:nowrap; }
-        th { background:#f8f9fc; }
-        .empty-msg { text-align:center; color:#94a3b8; padding:30px 0; }
-        @media (max-width:600px) { .header h1 { font-size:18px; } th,td { font-size:11px; padding:8px; } table { min-width:700px; } }
-        .loader { display:inline-block; width:16px; height:16px; border:3px solid #f3f3f3; border-top:3px solid #4a6cf7; border-radius:50%; animation:spin 0.8s linear infinite; margin-left:8px; vertical-align:middle; }
-        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-        .status { font-size:14px; color:#4a6cf7; margin:8px 0; }
-        .note { font-size:12px; color:#888; margin-top:10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пристань РП — Ролевая игра в Roblox</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+
+  body {
+    background: #08090d;
+    color: #d7dce3;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  /* ===== ХЕДЕР ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(8, 9, 13, 0.9);
+    backdrop-filter: blur(14px);
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+  .logo span { color: #5b7cff; }
+  nav a {
+    color: #8b93a1;
+    text-decoration: none;
+    margin-left: 36px;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: 0.25s;
+  }
+  nav a:hover { color: #ffffff; }
+
+  /* ===== ГЛАВНЫЙ ЭКРАН ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 140px 24px 80px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(91, 124, 255, 0.12), transparent 55%),
+      linear-gradient(180deg, #08090d 0%, #0d1017 100%);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(91, 124, 255, 0.4), transparent);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 7px 18px;
+    border: 1px solid rgba(91, 124, 255, 0.4);
+    border-radius: 2px;
+    color: #5b7cff;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 600;
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 28px;
+  }
+  .hero h1 span {
+    background: linear-gradient(180deg, #5b7cff 0%, #1e3a8a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p.subtitle {
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: #8b93a1;
+    max-width: 720px;
+    line-height: 1.75;
+    margin-bottom: 44px;
+  }
+
+  /* ===== КНОПКА ИГРАТЬ ===== */
+  .play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 52px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    background: #5b7cff;
+    border: 1px solid #5b7cff;
+    border-radius: 2px;
+    transition: 0.3s ease;
+    position: relative;
+  }
+  .play-btn:hover {
+    background: transparent;
+    color: #5b7cff;
+    box-shadow: 0 0 30px rgba(91, 124, 255, 0.35);
+  }
+  .play-btn::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 9px solid currentColor;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .play-note {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #4d5563;
+    letter-spacing: 1px;
+  }
+
+  /* ===== СЕКЦИИ ===== */
+  section { padding: 110px 60px; position: relative; }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(24px, 3.2vw, 38px);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #ffffff;
+    margin-bottom: 16px;
+  }
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: #5b7cff;
+    margin: 20px auto 0;
+  }
+  .section-sub {
+    text-align: center;
+    color: #8b93a1;
+    max-width: 680px;
+    margin: 30px auto 70px;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ===== ПЛЕЙСХОЛДЕРЫ ФОТО ===== */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .photo-placeholder {
+    aspect-ratio: 16 / 10;
+    background: #0d1017;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4d5563;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    position: relative;
+  }
+  .photo-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed rgba(91, 124, 255, 0.2);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .photo-placeholder:hover {
+    border-color: rgba(91, 124, 255, 0.6);
+    color: #5b7cff;
+    background: #10141f;
+  }
+
+  /* ===== ОСОБЕННОСТИ ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    max-width: 1240px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .feature-card {
+    background: #08090d;
+    padding: 44px 32px;
+    transition: 0.3s ease;
+    position: relative;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 0;
+    height: 2px;
+    background: #5b7cff;
+    transition: 0.4s ease;
+  }
+  .feature-card:hover::before { width: 100%; }
+  .feature-card:hover { background: #0d1017; }
+
+  .feature-card .num {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #5b7cff;
+    margin-bottom: 22px;
+    display: block;
+  }
+  .feature-card h3 {
+    font-size: 17px;
+    margin-bottom: 14px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+  }
+  .feature-card p {
+    color: #8b93a1;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  /* ===== СПИСОК ИГР ===== */
+  .games-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .game-tag {
+    padding: 12px 26px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    color: #b8bfca;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+  }
+  .game-tag:hover {
+    border-color: #5b7cff;
+    color: #ffffff;
+    background: rgba(91, 124, 255, 0.06);
+  }
+
+  /* ===== CTA ===== */
+  .cta {
+    text-align: center;
+    padding: 130px 24px;
+    background: linear-gradient(180deg, #08090d 0%, #0d1017 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cta h2 {
+    font-size: clamp(28px, 4.5vw, 52px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    color: #ffffff;
+  }
+  .cta p {
+    color: #8b93a1;
+    max-width: 620px;
+    margin: 0 auto 44px;
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ===== ФУТЕР ===== */
+  footer {
+    text-align: center;
+    padding: 44px 24px;
+    color: #4d5563;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  footer span { color: #5b7cff; }
+
+  /* ===== АДАПТИВ ===== */
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+    nav { display: none; }
+    section { padding: 70px 20px; }
+    .play-btn { padding: 16px 34px; font-size: 13px; letter-spacing: 2px; }
+    .hero h1 { letter-spacing: 1px; }
+  }
+
+  /* ===== ПОЯВЛЕНИЕ ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
 </head>
 <body>
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <h2>🔐 Вход</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Имя пользователя" required>
-            <input type="password" id="password" placeholder="Пароль" required>
-            <button type="submit">Войти</button>
-            <div id="loginError" class="error"></div>
-        </form>
+
+<header>
+  <div class="logo">Пристань<span>.</span>РП</div>
+  <nav>
+    <a href="#about">О проекте</a>
+    <a href="#gallery">Скриншоты</a>
+    <a href="#features">Возможности</a>
+    <a href="#play">Играть</a>
+  </nav>
+</header>
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<section class="hero">
+  <div class="badge">Ролевая игра в Roblox</div>
+  <h1>Пристань <span>РП</span></h1>
+  <p class="subtitle">
+    Проект, объединивший механики лучших РП игр Roblox в единую вселенную.
+    Бобруйск РП, Зареченск РП, Кемерово РП — теперь в одном месте.
+    Работа, бизнес, недвижимость, фракции и настоящая городская жизнь.
+  </p>
+  <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть сейчас</a>
+  <p class="play-note">Кнопка ведёт на страницу игры в Roblox</p>
+</section>
+
+<!-- О ПРОЕКТЕ -->
+<section id="about" class="fade-in">
+  <h2 class="section-title">О проекте</h2>
+  <p class="section-sub">
+    «Пристань РП» — новый уровень ролевых игр в Roblox. Мы собрали лучшее
+    из легендарных РП проектов и объединили в одну большую вселенную.
+  </p>
+  <div class="games-list">
+    <div class="game-tag">Бобруйск РП</div>
+    <div class="game-tag">Зареченск РП</div>
+    <div class="game-tag">Кемерово РП</div>
+    <div class="game-tag">ГИБДД РП</div>
+    <div class="game-tag">Бизнес РП</div>
+    <div class="game-tag">Семья РП</div>
+    <div class="game-tag">Городская жизнь</div>
+    <div class="game-tag">Работа и карьера</div>
+  </div>
+</section>
+
+<!-- ГАЛЕРЕЯ -->
+<section id="gallery" class="fade-in">
+  <h2 class="section-title">Скриншоты</h2>
+  <p class="section-sub">Материалы проекта «Пристань РП»</p>
+  <div class="gallery">
+    <div class="photo-placeholder">Фотка превью</div>
+    <div class="photo-placeholder">Фотка 1</div>
+    <div class="photo-placeholder">Фотка 2</div>
+    <div class="photo-placeholder">Фотка 3</div>
+    <div class="photo-placeholder">Фотка 4</div>
+    <div class="photo-placeholder">Фотка 5</div>
+  </div>
+</section>
+
+<!-- ВОЗМОЖНОСТИ -->
+<section id="features" class="fade-in">
+  <h2 class="section-title">Возможности</h2>
+  <p class="section-sub">Что ждёт вас в «Пристань РП»</p>
+  <div class="features">
+    <div class="feature-card">
+      <span class="num">01</span>
+      <h3>Транспорт</h3>
+      <p>Десятки видов транспорта — от обычных легковых машин до спортивных авто и служебных единиц.</p>
     </div>
-</div>
-<div class="container" id="mainContent" style="display:none;">
-    <div class="header">
-        <h1>📋 История</h1>
-        <button class="logout-btn" id="logoutBtn">Выйти</button>
+    <div class="feature-card">
+      <span class="num">02</span>
+      <h3>Работа и карьера</h3>
+      <p>Служба в полиции, СТО, кафе, больнице — или открытие собственного бизнеса и развитие с нуля.</p>
     </div>
-    <div id="statusMessage" class="status"></div>
-    <div class="table-wrapper">
-        <table>
-            <thead><tr>
-                <th>Дата и время</th>
-                <th>IP</th>
-                <th>Страна</th>
-                <th>Регион</th>
-                <th>Город</th>
-                <th>Улица (с точностью)</th>
-                <th>Провайдер</th>
-                <th>Результат</th>
-            </tr></thead>
-            <tbody id="logBody"></tbody>
-        </table>
+    <div class="feature-card">
+      <span class="num">03</span>
+      <h3>Недвижимость</h3>
+      <p>Покупка домов и квартир, обустройство интерьера и приглашение друзей в гости.</p>
     </div>
-    <div id="emptyLog" class="empty-msg">Логов пока нет.</div>
-    <div class="note">* Сохраняются все попытки входа (включая неудачные).</div>
-</div>
+    <div class="feature-card">
+      <span class="num">04</span>
+      <h3>Сообщество</h3>
+      <p>Общение, друзья, семьи и вступление во фракции с собственной иерархией.</p>
+    </div>
+    <div class="feature-card">
+      <span class="num">05</span>
+      <h3>Механики</h3>
+      <p>Система уровней, кастомные эмоции, инвентарь и продуманная экономика проекта.</p>
+    </div>
+    <div class="feature-card">
+      <span class="num">06</span>
+      <h3>Открытый мир</h3>
+      <p>Большая карта города с районами, трассами и множеством интерактивных локаций.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="play" class="cta fade-in">
+  <h2>Начните свою историю</h2>
+  <p>Присоединяйтесь к «Пристань РП» прямо сейчас и станьте частью сообщества.</p>
+  <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть</a>
+</section>
+
+<footer>
+  © 2025 <span>Пристань РП</span> — Ролевой проект в Roblox
+</footer>
 
 <script>
-    // ========== НАСТРОЙКИ ==========
-    const VALID_USER = 'АлисаАЙПИ';
-    const VALID_PASS = 'IpAlica';
-    const STORAGE_KEY = 'visitLogs';
-
-    // ========== РАБОТА С ЛОГАМИ ==========
-    function getLogs() {
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-        catch { return []; }
-    }
-    function saveLogs(logs) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-    }
-
-    // ========== УНИВЕРСАЛЬНЫЙ JSONP ==========
-    function jsonpRequest(url, callbackName) {
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            const callback = callbackName || 'jsonp_' + Date.now();
-            window[callback] = function(data) {
-                delete window[callback];
-                document.body.removeChild(script);
-                resolve(data);
-            };
-            script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callback;
-            script.onerror = function() {
-                delete window[callback];
-                document.body.removeChild(script);
-                resolve(null);
-            };
-            document.body.appendChild(script);
-            setTimeout(() => {
-                if (window[callback]) {
-                    delete window[callback];
-                    document.body.removeChild(script);
-                    resolve(null);
-                }
-            }, 5000);
-        });
-    }
-
-    // ========== ПОЛУЧЕНИЕ ГЕОДАННЫХ ПО IP ==========
-    async function getGeoByIP() {
-        let data = await jsonpRequest('https://ip-api.com/json/?fields=status,country,regionName,city,lat,lon,isp,query');
-        if (data && data.status === 'success') {
-            return {
-                ip: data.query,
-                country: data.country,
-                region: data.regionName,
-                city: data.city,
-                isp: data.isp,
-                lat: data.lat,
-                lon: data.lon,
-                source: 'ip-api'
-            };
-        }
-        data = await jsonpRequest('https://ipapi.co/json/');
-        if (data && data.ip) {
-            return {
-                ip: data.ip,
-                country: data.country_name || '—',
-                region: data.region || '—',
-                city: data.city || '—',
-                isp: data.org || '—',
-                lat: data.latitude || null,
-                lon: data.longitude || null,
-                source: 'ipapi.co'
-            };
-        }
-        data = await jsonpRequest('https://ipinfo.io/json');
-        if (data && data.ip) {
-            let locParts = (data.loc || '').split(',');
-            let lat = locParts[0] ? parseFloat(locParts[0]) : null;
-            let lon = locParts[1] ? parseFloat(locParts[1]) : null;
-            return {
-                ip: data.ip,
-                country: data.country || '—',
-                region: data.region || '—',
-                city: data.city || '—',
-                isp: data.org || '—',
-                lat: lat,
-                lon: lon,
-                source: 'ipinfo'
-            };
-        }
-        return null;
-    }
-
-    // ========== ПОЛУЧЕНИЕ УЛИЦЫ ПО КООРДИНАТАМ (геокодеры) ==========
-    async function fetchStreet(lat, lon) {
-        if (!lat || !lon) return null;
-        // 1) geocode.xyz (JSONP)
-        try {
-            const data = await jsonpRequest(`https://geocode.xyz/${lat},${lon}?geoit=json`);
-            if (data && (data.street || data.display_name)) {
-                if (data.street) {
-                    const house = data.housenumber || '';
-                    return [data.street, house].filter(Boolean).join(', ') || null;
-                } else if (data.display_name) {
-                    const parts = data.display_name.split(',');
-                    return parts[0] || null;
-                }
-            }
-        } catch (e) {}
-
-        // 2) Nominatim через corsproxy.io (fetch)
-        try {
-            const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon+'&zoom=18&addressdetails=1')}`;
-            const response = await fetch(proxyUrl);
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.address) {
-                    const addr = data.address;
-                    const street = addr.road || addr.pedestrian || addr.footway || '';
-                    const house = addr.house_number || '';
-                    const suburb = addr.suburb || addr.neighbourhood || '';
-                    const parts = [street, house, suburb].filter(Boolean);
-                    return parts.join(', ') || null;
-                }
-            }
-        } catch (e) {}
-        return null;
-    }
-
-    // ========== ПОЛУЧЕНИЕ GPS С ПОВТОРНЫМИ ПОПЫТКАМИ ==========
-    function getGPSPosition() {
-        return new Promise((resolve) => {
-            if (!navigator.geolocation) {
-                resolve(null);
-                return;
-            }
-            let attempts = 0;
-            const maxAttempts = 5;
-            let bestPos = null;
-            let bestAccuracy = Infinity;
-
-            function tryGPS() {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        const acc = pos.coords.accuracy;
-                        if (acc < bestAccuracy) {
-                            bestPos = pos;
-                            bestAccuracy = acc;
-                        }
-                        if (acc <= 100) {
-                            resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: acc });
-                            return;
-                        }
-                        attempts++;
-                        if (attempts < maxAttempts) {
-                            setTimeout(tryGPS, 3000);
-                        } else {
-                            if (bestPos) {
-                                resolve({ lat: bestPos.coords.latitude, lon: bestPos.coords.longitude, accuracy: bestAccuracy });
-                            } else {
-                                resolve(null);
-                            }
-                        }
-                    },
-                    (err) => {
-                        attempts++;
-                        if (attempts < maxAttempts) {
-                            setTimeout(tryGPS, 3000);
-                        } else {
-                            resolve(null);
-                        }
-                    },
-                    { timeout: 15000, enableHighAccuracy: true, maximumAge: 0 }
-                );
-            }
-            tryGPS();
-        });
-    }
-
-    // ========== ГЛАВНАЯ ФУНКЦИЯ СБОРА ДАННЫХ ==========
-    async function getFullData() {
-        let result = {
-            ip: 'неизвестно',
-            country: '—',
-            region: '—',
-            city: '—',
-            street: '—',
-            isp: '—'
-        };
-
-        let ipGeo = await getGeoByIP();
-        if (ipGeo) {
-            result.ip = ipGeo.ip || 'неизвестно';
-            result.country = ipGeo.country || '—';
-            result.region = ipGeo.region || '—';
-            result.city = ipGeo.city || '—';
-            result.isp = ipGeo.isp || '—';
-        } else {
-            const ipData = await jsonpRequest('https://api.ipify.org?format=jsonp');
-            if (ipData && ipData.ip) {
-                result.ip = ipData.ip;
-                result.country = '— (только IP)';
-            }
-            return result;
-        }
-
-        // GPS
-        let gps = await getGPSPosition();
-        let street = null;
-        if (gps && gps.accuracy <= 100) {
-            street = await fetchStreet(gps.lat, gps.lon);
-            if (street) {
-                result.street = street + ` (GPS, ${Math.round(gps.accuracy)} м)`;
-            } else {
-                result.street = `— (GPS: ${Math.round(gps.accuracy)} м, адрес не найден)`;
-            }
-        } else if (gps && gps.accuracy > 100) {
-            if (ipGeo.lat && ipGeo.lon) {
-                street = await fetchStreet(ipGeo.lat, ipGeo.lon);
-                if (street) {
-                    result.street = street + ' (по IP, GPS неточен)';
-                } else {
-                    result.street = '— (по IP не найдена)';
-                }
-            } else {
-                result.street = `— (GPS: ${Math.round(gps.accuracy)} м)`;
-            }
-        } else {
-            if (ipGeo.lat && ipGeo.lon) {
-                street = await fetchStreet(ipGeo.lat, ipGeo.lon);
-                if (street) {
-                    result.street = street + ' (по IP)';
-                } else {
-                    result.street = '— (по IP не найдена)';
-                }
-            } else {
-                result.street = '— (нет координат)';
-            }
-        }
-        return result;
-    }
-
-    // ========== ДОБАВЛЕНИЕ ЗАПИСИ (с указанием результата) ==========
-    async function addLogEntry(status) {
-        const statusDiv = document.getElementById('statusMessage');
-        statusDiv.innerHTML = '⏳ Определяем местоположение... <span class="loader"></span>';
-        const data = await getFullData();
-        statusDiv.innerHTML = '';
-
-        const now = new Date();
-        const datetime = now.toLocaleString('ru-RU', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-
-        const logs = getLogs();
-        logs.push({
-            datetime: datetime,
-            ip: data.ip,
-            country: data.country,
-            region: data.region,
-            city: data.city,
-            street: data.street,
-            isp: data.isp,
-            result: status // 'успешно' или 'неудачно'
-        });
-        saveLogs(logs);
-        return logs;
-    }
-
-    // ========== ОТОБРАЖЕНИЕ ТАБЛИЦЫ ==========
-    function renderTable() {
-        const logs = getLogs();
-        const tbody = document.getElementById('logBody');
-        const empty = document.getElementById('emptyLog');
-        tbody.innerHTML = '';
-        if (logs.length === 0) {
-            empty.style.display = 'block';
-            return;
-        }
-        empty.style.display = 'none';
-        [...logs].reverse().forEach(entry => {
-            const street = entry.street || '—';
-            const result = entry.result || '—';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${entry.datetime}</td>
-                <td>${entry.ip}</td>
-                <td>${entry.country}</td>
-                <td>${entry.region}</td>
-                <td>${entry.city}</td>
-                <td>${street}</td>
-                <td>${entry.isp}</td>
-                <td>${result}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // ========== АВТОРИЗАЦИЯ ==========
-    function isLoggedIn() { return sessionStorage.getItem('loggedIn') === 'true'; }
-
-    async function login(username, password) {
-        if (username === VALID_USER && password === VALID_PASS) {
-            sessionStorage.setItem('loggedIn', 'true');
-            return true;
-        }
-        return false;
-    }
-
-    function logout() {
-        sessionStorage.removeItem('loggedIn');
-        showModal();
-    }
-
-    function showModal() {
-        document.getElementById('loginModal').classList.remove('hidden');
-        document.getElementById('mainContent').style.display = 'none';
-        document.getElementById('loginError').textContent = '';
-        document.getElementById('loginForm').reset();
-        document.getElementById('statusMessage').innerHTML = '';
-    }
-
-    function showMain() {
-        document.getElementById('loginModal').classList.add('hidden');
-        document.getElementById('mainContent').style.display = 'block';
-        renderTable();
-    }
-
-    // ========== ИНИЦИАЛИЗАЦИЯ ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            const err = document.getElementById('loginError');
-
-            // Сначала записываем визит (с пометкой "попытка")
-            await addLogEntry('попытка');
-
-            // Теперь проверяем данные
-            const ok = await login(user, pass);
-            if (ok) {
-                // Успешный вход – обновляем последнюю запись (меняем результат на "успешно")
-                let logs = getLogs();
-                if (logs.length > 0) {
-                    // Изменяем результат последней записи (которая только что добавилась)
-                    logs[logs.length - 1].result = 'успешно';
-                    saveLogs(logs);
-                }
-                err.textContent = '';
-                showMain();
-            } else {
-                err.textContent = 'Неверные данные!';
-                // Неудачная попытка – результат уже "попытка" – оставляем как есть
-            }
-        });
-
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-        if (isLoggedIn()) showMain(); else showModal();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
 </script>
+
 </body>
 </html>
