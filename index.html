@@ -3,799 +3,1205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Пристань РП - Зимний сезон в Roblox</title>
+<title>Пристань РП — Зимний город в Roblox</title>
+
 <style>
-  * { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Segoe UI', Arial, sans-serif;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+  user-select: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #07090d;
+  color: #dce1e8;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+img {
+  pointer-events: none;
+}
+
+#cursorCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.snowflake {
+  position: fixed;
+  top: -20px;
+  color: white;
+  pointer-events: none;
+  z-index: 50;
+  text-shadow: 0 0 6px rgba(255,255,255,.45);
+  animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+  0% {
+    transform: translate3d(0,-30px,0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(30px,50vh,0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-30px,110vh,0) rotate(360deg);
+  }
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  background: rgba(7,9,13,.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  z-index: 1000;
+}
+
+.logo {
+  color: #fff;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.logo span {
+  color: #6384ff;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+nav {
+  display: flex;
+  gap: 30px;
+}
+
+nav a {
+  color: #858e9d;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: .25s;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+.discord-header-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid rgba(99,132,255,.4);
+  color: #6c8aff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: .3s;
+}
+
+.discord-header-btn:hover {
+  color: #fff;
+  background: #6384ff;
+  border-color: #6384ff;
+}
+
+.hero {
+  min-height: 100vh;
+  padding: 150px 24px 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(74,105,255,.19), transparent 45%),
+    radial-gradient(circle at 20% 80%, rgba(44,73,150,.09), transparent 35%),
+    linear-gradient(180deg,#07090d,#0c1018);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: -450px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(82,111,255,.08);
+  filter: blur(100px);
+}
+
+.badge {
+  position: relative;
+  margin-bottom: 30px;
+  padding: 7px 18px;
+  border: 1px solid rgba(99,132,255,.35);
+  color: #6d8aff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  position: relative;
+  font-size: clamp(55px,9vw,110px);
+  line-height: .95;
+  font-weight: 950;
+  letter-spacing: 2px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.hero h1 span {
+  background: linear-gradient(180deg,#7e9aff,#3450bd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero .subtitle {
+  position: relative;
+  max-width: 760px;
+  margin: 30px auto 42px;
+  color: #8d96a5;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.hero-buttons {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-btn,
+.discord-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 38px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 800;
+  transition: .3s;
+}
+
+.play-btn {
+  color: #fff;
+  background: #5f7fff;
+  border: 1px solid #5f7fff;
+  box-shadow: 0 15px 45px rgba(65,90,220,.22);
+}
+
+.play-btn:hover {
+  color: #6e8bff;
+  background: transparent;
+  box-shadow: 0 0 35px rgba(91,124,255,.25);
+}
+
+.discord-btn {
+  color: #bdc4cf;
+  border: 1px solid rgba(255,255,255,.13);
+}
+
+.discord-btn:hover {
+  color: #fff;
+  border-color: #5f7fff;
+  background: rgba(95,127,255,.08);
+}
+
+.play-note {
+  position: relative;
+  margin-top: 18px;
+  color: #4d5665;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+section {
+  position: relative;
+  padding: 115px 60px;
+}
+
+.section-title {
+  text-align: center;
+  color: #fff;
+  font-size: clamp(25px,3vw,38px);
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 55px;
+  height: 2px;
+  margin: 19px auto 0;
+  background: #617fff;
+}
+
+.section-sub {
+  max-width: 680px;
+  margin: 25px auto 70px;
+  color: #858e9c;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.about {
+  background: #090b10;
+}
+
+.about-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+.about-card {
+  padding: 42px 32px;
+  background: #090b10;
+  transition: .35s;
+}
+
+.about-card:hover {
+  background: #0e121a;
+}
+
+.about-card .icon {
+  width: 45px;
+  height: 45px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(99,132,255,.35);
+  color: #6d8aff;
+  font-size: 18px;
+}
+
+.about-card h3 {
+  margin-bottom: 13px;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.about-card p {
+  color: #7e8796;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.gallery {
+  max-width: 1250px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+}
+
+.gallery-row {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.gallery-row.reverse {
+  grid-template-columns: 1fr 1.25fr;
+}
+
+.gallery-row.reverse .gallery-photo {
+  order: 2;
+}
+
+.gallery-row.reverse .gallery-text {
+  order: 1;
+}
+
+.gallery-photo {
+  position: relative;
+  transform: perspective(1300px) rotateY(5deg) rotateX(2deg);
+  transition: .7s cubic-bezier(.22,1,.36,1);
+}
+
+.gallery-row.reverse .gallery-photo {
+  transform: perspective(1300px) rotateY(-5deg) rotateX(2deg);
+}
+
+.gallery-photo:hover,
+.gallery-row.reverse .gallery-photo:hover {
+  transform: perspective(1300px) rotateY(0) rotateX(0) scale(1.025);
+}
+
+.gallery-photo-inner {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+  background: #0d1118;
+  box-shadow: 0 35px 70px rgba(0,0,0,.5);
+}
+
+.gallery-photo-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .7s cubic-bezier(.22,1,.36,1);
+}
+
+.gallery-photo:hover img {
+  transform: scale(1.045);
+}
+
+.gallery-photo-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg,rgba(74,102,255,.15),transparent 50%),
+    linear-gradient(0deg,rgba(0,0,0,.25),transparent 50%);
+  pointer-events: none;
+}
+
+.photo-label {
+  position: absolute;
+  top: -13px;
+  left: 22px;
+  z-index: 5;
+  padding: 5px 13px;
+  color: #6f8bff;
+  background: #080a0e;
+  border: 1px solid rgba(99,132,255,.4);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.gallery-text .num {
+  display: block;
+  margin-bottom: 17px;
+  color: #6382ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.gallery-text h3 {
+  color: #fff;
+  font-size: clamp(23px,2.5vw,34px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.gallery-text .divider {
+  width: 42px;
+  height: 2px;
+  margin: 23px 0;
+  background: #6382ff;
+}
+
+.gallery-text p {
+  max-width: 520px;
+  color: #858e9c;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.features {
+  max-width: 1250px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+.feature-card {
+  position: relative;
+  padding: 40px 30px;
+  background: #080a0e;
+  transition: .3s;
+}
+
+.feature-card:hover {
+  background: #0d1118;
+}
+
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #6382ff;
+  transition: .4s;
+}
+
+.feature-card:hover::before {
+  width: 100%;
+}
+
+.feature-card .num {
+  color: #6382ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.feature-card h3 {
+  margin: 20px 0 13px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+.feature-card p {
+  color: #7e8795;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.crime {
+  background:
+    radial-gradient(circle at 50% 100%,rgba(58,75,145,.11),transparent 45%),
+    #090b10;
+}
+
+.crime-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+
+.crime-card {
+  position: relative;
+  padding: 35px;
+  min-height: 210px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(10,13,19,.8);
+  overflow: hidden;
+  transition: .35s;
+}
+
+.crime-card:hover {
+  border-color: rgba(99,132,255,.3);
+  transform: translateY(-4px);
+}
+
+.crime-card span {
+  color: #637fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.crime-card h3 {
+  margin: 17px 0 12px;
+  color: #fff;
+  font-size: 19px;
+  text-transform: uppercase;
+}
+
+.crime-card p {
+  color: #7e8795;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.crime-card::after {
+  content: "";
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  right: -80px;
+  bottom: -100px;
+  border-radius: 50%;
+  background: rgba(91,124,255,.1);
+  filter: blur(35px);
+}
+
+.cta {
+  padding: 140px 24px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 100%,rgba(70,98,210,.13),transparent 45%),
+    linear-gradient(180deg,#080a0e,#0c1017);
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.cta h2 {
+  color: #fff;
+  font-size: clamp(30px,4.5vw,54px);
+  font-weight: 950;
+  line-height: 1.1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.cta p {
+  max-width: 620px;
+  margin: 25px auto 40px;
+  color: #858e9c;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+footer {
+  padding: 45px 24px;
+  color: #464f5e;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+footer span {
+  color: #6382ff;
+}
+
+.footer-discord {
+  display: inline-block;
+  margin-top: 13px;
+  color: #747e8d;
+  text-decoration: none;
+  transition: .25s;
+}
+
+.footer-discord:hover {
+  color: #6382ff;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media(max-width:1000px) {
+  .features {
+    grid-template-columns: repeat(2,1fr);
   }
 
-  body {
-    background: #08090d;
-    color: #d7dce3;
-    overflow-x: hidden;
-    line-height: 1.5;
-    position: relative;
-    -webkit-touch-callout: none;
+  .about-grid {
+    grid-template-columns: 1fr;
   }
 
-  img {
-    pointer-events: none;
+  .gallery-row,
+  .gallery-row.reverse {
+    grid-template-columns: 1fr;
+    gap: 45px;
   }
 
-  .snowflake {
-    position: fixed;
-    top: -15px;
-    color: #ffffff;
-    pointer-events: none;
-    z-index: 99;
-    user-select: none;
-    animation: fall linear infinite;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+  .gallery-row.reverse .gallery-photo {
+    order: 1;
   }
 
-  @keyframes fall {
-    0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
-    50% { transform: translateY(50vh) translateX(30px) rotate(180deg); }
-    100% { transform: translateY(105vh) translateX(-30px) rotate(360deg); }
+  .gallery-row.reverse .gallery-text {
+    order: 2;
   }
+}
 
-  #cursorCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 1000;
-  }
-
+@media(max-width:768px) {
   header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background: rgba(8, 9, 13, 0.9);
-    backdrop-filter: blur(14px);
-    z-index: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0 20px;
   }
-  .logo {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-transform: uppercase;
+
+  nav {
+    display: none;
   }
-  .logo span { color: #5b7cff; }
 
   .header-right {
-    display: flex;
-    align-items: center;
-    gap: 32px;
-  }
-  nav a {
-    color: #8b93a1;
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: 0.25s;
-  }
-  nav a:hover { color: #ffffff; }
-
-  .discord-header-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 18px;
-    border: 1px solid rgba(91, 124, 255, 0.4);
-    border-radius: 2px;
-    color: #5b7cff;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: 0.3s;
-  }
-  .discord-header-btn:hover {
-    background: #5b7cff;
-    color: #ffffff;
-  }
-
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 140px 24px 80px;
-    position: relative;
-    background:
-      radial-gradient(ellipse at 50% 0%, rgba(91, 124, 255, 0.15), transparent 55%),
-      linear-gradient(180deg, #08090d 0%, #0d1017 100%);
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(91, 124, 255, 0.4), transparent);
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 7px 18px;
-    border: 1px solid rgba(91, 124, 255, 0.4);
-    border-radius: 2px;
-    color: #5b7cff;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    font-weight: 600;
-  }
-
-  .hero h1 {
-    font-size: clamp(44px, 8vw, 96px);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #ffffff;
-    margin-bottom: 28px;
-  }
-  .hero h1 span {
-    background: linear-gradient(180deg, #5b7cff 0%, #1e3a8a 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .hero p.subtitle {
-    font-size: clamp(14px, 1.4vw, 17px);
-    color: #8b93a1;
-    max-width: 720px;
-    line-height: 1.75;
-    margin-bottom: 44px;
-  }
-
-  .hero-buttons {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .play-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 52px;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-decoration: none;
-    background: #5b7cff;
-    border: 1px solid #5b7cff;
-    border-radius: 2px;
-    transition: 0.3s ease;
-  }
-  .play-btn:hover {
-    background: transparent;
-    color: #5b7cff;
-    box-shadow: 0 0 30px rgba(91, 124, 255, 0.35);
-  }
-  .play-btn::before {
-    content: '';
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-left: 9px solid currentColor;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-  }
-
-  .discord-btn {
-    display: inline-flex;
-    align-items: center;
     gap: 12px;
-    padding: 18px 40px;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #b8bfca;
-    text-decoration: none;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 2px;
-    transition: 0.3s ease;
-  }
-  .discord-btn:hover {
-    border-color: #5b7cff;
-    color: #ffffff;
-    background: rgba(91, 124, 255, 0.06);
-  }
-  .discord-btn svg {
-    width: 18px;
-    height: 18px;
-    fill: currentColor;
   }
 
-  .play-note {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #4d5563;
-    letter-spacing: 1px;
-  }
-
-  section { padding: 110px 60px; position: relative; }
-
-  .section-title {
-    text-align: center;
-    font-size: clamp(24px, 3.2vw, 38px);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    color: #ffffff;
-    margin-bottom: 16px;
-  }
-  .section-title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 2px;
-    background: #5b7cff;
-    margin: 20px auto 0;
-  }
-  .section-sub {
-    text-align: center;
-    color: #8b93a1;
-    max-width: 680px;
-    margin: 30px auto 70px;
-    line-height: 1.7;
-    font-size: 15px;
-  }
-
-  .gallery {
-    max-width: 1240px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 90px;
-  }
-
-  .gallery-row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 70px;
-    align-items: center;
-  }
-  .gallery-row.reverse {
-    grid-template-columns: 1fr 1.2fr;
-  }
-  .gallery-row.reverse .gallery-photo { order: 2; }
-  .gallery-row.reverse .gallery-text { order: 1; }
-
-  .gallery-photo {
-    position: relative;
-  }
-  .gallery-photo-inner {
-    aspect-ratio: 16 / 10;
-    background: #0d1017;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #4d5563;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-  }
-  .gallery-photo-inner::before {
-    content: '';
-    position: absolute;
-    inset: 14px;
-    border: 1px dashed rgba(91, 124, 255, 0.25);
-    border-radius: 2px;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .gallery-photo-inner::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(91, 124, 255, 0.06), transparent 60%);
-    pointer-events: none;
-  }
-
-  .gallery-row .gallery-photo {
-    transform: perspective(1200px) rotateY(6deg) rotateX(3deg) rotate(-1.5deg);
-    transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .gallery-row .gallery-photo:hover {
-    transform: perspective(1200px) rotateY(0deg) rotateX(0deg) rotate(0deg) scale(1.02);
-  }
-  .gallery-row.reverse .gallery-photo {
-    transform: perspective(1200px) rotateY(-6deg) rotateX(3deg) rotate(1.5deg);
-  }
-  .gallery-row.reverse .gallery-photo:hover {
-    transform: perspective(1200px) rotateY(0deg) rotateX(0deg) rotate(0deg) scale(1.02);
-  }
-
-  .photo-label {
-    position: absolute;
-    top: -14px;
-    left: 20px;
-    background: #08090d;
-    padding: 5px 14px;
-    border: 1px solid rgba(91, 124, 255, 0.4);
-    color: #5b7cff;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    z-index: 3;
-    border-radius: 2px;
-  }
-
-  .gallery-text {
-    padding: 0 10px;
-  }
-  .gallery-text .num {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #5b7cff;
-    display: block;
-    margin-bottom: 20px;
-  }
-  .gallery-text h3 {
-    font-size: clamp(22px, 2.4vw, 32px);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #ffffff;
-    line-height: 1.2;
-    margin-bottom: 20px;
-  }
-  .gallery-text p {
-    color: #8b93a1;
-    font-size: 15px;
-    line-height: 1.8;
-  }
-  .gallery-text .divider {
-    width: 40px;
-    height: 2px;
-    background: #5b7cff;
-    margin: 24px 0;
+  section {
+    padding: 80px 20px;
   }
 
   .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1px;
-    max-width: 1240px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-  .feature-card {
-    background: #08090d;
-    padding: 44px 32px;
-    transition: 0.3s ease;
-    position: relative;
-  }
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 0;
-    height: 2px;
-    background: #5b7cff;
-    transition: 0.4s ease;
-  }
-  .feature-card:hover::before { width: 100%; }
-  .feature-card:hover { background: #0d1017; }
-
-  .feature-card .num {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: #5b7cff;
-    margin-bottom: 22px;
-    display: block;
-  }
-  .feature-card h3 {
-    font-size: 17px;
-    margin-bottom: 14px;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-  }
-  .feature-card p {
-    color: #8b93a1;
-    line-height: 1.7;
-    font-size: 14px;
+    grid-template-columns: 1fr;
   }
 
-  .games-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .game-tag {
-    padding: 12px 26px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    color: #b8bfca;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: 0.3s ease;
-  }
-  .game-tag:hover {
-    border-color: #5b7cff;
-    color: #ffffff;
-    background: rgba(91, 124, 255, 0.06);
-  }
-  .game-mix-info {
-    color: #5b7cff;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-align: center;
-    margin-top: 10px;
+  .crime-grid {
+    grid-template-columns: 1fr;
   }
 
-  .cta {
-    text-align: center;
-    padding: 130px 24px;
-    background: linear-gradient(180deg, #08090d 0%, #0d1017 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-  .cta h2 {
-    font-size: clamp(28px, 4.5vw, 52px);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 24px;
-    color: #ffffff;
-  }
-  .cta p {
-    color: #8b93a1;
-    max-width: 620px;
-    margin: 0 auto 44px;
-    line-height: 1.75;
-    font-size: 15px;
-  }
-  .cta-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+  .hero {
+    padding-top: 125px;
   }
 
-  footer {
-    text-align: center;
-    padding: 44px 24px;
-    color: #4d5563;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  footer span { color: #5b7cff; }
-
-  footer .footer-discord {
-    display: inline-block;
-    margin-top: 14px;
-    color: #8b93a1;
-    text-decoration: none;
-    letter-spacing: 2px;
-    transition: 0.3s;
-  }
-  footer .footer-discord:hover { color: #5b7cff; }
-
-  @media (max-width: 900px) {
-    .gallery-row,
-    .gallery-row.reverse {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-    .gallery-row.reverse .gallery-photo { order: 1; }
-    .gallery-row.reverse .gallery-text { order: 2; }
-    .gallery-row .gallery-photo,
-    .gallery-row.reverse .gallery-photo {
-      transform: perspective(1000px) rotateY(0deg) rotateX(3deg) rotate(-1deg);
-    }
-  }
-  @media (max-width: 768px) {
-    header { padding: 16px 20px; }
-    nav { display: none; }
-    .header-right { gap: 16px; }
-    .discord-header-btn { padding: 8px 14px; font-size: 11px; letter-spacing: 1.5px; }
-    section { padding: 70px 20px; }
-    .play-btn, .discord-btn { padding: 16px 30px; font-size: 13px; letter-spacing: 2px; }
-    .hero h1 { letter-spacing: 1px; }
-    .gallery { gap: 60px; }
+  .hero h1 {
+    font-size: 56px;
   }
 
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  .gallery {
+    gap: 65px;
   }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+
+  .play-btn,
+  .discord-btn {
+    padding: 0 28px;
   }
+}
 </style>
 </head>
-<body oncontextmenu="return false;">
+
+<body>
 
 <canvas id="cursorCanvas"></canvas>
 
 <header>
-  <div class="logo">Пристань<span>.</span>РП</div>
+  <div class="logo">ПРИСТАНЬ<span>.</span>РП</div>
+
   <div class="header-right">
     <nav>
       <a href="#about">О проекте</a>
       <a href="#gallery">Геймплей</a>
       <a href="#features">Возможности</a>
+      <a href="#crime">Криминал</a>
       <a href="#play">Играть</a>
     </nav>
+
     <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="discord-header-btn">
-      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.6 12.6 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16">
+        <path fill="currentColor" d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.6 12.6 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+      </svg>
       Discord
     </a>
   </div>
 </header>
 
 <section class="hero">
-  <div class="badge">❄️ Зимний сезон в Roblox</div>
+  <div class="badge">Зимний сезон · Roblox</div>
+
   <h1>Пристань <span>РП</span></h1>
+
   <p class="subtitle">
-    Погрузитесь в атмосферу зимней сказки! Заснеженные улицы, праздничный вайб и уютная новогодняя атмосфера уже ждут вас. 
-    Бобруйск РП, Зареченск РП, Кемерово РП — объединились в единую зимнюю вселенную. 
-    Работа, зимний дрифт на машинах, уютная недвижимость и настоящая городская жизнь.
+    Заснеженный город, машины, работа, полиция и настоящая уличная жизнь.
+    Начни свой путь с обычной работы или стань одним из самых влиятельных людей района.
+    Выбор всегда остаётся за тобой.
   </p>
+
   <div class="hero-buttons">
-    <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть сейчас</a>
+    <a href="https://www.roblox.com/" target="_blank" class="play-btn">
+      Играть сейчас
+    </a>
+
     <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="discord-btn">
-      <svg viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.6 12.6 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
       Discord
     </a>
   </div>
-  <p class="play-note">Кнопка "Играть" ведёт на страницу игры в Roblox</p>
+
+  <p class="play-note">
+    Игра работает на платформе Roblox
+  </p>
 </section>
 
-<section id="about" class="fade-in">
+<section id="about" class="about fade-in">
   <h2 class="section-title">О проекте</h2>
+
   <p class="section-sub">
-    "Пристань РП" в зимнем антураже — это совершенно новый опыт ролевых игр в Roblox. 
-    Встречайте холода на заснеженных дорогах вместе с тысячами игроков.
+    «Пристань РП» — зимний городской RolePlay в Roblox, где каждый игрок
+    сам выбирает, кем стать и как будет выглядеть его история.
   </p>
-  <div class="games-list">
-    <div class="game-tag">Бобруйск РП</div>
-    <div class="game-tag">Зареченск РП</div>
-    <div class="game-tag">Кемерово РП</div>
-    <div class="game-mix-info">игра микс из них всех</div>
+
+  <div class="about-grid">
+
+    <div class="about-card">
+      <div class="icon">01</div>
+      <h3>Свободная жизнь</h3>
+      <p>
+        Начни с простых занятий, заработай первые деньги, купи машину
+        и постепенно развивай своего персонажа.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="icon">02</div>
+      <h3>Городская жизнь</h3>
+      <p>
+        Работай, катайся по заснеженному городу, общайся с игроками
+        и участвуй в событиях города.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="icon">03</div>
+      <h3>Твой выбор</h3>
+      <p>
+        Можно жить спокойно и строить карьеру, а можно пойти по опасному
+        пути и стать авторитетом на районе.
+      </p>
+    </div>
+
   </div>
 </section>
 
 <section id="gallery" class="fade-in">
   <h2 class="section-title">Геймплей</h2>
-  <p class="section-sub">Зимняя сказка и уютные вечера на улицах "Пристань РП"</p>
+
+  <p class="section-sub">
+    Несколько моментов из атмосферы «Пристань РП»
+  </p>
 
   <div class="gallery">
+
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="photo-label">Превью</div>
-        <div class="gallery-photo-inner">Фотка превью</div>
+        <div class="photo-label">01 · Город</div>
+
+        <div class="gallery-photo-inner">
+          <img src="https://images.unsplash.com/photo-1483664852095-d6cc6870702d?auto=format&fit=crop&w=1400&q=85" alt="Зимний город">
+        </div>
       </div>
+
       <div class="gallery-text">
-        <span class="num">01 / Зимний город</span>
-        <h3>Заснеженные кварталы</h3>
+        <span class="num">01 / ЗИМНИЙ ГОРОД</span>
+        <h3>Город под снегом</h3>
         <div class="divider"></div>
+
         <p>
-          Город полностью преобразился: пушистый снег на крышах домов, гирлянды на улицах 
-          и морозный воздух создают непередаваемую атмосферу зимних праздников.
+          Заснеженные улицы, вечерний свет фонарей и постоянное движение
+          создают атмосферу живого зимнего города.
         </p>
       </div>
     </div>
 
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="photo-label">Фотка 1</div>
-        <div class="gallery-photo-inner">Фотка 1</div>
+        <div class="photo-label">02 · Автомобили</div>
+
+        <div class="gallery-photo-inner">
+          <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=85" alt="Автомобиль">
+        </div>
       </div>
+
       <div class="gallery-text">
-        <span class="num">02 / Движ</span>
-        <h3>Зимний дрифт и авто</h3>
+        <span class="num">02 / АВТОМОБИЛИ</span>
+        <h3>Машины и дороги</h3>
         <div class="divider"></div>
+
         <p>
-          Проверьте своё мастерство вождения в условиях гололёда! Управляемость машин 
-          на заснеженных трассах добавляет драйва каждой поездке с друзьями.
+          Собирай деньги на новые автомобили, катайся по городу,
+          участвуй в погонях и просто проводи время с друзьями.
         </p>
       </div>
     </div>
+
+    <div class="gallery-row">
+      <div class="gallery-photo">
+        <div class="photo-label">03 · Работа</div>
+
+        <div class="gallery-photo-inner">
+          <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=85" alt="Работа">
+        </div>
+      </div>
+
+      <div class="gallery-text">
+        <span class="num">03 / РАБОТА</span>
+        <h3>Начни с нуля</h3>
+        <div class="divider"></div>
+
+        <p>
+          Необязательно сразу становиться богатым. Устройся грузчиком,
+          заработай первые деньги и начни строить свою карьеру.
+        </p>
+      </div>
+    </div>
+
+    <div class="gallery-row reverse">
+      <div class="gallery-photo">
+        <div class="photo-label">04 · Полиция</div>
+
+        <div class="gallery-photo-inner">
+          <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=85" alt="Полиция">
+        </div>
+      </div>
+
+      <div class="gallery-text">
+        <span class="num">04 / ПОРЯДОК</span>
+        <h3>Полиция и структуры</h3>
+        <div class="divider"></div>
+
+        <p>
+          Можно пойти работать в городские структуры, получить звание,
+          выполнять задания и поддерживать порядок на улицах.
+        </p>
+      </div>
+    </div>
+
+    <div class="gallery-row">
+      <div class="gallery-photo">
+        <div class="photo-label">05 · Район</div>
+
+        <div class="gallery-photo-inner">
+          <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=85" alt="Город">
+        </div>
+      </div>
+
+      <div class="gallery-text">
+        <span class="num">05 / УЛИЧНАЯ ЖИЗНЬ</span>
+        <h3>Стань авторитетом</h3>
+        <div class="divider"></div>
+
+        <p>
+          Хочешь другого пути? Собирай свою компанию, участвуй
+          в криминальных событиях, грабь людей и банки и зарабатывай
+          влияние на районе.
+        </p>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <section id="features" class="fade-in">
-  <h2 class="section-title">Зимние возможности</h2>
-  <p class="section-sub">Что ждёт вас в холодный сезон</p>
+  <h2 class="section-title">Возможности</h2>
+
+  <p class="section-sub">
+    Выбирай свой путь и развивай персонажа так, как хочется именно тебе.
+  </p>
+
   <div class="features">
+
     <div class="feature-card">
       <span class="num">01</span>
-      <h3>Зимний тюнинг</h3>
-      <p>Подготовьте свой транспорт к холодам: зимняя резина, уникальные раскраски и праздничные аксессуары.</p>
+      <h3>Работа грузчиком</h3>
+      <p>
+        Начни обычным работником, выполняй задания и постепенно
+        накопи деньги на свою первую машину.
+      </p>
     </div>
+
     <div class="feature-card">
       <span class="num">02</span>
-      <h3>Праздничная работа</h3>
-      <p>Зарабатывайте валюту на сезонных и классических работах, стройте карьеру в структурах города.</p>
+      <h3>Автомобили</h3>
+      <p>
+        Покупай транспорт, катайся по городу и развивай свой гараж.
+      </p>
     </div>
+
     <div class="feature-card">
       <span class="num">03</span>
-      <h3>Уютное жилье</h3>
-      <p>Покупайте недвижимость, украшайте её гирляндами и проводите тёхие зимние вечера в компании друзей.</p>
+      <h3>Полиция</h3>
+      <p>
+        Получай звания, выполняй служебные задачи и следи за порядком.
+      </p>
     </div>
+
+    <div class="feature-card">
+      <span class="num">04</span>
+      <h3>Карьера</h3>
+      <p>
+        Развивай персонажа, зарабатывай деньги и открывай новые возможности.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section id="crime" class="crime fade-in">
+  <h2 class="section-title">Уличная жизнь</h2>
+
+  <p class="section-sub">
+    В городе есть не только законный путь.
+  </p>
+
+  <div class="crime-grid">
+
+    <div class="crime-card">
+      <span>01 · РИСК</span>
+      <h3>Грабежи</h3>
+      <p>
+        Рискни всем ради быстрых денег и участвуй в криминальных ситуациях
+        вместе с другими игроками.
+      </p>
+    </div>
+
+    <div class="crime-card">
+      <span>02 · ОПАСНОСТЬ</span>
+      <h3>Ограбление банка</h3>
+      <p>
+        Собери команду, продумай план и попробуй провести самое громкое
+        ограбление города.
+      </p>
+    </div>
+
+    <div class="crime-card">
+      <span>03 · ВЛИЯНИЕ</span>
+      <h3>Авторитет района</h3>
+      <p>
+        Собирай вокруг себя игроков, повышай влияние и становись
+        известным персонажем на улицах Пристани.
+      </p>
+    </div>
+
+    <div class="crime-card">
+      <span>04 · КОНФЛИКТ</span>
+      <h3>Полиция против улиц</h3>
+      <p>
+        Пока одни игроки нарушают закон, другие будут пытаться их остановить.
+        Каждый выбор влияет на городскую жизнь.
+      </p>
+    </div>
+
   </div>
 </section>
 
 <section id="play" class="cta fade-in">
-  <h2>Встречайте зиму вместе с нами</h2>
-  <p>Заходите на сервер "Пристань РП" в Roblox и ощутите всю атмосферу зимнего приключения.</p>
+  <h2>Твоя история начинается здесь</h2>
+
+  <p>
+    Выбери свой путь, заходи в город и начинай развивать своего персонажа
+    в зимней атмосфере «Пристань РП».
+  </p>
+
   <div class="cta-buttons">
-    <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть</a>
+    <a href="https://www.roblox.com/" target="_blank" class="play-btn">
+      Играть
+    </a>
+
     <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="discord-btn">
-      <svg viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.6 12.6 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
       Discord
     </a>
   </div>
 </section>
 
 <footer>
-  © 2025 <span>Пристань РП</span> - Ролевой проект в Roblox (Зимний сезон)
+  © 2026 <span>Пристань РП</span> — RolePlay проект в Roblox
   <br>
-  <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="footer-discord">discord.gg/9kRv3NVUAD</a>
+  <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="footer-discord">
+    discord.gg/9kRv3NVUAD
+  </a>
 </footer>
 
 <script>
-  // Защита от копирования и открытия исходного кода
-  document.addEventListener('copy', (e) => e.preventDefault());
-  document.addEventListener('cut', (e) => e.preventDefault());
-  document.addEventListener('selectstart', (e) => e.preventDefault());
-  document.addEventListener('dragstart', (e) => e.preventDefault());
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'F12' || 
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-        (e.ctrlKey && e.key === 'U')) {
-      e.preventDefault();
-      return false;
-    }
-  });
+const snowflakeChars = ["❄","❅","❆","•"];
 
-  // Падающие снежинки
-  const snowflakesCount = 55;
-  const snowflakeChars = ['❄', '❅', '❆', '•'];
-  
-  for (let i = 0; i < snowflakesCount; i++) {
-    const snowflake = document.createElement('div');
-    snowflake.classList.add('snowflake');
-    snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
-    
-    const size = Math.random() * 10 + 10 + 'px';
-    snowflake.style.fontSize = size;
-    snowflake.style.left = Math.random() * 100 + 'vw';
-    snowflake.style.animationDuration = Math.random() * 6 + 4 + 's';
-    snowflake.style.animationDelay = Math.random() * 5 + 's';
-    snowflake.style.opacity = Math.random() * 0.6 + 0.3;
-    
-    document.body.appendChild(snowflake);
+for (let i = 0; i < 55; i++) {
+  const snowflake = document.createElement("div");
+
+  snowflake.className = "snowflake";
+  snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+  snowflake.style.left = Math.random() * 100 + "vw";
+  snowflake.style.fontSize = Math.random() * 9 + 8 + "px";
+  snowflake.style.opacity = Math.random() * .45 + .2;
+  snowflake.style.animationDuration = Math.random() * 7 + 5 + "s";
+  snowflake.style.animationDelay = Math.random() * 7 + "s";
+
+  document.body.appendChild(snowflake);
+}
+
+const canvas = document.getElementById("cursorCanvas");
+const ctx = canvas.getContext("2d");
+
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+canvas.width = width;
+canvas.height = height;
+
+let targetX = width / 2;
+let targetY = height / 2;
+
+let currentX = targetX;
+let currentY = targetY;
+
+let previousX = currentX;
+let previousY = currentY;
+
+let cursorVisible = false;
+
+const trail = [];
+
+const trailLength = 16;
+
+window.addEventListener("resize", () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+
+  canvas.width = width;
+  canvas.height = height;
+});
+
+window.addEventListener("mousemove", e => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+  cursorVisible = true;
+});
+
+function animateCursor() {
+  currentX += (targetX - currentX) * 0.24;
+  currentY += (targetY - currentY) * 0.24;
+
+  const distance = Math.hypot(
+    currentX - previousX,
+    currentY - previousY
+  );
+
+  if (distance > 0.4) {
+    trail.push({
+      x: currentX,
+      y: currentY,
+      life: 1
+    });
+
+    previousX = currentX;
+    previousY = currentY;
   }
 
-  // Плавный след курсора (гладкая белая полоса)
-  const canvas = document.getElementById('cursorCanvas');
-  const ctx = canvas.getContext('2d');
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  let trail = [];
-  const maxTrailLength = 25; // Длина шлейфа
-
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  function animateTrail() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Добавляем текущую позицию мыши с эффектом интерполяции (плавное догоняние)
-    const lastPoint = trail[trail.length - 1];
-    if (!lastPoint || Math.hypot(mouse.x - lastPoint.x, mouse.y - lastPoint.y) > 1) {
-      trail.push({ x: mouse.x, y: mouse.y });
-      if (trail.length > maxTrailLength) {
-        trail.shift();
-      }
-    }
-
-    if (trail.length > 2) {
-      ctx.beginPath();
-      ctx.moveTo(trail[0].x, trail[0].y);
-
-      // Сглаживание линий шлейфа с помощью QuadraticCurveTo
-      for (let i = 1; i < trail.length - 1; i++) {
-        const xc = (trail[i].x + trail[i + 1].x) / 2;
-        const yc = (trail[i].y + trail[i + 1].y) / 2;
-        ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
-      }
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-      ctx.shadowColor = '#5b7cff';
-      ctx.shadowBlur = 12;
-      ctx.lineWidth = 4;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-    }
-
-    requestAnimationFrame(animateTrail);
+  while (trail.length > trailLength) {
+    trail.shift();
   }
 
-  animateTrail();
+  ctx.clearRect(0, 0, width, height);
 
-  // Анимация появления блоков при скролле
-  const observer = new IntersectionObserver((entries) => {
+  if (cursorVisible && trail.length > 1) {
+    ctx.beginPath();
+
+    ctx.moveTo(trail[0].x, trail[0].y);
+
+    for (let i = 1; i < trail.length - 1; i++) {
+      const current = trail[i];
+      const next = trail[i + 1];
+
+      const midX = (current.x + next.x) / 2;
+      const midY = (current.y + next.y) / 2;
+
+      ctx.quadraticCurveTo(
+        current.x,
+        current.y,
+        midX,
+        midY
+      );
+    }
+
+    const opacity = Math.min(
+      .18,
+      trail.length / trailLength * .18
+    );
+
+    ctx.strokeStyle = `rgba(125,145,255,${opacity})`;
+    ctx.lineWidth = 1.3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.stroke();
+  }
+
+  for (let i = trail.length - 1; i >= 0; i--) {
+    trail[i].life -= .075;
+
+    if (trail[i].life <= 0) {
+      trail.splice(i,1);
+    }
+  }
+
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
+
+const observer = new IntersectionObserver(
+  entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
     });
-  }, { threshold: 0.1 });
+  },
+  {
+    threshold: .1
+  }
+);
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+document.querySelectorAll(".fade-in").forEach(element => {
+  observer.observe(element);
+});
 
-  document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    });
+document.querySelectorAll("nav a").forEach(link => {
+  link.addEventListener("click", event => {
+    event.preventDefault();
+
+    const target = document.querySelector(
+      link.getAttribute("href")
+    );
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth"
+      });
+    }
   });
+});
 </script>
 
 </body>
