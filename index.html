@@ -704,6 +704,7 @@
     }
   });
 
+  // Падающие снежинки
   const snowflakesCount = 55;
   const snowflakeChars = ['❄', '❅', '❆', '•'];
   
@@ -722,6 +723,7 @@
     document.body.appendChild(snowflake);
   }
 
+  // Плавный след курсора (гладкая белая полоса)
   const canvas = document.getElementById('cursorCanvas');
   const ctx = canvas.getContext('2d');
 
@@ -732,52 +734,45 @@
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
-  let points = [];
-  let isMouseDown = false;
-
-  window.addEventListener('mousedown', () => { isMouseDown = true; });
-  window.addEventListener('mouseup', () => { isMouseDown = false; });
+  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  let trail = [];
+  const maxTrailLength = 25; // Длина шлейфа
 
   window.addEventListener('mousemove', (e) => {
-    const now = Date.now();
-    points.push({
-      x: e.clientX,
-      y: e.clientY,
-      time: now,
-      pressure: isMouseDown ? 2.5 : 1.0
-    });
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
   });
 
   function animateTrail() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const now = Date.now();
-    points = points.filter(p => now - p.time < 600);
-
-    if (points.length > 1) {
-      for (let i = 1; i < points.length; i++) {
-        const p1 = points[i - 1];
-        const p2 = points[i];
-
-        const age = now - p2.time;
-        const life = 1 - age / 600;
-
-        const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-        const speed = Math.min(distance, 30);
-        
-        const baseWidth = (35 / (speed + 2) + 1.2) * p2.pressure;
-
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${life * 0.85})`;
-        ctx.shadowColor = '#5b7cff';
-        ctx.shadowBlur = 8 * life;
-        ctx.lineWidth = Math.max(baseWidth * life, 0.5);
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
+    // Добавляем текущую позицию мыши с эффектом интерполяции (плавное догоняние)
+    const lastPoint = trail[trail.length - 1];
+    if (!lastPoint || Math.hypot(mouse.x - lastPoint.x, mouse.y - lastPoint.y) > 1) {
+      trail.push({ x: mouse.x, y: mouse.y });
+      if (trail.length > maxTrailLength) {
+        trail.shift();
       }
+    }
+
+    if (trail.length > 2) {
+      ctx.beginPath();
+      ctx.moveTo(trail[0].x, trail[0].y);
+
+      // Сглаживание линий шлейфа с помощью QuadraticCurveTo
+      for (let i = 1; i < trail.length - 1; i++) {
+        const xc = (trail[i].x + trail[i + 1].x) / 2;
+        const yc = (trail[i].y + trail[i + 1].y) / 2;
+        ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
+      }
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.shadowColor = '#5b7cff';
+      ctx.shadowBlur = 12;
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
     }
 
     requestAnimationFrame(animateTrail);
@@ -785,6 +780,7 @@
 
   animateTrail();
 
+  // Анимация появления блоков при скролле
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
