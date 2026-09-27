@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Пристань РП - Зимний сезон в Roblox</title>
+<title>Пристань РП - Ролевой проект в Roblox</title>
 <style>
   * { 
     margin: 0; 
@@ -27,23 +27,6 @@
 
   img {
     pointer-events: none;
-  }
-
-  .snowflake {
-    position: fixed;
-    top: -15px;
-    color: #ffffff;
-    pointer-events: none;
-    z-index: 99;
-    user-select: none;
-    animation: fall linear infinite;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
-  }
-
-  @keyframes fall {
-    0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
-    50% { transform: translateY(50vh) translateX(30px) rotate(180deg); }
-    100% { transform: translateY(105vh) translateX(-30px) rotate(360deg); }
   }
 
   #cursorCanvas {
@@ -327,11 +310,11 @@
     pointer-events: none;
   }
 
-  /* Стили для реальных картинок (если решите заменить текст на теги img) */
   .gallery-photo-inner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
   }
 
   .gallery-row .gallery-photo {
@@ -585,12 +568,11 @@
 </header>
 
 <section class="hero">
-  <div class="badge">❄️ Зимний сезон в Roblox</div>
+  <div class="badge">🔥 Ролевой проект в Roblox</div>
   <h1>Пристань <span>РП</span></h1>
   <p class="subtitle">
-    Погрузитесь в атмосферу зимней сказки! Заснеженные улицы, праздничный вайб и уютная новогодняя атмосфера уже ждут вас. 
-    Бобруйск РП, Зареченск РП, Кемерово РП — объединились в единую зимнюю вселенную. 
-    Становитесь честным трудягой или авторитетом на районе, устраивайте зимний дрифт и вершите свои правила.
+    Погрузитесь в атмосферу настоящего городского вайба! Бобруйск РП, Зареченск РП, Кемерово РП — объединились в единую вселенную. 
+    Становитесь честным трудягой-грузчиком или авторитетом на районе, устраивайте криминальные разборки, грабьте банки и вершите свои правила.
   </p>
   <div class="hero-buttons">
     <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть сейчас</a>
@@ -605,8 +587,8 @@
 <section id="about" class="fade-in">
   <h2 class="section-title">О проекте</h2>
   <p class="section-sub">
-    "Пристань РП" в зимнем антураже — это совершенно новый опыт ролевых игр в Roblox. 
-    Встречайте холода на заснеженных дорогах вместе с тысячами игроков.
+    "Пристань РП" — это совершенно новый опыт ролевых игр в Roblox. 
+    Исследуйте городские улицы вместе с тысячами игроков.
   </p>
   <div class="games-list">
     <div class="game-tag">Бобруйск РП</div>
@@ -617,92 +599,87 @@
 </section>
 
 <section id="gallery" class="fade-in">
-  <h2 class="section-title">Геймплей (5 фото)</h2>
-  <p class="section-sub">Зимняя атмосфера и криминальная жизнь на улицах "Пристань РП"</p>
+  <h2 class="section-title">Геймплей</h2>
+  <p class="section-sub">Атмосфера и криминальная жизнь на улицах "Пристань РП"</p>
 
   <div class="gallery">
-    <!-- Фото 1 -->
+    <!-- 1. Тюнинг -->
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="photo-label">Фото 1</div>
+        <div class="photo-label">Тюнинг</div>
         <div class="gallery-photo-inner">
-          <!-- Вместо текста можете поставить: <img src="ссылка_на_фото_1.jpg" alt="Фото 1"> -->
-          Зимний город
+          <img src="clipboard_paste_1790532130189.png" alt="Тюнинг">
         </div>
       </div>
       <div class="gallery-text">
-        <span class="num">01 / Атмосфера</span>
-        <h3>Заснеженные кварталы</h3>
+        <span class="num">01 / Автомобили</span>
+        <h3>Крутой тюнинг авто</h3>
         <div class="divider"></div>
-        <p>Город полностью преобразился: пушистый снег на дорогах, гирлянды на улицах и морозный воздух создают уникальный вайб.</p>
+        <p>Прокачивайте свои тачки по полной программе: стильные диски, винилы, занижение и мощные двигатели для гонок по ночному городу.</p>
       </div>
     </div>
 
-    <!-- Фото 2 -->
+    <!-- 2. Квартал -->
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="photo-label">Фото 2</div>
+        <div class="photo-label">Квартал</div>
         <div class="gallery-photo-inner">
-          <!-- <img src="ссылка_на_фото_2.jpg" alt="Фото 2"> -->
-          Работа грузчиком
+          <img src="clipboard_paste_1790532168278.png" alt="Квартал">
         </div>
       </div>
       <div class="gallery-text">
-        <span class="num">02 / Заработок</span>
-        <h3>Стань грузчиком</h3>
+        <span class="num">02 / Районы</span>
+        <h3>Городские кварталы</h3>
         <div class="divider"></div>
-        <p>Начни свой путь честным трудом! Устраивайся грузчиком, таскай тяжести, зарабатывай первые деньги и поднимайся с низов.</p>
+        <p>Детализированные улицы, оживленные перекрестки и районы, где кипит настоящая ролевая жизнь игроков.</p>
       </div>
     </div>
 
-    <!-- Фото 3 -->
+    <!-- 3. Грузчик -->
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="photo-label">Фото 3</div>
+        <div class="photo-label">Грузчик</div>
         <div class="gallery-photo-inner">
-          <!-- <img src="ссылка_на_фото_3.jpg" alt="Фото 3"> -->
-          Авторитет на районе
+          <img src="clipboard_paste_1790532208473.png" alt="Грузчик">
         </div>
       </div>
       <div class="gallery-text">
-        <span class="num">03 / Криминал</span>
-        <h3>Будь авторитетом</h3>
+        <span class="num">03 / Работа</span>
+        <h3>Работа грузчиком</h3>
         <div class="divider"></div>
-        <p>Не хочешь работать честно? Забирай власть в свои руки, стань авторитетом на районе и держи в страхе всю округу.</p>
+        <p>Начните свой путь честным трудом! Устраивайтесь грузчиком, переносите тяжести, зарабатывайте свои первые деньги и поднимайтесь с низов.</p>
       </div>
     </div>
 
-    <!-- Фото 4 -->
+    <!-- 4. Авторитет -->
     <div class="gallery-row reverse">
       <div class="gallery-photo">
-        <div class="photo-label">Фото 4</div>
+        <div class="photo-label">Авторитет</div>
         <div class="gallery-photo-inner">
-          <!-- <img src="ссылка_на_фото_4.jpg" alt="Фото 4"> -->
-          Ограбления банков
+          <img src="clipboard_paste_1790532255416.png" alt="Авторитет">
         </div>
       </div>
       <div class="gallery-text">
-        <span class="num">04 / Дела</span>
-        <h3>Грабь банки и людей</h3>
+        <span class="num">04 / Криминал</span>
+        <h3>Авторитет на районе</h3>
         <div class="divider"></div>
-        <p>Собирай верную команду, планируй дерзкие налёты, грабь банки, людей на улицах и срывай огромный куш!</p>
+        <p>Станьте настоящим авторитетом! Собирайте группировку, держите в страхе всю округу, грабьте людей и устанавливайте свои порядки.</p>
       </div>
     </div>
 
-    <!-- Фото 5 -->
+    <!-- 5. Остаток -->
     <div class="gallery-row">
       <div class="gallery-photo">
-        <div class="photo-label">Фото 5</div>
+        <div class="photo-label">Банки и дела</div>
         <div class="gallery-photo-inner">
-          <!-- <img src="ссылка_на_фото_5.jpg" alt="Фото 5"> -->
-          Зимний дрифт
+          <img src="clipboard_paste_1790532340053.png" alt="Ограбления">
         </div>
       </div>
       <div class="gallery-text">
-        <span class="num">05 / Движ</span>
-        <h3>Зимний дрифт и авто</h3>
+        <span class="num">05 / Ограбления</span>
+        <h3>Грабьте банки</h3>
         <div class="divider"></div>
-        <p>Проверь своё мастерство вождения на заснеженных дорогах. Управляемость машин на льду добавляет адреналина каждой поездке.</p>
+        <p>Планируйте дерзкие налёты на банки, уходите от погоч полиций и срывайте огромный куш вместе с верными друзьями.</p>
       </div>
     </div>
   </div>
@@ -710,29 +687,29 @@
 
 <section id="features" class="fade-in">
   <h2 class="section-title">Возможности в игре</h2>
-  <p class="section-sub">Кем ты станешь в этом суровом мире?</p>
+  <p class="section-sub">Кем вы станете в этом мире?</p>
   <div class="features">
     <div class="feature-card">
       <span class="num">01</span>
       <h3>Честный работяга</h3>
-      <p>Устроиться грузчиком, развозить грузы и зарабатывать стабильные деньги честным трудом.</p>
+      <p>Устроиться грузчиком, выполнять заказы и зарабатывать стабильные деньги честным трудом.</p>
     </div>
     <div class="feature-card">
       <span class="num">02</span>
-      <h3>Криминальный мир</h3>
+      <h3>Криминальный путь</h3>
       <p>Стать авторитетом на районе, грабить людей, держать под контролем территории и банки.</p>
     </div>
     <div class="feature-card">
       <span class="num">03</span>
-      <h3>Зимний вайб</h3>
-      <p>Новогодняя атмосфера, гонки на заснеженных тачках и опасные приключения с друзьями.</p>
+      <h3>Авто и тюнинг</h3>
+      <p>Мощные машины, уличные гонки, тюнинг и полная свобода действий на дороге.</p>
     </div>
   </div>
 </section>
 
 <section id="play" class="cta fade-in">
-  <h2>Встречай зиму вместе с нами</h2>
-  <p>Заходи на сервер "Пристань РП" в Roblox и покажи, чего ты стоишь на улицах города.</p>
+  <h2>Начните играть прямо сейчас</h2>
+  <p>Заходите на сервер "Пристань РП" в Roblox и покажите, чего вы стоите на улицах города.</p>
   <div class="cta-buttons">
     <a href="https://www.roblox.com/" target="_blank" class="play-btn">Играть</a>
     <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="discord-btn">
@@ -743,7 +720,7 @@
 </section>
 
 <footer>
-  © 2025 <span>Пристань РП</span> - Ролевой проект в Roblox (Зимний сезон)
+  © 2025 <span>Пристань РП</span> - Ролевой проект в Roblox
   <br>
   <a href="https://discord.gg/9kRv3NVUAD" target="_blank" class="footer-discord">discord.gg/9kRv3NVUAD</a>
 </footer>
@@ -764,26 +741,7 @@
     }
   });
 
-  // Падающие снежинки
-  const snowflakesCount = 55;
-  const snowflakeChars = ['❄', '❅', '❆', '•'];
-  
-  for (let i = 0; i < snowflakesCount; i++) {
-    const snowflake = document.createElement('div');
-    snowflake.classList.add('snowflake');
-    snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
-    
-    const size = Math.random() * 10 + 10 + 'px';
-    snowflake.style.fontSize = size;
-    snowflake.style.left = Math.random() * 100 + 'vw';
-    snowflake.style.animationDuration = Math.random() * 6 + 4 + 's';
-    snowflake.style.animationDelay = Math.random() * 5 + 's';
-    snowflake.style.opacity = Math.random() * 0.6 + 0.3;
-    
-    document.body.appendChild(snowflake);
-  }
-
-  // Сверхплавный, легкий след мышки (исчезает при остановке)
+  // Ультраплавный, легкий след мышки (исчезает при остановке)
   const canvas = document.getElementById('cursorCanvas');
   const ctx = canvas.getContext('2d');
 
@@ -796,7 +754,7 @@
 
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   let trail = [];
-  const maxTrailLength = 16; // Длина шлейфа
+  const maxTrailLength = 16;
 
   window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
@@ -818,7 +776,6 @@
       trail.shift();
     }
 
-    // Если мышка остановилась, плавно сокращаем массив точек, чтобы след испарялся, а не застывал
     if (!isMoving && trail.length > 0) {
       trail.shift();
     }
@@ -833,7 +790,6 @@
         ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
       }
 
-      // Еле заметный, тонкий, мягкий белый след
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
       ctx.shadowColor = '#5b7cff';
       ctx.shadowBlur = 6;
