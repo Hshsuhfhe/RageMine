@@ -5,7 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Пристань РП - Зимний сезон в Roblox</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+  * { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Arial, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
   body {
     background: #08090d;
@@ -13,6 +22,11 @@
     overflow-x: hidden;
     line-height: 1.5;
     position: relative;
+    -webkit-touch-callout: none;
+  }
+
+  img {
+    pointer-events: none;
   }
 
   .snowflake {
@@ -543,7 +557,7 @@
   }
 </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <canvas id="cursorCanvas"></canvas>
 
@@ -675,6 +689,21 @@
 </footer>
 
 <script>
+  // Защита от копирования и открытия исходного кода
+  document.addEventListener('copy', (e) => e.preventDefault());
+  document.addEventListener('cut', (e) => e.preventDefault());
+  document.addEventListener('selectstart', (e) => e.preventDefault());
+  document.addEventListener('dragstart', (e) => e.preventDefault());
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+        (e.ctrlKey && e.key === 'U')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
   const snowflakesCount = 55;
   const snowflakeChars = ['❄', '❅', '❆', '•'];
   
